@@ -350,8 +350,16 @@ function renderHeader() {
               <span>${COMPANY_INFO.phones[0]}</span>
             </a>
 
-            <button class="btn btn-primary" onclick="navigateTo('rfq')">
+            <button class="btn btn-primary desktop-rfq-btn" onclick="navigateTo('rfq')">
               <span>RFQ (${cartTotal})</span>
+            </button>
+
+            <button class="mobile-cart-badge-btn" onclick="navigateTo('rfq')" title="View Quotation List">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+              </svg>
+              ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
             </button>
 
             <button class="mobile-menu-toggle-btn" onclick="toggleMobileMenu()" title="Open Navigation Menu">

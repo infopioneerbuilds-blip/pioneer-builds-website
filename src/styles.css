@@ -856,6 +856,45 @@ button, input, select, textarea {
   color: #ffffff;
 }
 
+/* Mobile RFQ Cart Badge Icon Button */
+.mobile-cart-badge-btn {
+  display: none;
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-text-main);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.mobile-cart-badge-btn:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.cart-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  background-color: var(--color-primary);
+  color: #1E293B;
+  font-size: 10px;
+  font-weight: 800;
+  min-width: 17px;
+  height: 17px;
+  border-radius: 9999px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.15);
+}
+
 /* MANDATORY Reduced Motion Accessibility Wrapper */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -888,7 +927,7 @@ button, input, select, textarea {
   }
 
   .tamba-header-wrap {
-    padding: var(--space-2) 0;
+    padding: 6px 0;
   }
 
   .tamba-navbar {
@@ -896,6 +935,8 @@ button, input, select, textarea {
     gap: 6px;
     width: 100%;
     box-sizing: border-box;
+    border-radius: 9999px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
   }
 
   .brand-logo {
@@ -903,9 +944,9 @@ button, input, select, textarea {
   }
 
   .brand-icon {
-    width: 34px;
-    height: 34px;
-    font-size: 16px;
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
   }
 
   .brand-subtitle {
@@ -914,6 +955,7 @@ button, input, select, textarea {
 
   .brand-title {
     font-size: 14px;
+    letter-spacing: 0.02em;
   }
 
   .phone-link-btn {
@@ -924,13 +966,24 @@ button, input, select, textarea {
     display: none;
   }
 
-  .nav-actions-group {
-    gap: 6px;
+  .desktop-rfq-btn {
+    display: none;
   }
 
-  .nav-actions-group .btn-primary {
-    padding: 6px 10px;
-    font-size: 12px;
+  .mobile-cart-badge-btn {
+    display: flex;
+  }
+
+  .nav-actions-group {
+    gap: 2px;
+  }
+
+  .icon-btn,
+  .mobile-menu-toggle-btn {
+    border: none;
+    background: transparent;
+    width: 36px;
+    height: 36px;
   }
 
   .mobile-menu-toggle-btn {
@@ -984,6 +1037,7 @@ button, input, select, textarea {
     height: 24px;
   }
 }
+
 
 @media (max-width: 480px) {
   .solutions-grid {
