@@ -7,7 +7,7 @@ export const COMPANY_INFO = {
   address: "Dubai, United Arab Emirates",
   phones: ["+971 56 542 6446", "+971 58 546 6599"],
   whatsapp: "971565426446",
-  emails: ["salespbmtllc@gmail.com", "pbmtllc@gmail.com"],
+  emails: ["info.pioneerbuilds@gmail.com", "salespbmtllc@gmail.com"],
   website: "www.pioneerbuildingmaterial.com",
   workingHours: "Mon - Sat: 7:30 AM - 7:00 PM | Sunday: Closed",
   quotationRef: "QUO-PBM-2026-001"

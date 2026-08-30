@@ -55,12 +55,14 @@ const ICONS = {
   arrowRight: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`
 };
 
-// Cart Helpers
+// Cart Helpers & Global Window Handlers
 function saveBoqCart() {
   localStorage.setItem('pioneer_boq_cart', JSON.stringify(state.boqCart));
 }
 
-function addToBoqCart(product, quantity = 1) {
+window.addToBoqCartById = function(productId, quantity = 1) {
+  const product = PRODUCTS.find(p => p.id === productId);
+  if (!product) return;
   const existing = state.boqCart.find(item => item.id === product.id);
   if (existing) {
     existing.qty += quantity;
@@ -70,13 +72,23 @@ function addToBoqCart(product, quantity = 1) {
   saveBoqCart();
   showToast(`Added "${product.name}" to your RFQ List!`);
   renderApp();
-}
+};
 
-function removeFromBoqCart(productId) {
+window.removeFromBoqCart = function(productId) {
   state.boqCart = state.boqCart.filter(item => item.id !== productId);
   saveBoqCart();
+  showToast('Item removed from RFQ List');
   renderApp();
-}
+};
+
+window.updateBoqCartQty = function(productId, qty) {
+  const item = state.boqCart.find(i => i.id === productId);
+  if (item) {
+    item.qty = Math.max(1, parseInt(qty) || 1);
+    saveBoqCart();
+    renderApp();
+  }
+};
 
 function showToast(msg) {
   let toast = document.getElementById('toast-notification');
@@ -101,9 +113,38 @@ function showToast(msg) {
   }, 3000);
 }
 
+function generateEmailQuoteUrl(clientName = '', clientPhone = '', customNotes = '') {
+  const recipient = "info.pioneerbuilds@gmail.com";
+  const subject = `Pioneer BMT RFQ Quotation Request - ${clientName || 'Site Inquiry'}`;
+  
+  let body = `OFFICIAL RFQ QUOTATION REQUEST\n`;
+  body += `Pioneer Building Materials Trading LLC | TRN: ${COMPANY_INFO.trn}\n`;
+  body += `Recipient: ${recipient}\n`;
+  body += `------------------------------------\n\n`;
+
+  if (clientName) body += `CLIENT NAME / COMPANY: ${clientName}\n`;
+  if (clientPhone) body += `PHONE / WHATSAPP: ${clientPhone}\n`;
+  if (customNotes) body += `SITE LOCATION / PROJECT NOTES:\n${customNotes}\n`;
+  body += `------------------------------------\n\n`;
+
+  if (state.boqCart.length === 0) {
+    body += `Inquiry Details: Requesting pricing catalog for general building materials.\n`;
+  } else {
+    body += `ITEMS INQUIRED (BOQ LIST):\n`;
+    state.boqCart.forEach((item, index) => {
+      body += `${index + 1}. ${item.name}\n   Qty: ${item.qty} ${item.unit || ''} | Spec: ${item.spec}\n\n`;
+    });
+  }
+
+  body += `Please reply with unit pricing, stock availability, and site delivery rates across UAE.\nThank you!`;
+  
+  return `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 function generateWhatsAppQuoteUrl(customNotes = '') {
   let text = `*OFFICIAL RFQ QUOTATION REQUEST*\n`;
   text += `Pioneer Building Materials Trading LLC | TRN: ${COMPANY_INFO.trn}\n`;
+  text += `Email Target: info.pioneerbuilds@gmail.com\n`;
   text += `------------------------------------\n\n`;
   
   if (state.boqCart.length === 0) {
@@ -111,7 +152,7 @@ function generateWhatsAppQuoteUrl(customNotes = '') {
   } else {
     text += `*ITEMS INQUIRED (BOQ LIST):*\n`;
     state.boqCart.forEach((item, index) => {
-      text += `${index + 1}. *${item.name}*\n   Qty: ${item.qty} ${item.unit} | Spec: ${item.spec}\n`;
+      text += `${index + 1}. *${item.name}*\n   Qty: ${item.qty} ${item.unit || ''} | Spec: ${item.spec}\n`;
     });
   }
 
@@ -285,8 +326,8 @@ function renderProductCard(p) {
         <h4 class="product-card-title">${p.name}</h4>
         <p class="product-card-spec">${p.spec}</p>
         <div class="product-card-footer">
-          <span style="font-size: 11px; font-weight: 600;">Min: ${p.minOrder}</span>
-          <button onclick="addToBoqCart(PRODUCTS.find(i=>i.id==='${p.id}'))" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">
+          <span style="font-size: 11px; font-weight: 600; color: var(--color-text-subtle);">${p.unit || 'Standard Unit'}</span>
+          <button onclick="addToBoqCartById('${p.id}')" class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; font-weight: 700;">
             + Add to RFQ
           </button>
         </div>
@@ -417,12 +458,15 @@ function renderRfqView() {
     <div class="container" style="padding: var(--space-16) 0;">
       <div style="margin-bottom: var(--space-8);">
         <h1>Request for Quotation (RFQ)</h1>
-        <p>Review items in your list and dispatch a direct inquiry to Pioneer's sales WhatsApp desk.</p>
+        <p>Review items in your quotation list and send your inquiry directly to <strong>info.pioneerbuilds@gmail.com</strong>.</p>
       </div>
 
       <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-8);">
         <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6);">
-          <h3>Selected Material Items (${state.boqCart.length})</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-4);">
+            <h3 style="margin:0;">Selected Material Items (${state.boqCart.length})</h3>
+            ${!isCartEmpty ? `<button onclick="state.boqCart=[]; saveBoqCart(); renderApp();" style="font-size:12px; color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600;">Clear List</button>` : ''}
+          </div>
 
           ${isCartEmpty ? `
             <div style="padding: var(--space-12) 0; text-align: center;">
@@ -434,20 +478,25 @@ function renderRfqView() {
               <thead>
                 <tr style="border-bottom:1px solid var(--color-border); text-align:left;">
                   <th style="padding:8px;">Item</th>
-                  <th style="padding:8px;">Quantity</th>
-                  <th style="padding:8px;">Action</th>
+                  <th style="padding:8px; width:130px;">Quantity</th>
+                  <th style="padding:8px; text-align:right;">Action</th>
                 </tr>
               </thead>
               <tbody>
                 ${state.boqCart.map(item => `
                   <tr style="border-bottom:1px solid var(--color-border-subtle);">
                     <td style="padding:12px 8px;">
-                      <strong>${item.name}</strong>
+                      <strong style="color:var(--color-text-main); font-size:14px;">${item.name}</strong>
                       <div style="font-size:12px; color:var(--color-text-muted);">${item.spec}</div>
                     </td>
-                    <td style="padding:12px 8px;">${item.qty} ${item.unit}</td>
                     <td style="padding:12px 8px;">
-                      <button onclick="removeFromBoqCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600;">Remove</button>
+                      <div style="display:flex; align-items:center; gap:6px;">
+                        <input type="number" min="1" value="${item.qty}" onchange="updateBoqCartQty('${item.id}', this.value)" style="width:65px; padding:4px 8px; border:1px solid var(--color-border); border-radius:4px; font-weight:700;">
+                        <span style="font-size:11px; color:var(--color-text-subtle);">${item.unit || ''}</span>
+                      </div>
+                    </td>
+                    <td style="padding:12px 8px; text-align:right;">
+                      <button onclick="removeFromBoqCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600; font-size:13px;">Remove</button>
                     </td>
                   </tr>
                 `).join('')}
@@ -457,18 +506,46 @@ function renderRfqView() {
         </div>
 
         <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6); height: fit-content;">
-          <h3>Dispatch Quotation</h3>
-          <p style="font-size: var(--font-size-sm); margin-bottom: var(--space-4);">TRN: <strong>${COMPANY_INFO.trn}</strong></p>
+          <h3>Send Quotation Inquiry</h3>
+          <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-bottom: var(--space-4);">
+            Target Recipient: <strong style="color: var(--color-text-main);">info.pioneerbuilds@gmail.com</strong>
+          </p>
 
-          <div style="margin-bottom: var(--space-4);">
-            <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Delivery Location / Site Notes:</label>
-            <textarea id="boq-notes" rows="4" placeholder="Enter UAE site address, delivery date, specs..." style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;"></textarea>
-          </div>
+          <form onsubmit="
+            event.preventDefault();
+            const name = document.getElementById('rfq-client-name').value;
+            const phone = document.getElementById('rfq-client-phone').value;
+            const notes = document.getElementById('boq-notes').value;
+            window.location.href = generateEmailQuoteUrl(name, phone, notes);
+            showToast('Opening Email client to send quotation to info.pioneerbuilds@gmail.com!');
+          ">
+            <div style="margin-bottom: var(--space-3);">
+              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Your Name / Company:</label>
+              <input type="text" id="rfq-client-name" required placeholder="e.g. Al Habtoor Contracting" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
+            </div>
 
-          <a href="#" onclick="const notes = document.getElementById('boq-notes').value; window.open(generateWhatsAppQuoteUrl(notes), '_blank'); return false;" class="btn btn-whatsapp" style="width:100%; justify-content:center;">
-            ${ICONS.whatsapp}
-            <span>Send Quotation to WhatsApp</span>
-          </a>
+            <div style="margin-bottom: var(--space-3);">
+              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Mobile / WhatsApp Number:</label>
+              <input type="tel" id="rfq-client-phone" required placeholder="+971 50 123 4567" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
+            </div>
+
+            <div style="margin-bottom: var(--space-4);">
+              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Delivery Location / Project Notes:</label>
+              <textarea id="boq-notes" rows="3" placeholder="Enter UAE site address, delivery date, specs..." style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3);">
+              <span>✉️ Send Quotation to info.pioneerbuilds@gmail.com</span>
+            </button>
+
+            <button type="button" onclick="
+              const notes = document.getElementById('boq-notes').value;
+              window.open(generateWhatsAppQuoteUrl(notes), '_blank');
+            " class="btn btn-whatsapp" style="width:100%; justify-content:center;">
+              ${ICONS.whatsapp}
+              <span>Send via WhatsApp</span>
+            </button>
+          </form>
         </div>
       </div>
     </div>
