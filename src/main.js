@@ -123,7 +123,7 @@ function generateEmailQuoteUrl(clientName = '', clientPhone = '', customNotes = 
   const subject = `Pioneer BMT RFQ Quotation Request - ${clientName || 'Site Inquiry'}`;
   
   let body = `OFFICIAL RFQ QUOTATION REQUEST\n`;
-  body += `Pioneer Building Materials Trading LLC | TRN: ${COMPANY_INFO.trn}\n`;
+  body += `Pioneer Building Materials Trading LLC\n`;
   body += `Target Recipient: ${recipient}\n`;
   body += `------------------------------------\n\n`;
 
@@ -148,7 +148,7 @@ function generateEmailQuoteUrl(clientName = '', clientPhone = '', customNotes = 
 
 function generateWhatsAppQuoteUrl(customNotes = '') {
   let text = `*OFFICIAL RFQ QUOTATION REQUEST*\n`;
-  text += `Pioneer Building Materials Trading LLC | TRN: ${COMPANY_INFO.trn}\n`;
+  text += `Pioneer Building Materials Trading LLC\n`;
   text += `Email Target: ${TARGET_EMAIL}\n`;
   text += `------------------------------------\n\n`;
   
@@ -683,7 +683,6 @@ function renderAboutView() {
           <h3>Official Registration Details</h3>
           <ul style="list-style:none; margin-top:var(--space-4); display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); font-size:14px;">
             <li><strong>Legal Name:</strong> Pioneer Building Materials Trading LLC</li>
-            <li><strong>TRN Tax Registration:</strong> ${COMPANY_INFO.trn}</li>
             <li><strong>Headquarters:</strong> Dubai, United Arab Emirates</li>
             <li><strong>Phone Desks:</strong> <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.phones[0]}</a> / <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.phones[1]}</a></li>
             <li><strong>Email:</strong> <a href="mailto:${COMPANY_INFO.emails[0]}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.emails[0]}</a></li>
@@ -718,9 +717,6 @@ function renderContactView() {
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="color:var(--color-primary-dark); display:flex; align-items:center;">${ICONS.mail}</span>
               <a href="mailto:${COMPANY_INFO.emails[0]}" style="color:var(--color-text-main); font-weight:600; text-decoration:underline;">${COMPANY_INFO.emails[0]}</a>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px; color:var(--color-text-muted);">
-              <strong>TRN:</strong> ${COMPANY_INFO.trn}
             </div>
           </div>
 
@@ -768,7 +764,6 @@ function renderFooter() {
             <p style="font-size: 14px; color: #94a3b8; margin-bottom: var(--space-4);">
               Premier supplier of building materials, safety gear, timber, steel, and site transport across the UAE.
             </p>
-            <div style="font-size: 12px; color: #64748b;">TRN: ${COMPANY_INFO.trn}</div>
           </div>
 
           <div>
@@ -815,7 +810,7 @@ function renderFooter() {
         </div>
 
         <div class="footer-bottom">
-          <div>© ${new Date().getFullYear()} Pioneer Building Materials Trading LLC. TRN: ${COMPANY_INFO.trn}</div>
+          <div>© ${new Date().getFullYear()} Pioneer Building Materials Trading LLC. All rights reserved.</div>
         </div>
       </div>
     </footer>

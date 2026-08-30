@@ -3,7 +3,6 @@
 export const COMPANY_INFO = {
   name: "Pioneer Building Materials Trading LLC",
   shortName: "Pioneer BMT",
-  trn: "100395888900003",
   address: "Dubai, United Arab Emirates",
   phones: ["+971 56 542 6446", "+971 58 546 6599"],
   whatsapp: "971565426446",
