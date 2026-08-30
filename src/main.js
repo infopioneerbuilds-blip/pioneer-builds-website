@@ -85,9 +85,9 @@ function showToast(msg) {
     toast.id = 'toast-notification';
     toast.style.cssText = `
       position: fixed; bottom: 24px; right: 24px; z-index: 3000;
-      background: #0f172a; color: #ffffff; padding: 12px 20px;
+      background: #1E293B; color: #ffffff; padding: 12px 20px;
       border-radius: 8px; font-size: 14px; font-weight: 500;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-left: 4px solid #991b1b;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-left: 4px solid #80C0C0;
       transition: opacity 200ms ease-out, transform 200ms ease-out;
     `;
     document.body.appendChild(toast);
@@ -533,10 +533,10 @@ function renderFooter() {
         <div class="footer-grid">
           <div>
             <div class="brand-logo" style="margin-bottom: var(--space-4);">
-              <div class="brand-icon" style="background:#ffffff; color:var(--color-primary);">P</div>
+              <div class="brand-icon" style="background:#80C0C0; color:#1E293B;">P</div>
               <div class="brand-text">
                 <span class="brand-title" style="color:#ffffff;">PIONEER</span>
-                <span class="brand-subtitle" style="color:#f87171;">Building Materials LLC</span>
+                <span class="brand-subtitle" style="color:#80C0C0;">Building Materials LLC</span>
               </div>
             </div>
             <p style="font-size: 14px; color: #94a3b8; margin-bottom: var(--space-4);">
