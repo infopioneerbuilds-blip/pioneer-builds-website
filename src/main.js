@@ -10,6 +10,7 @@ const state = {
   searchQuery: '',
   boqCart: JSON.parse(localStorage.getItem('pioneer_boq_cart') || '[]'),
   searchModalOpen: false,
+  mobileMenuOpen: false,
   activeSlide: 0
 };
 
@@ -57,7 +58,8 @@ const ICONS = {
   arrowLeft: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`,
   arrowRight: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`,
   location: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
-  mail: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`
+  mail: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`,
+  menu: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`
 };
 
 // Cart Helpers & Global Window Handlers
@@ -263,8 +265,19 @@ window.handleSendQuotationWhatsApp = function(e) {
   showToast('Opening WhatsApp sales desk...');
 };
 
+window.toggleMobileMenu = function() {
+  state.mobileMenuOpen = !state.mobileMenuOpen;
+  renderApp();
+};
+
+window.closeMobileMenu = function() {
+  state.mobileMenuOpen = false;
+  renderApp();
+};
+
 // Clean HTML5 History Navigation (PushState Router)
 window.navigateTo = function(view, catSlug = null) {
+  state.mobileMenuOpen = false;
   let targetPath = '/';
   if (view === 'home' || !view) {
     targetPath = '/';
@@ -338,7 +351,11 @@ function renderHeader() {
             </a>
 
             <button class="btn btn-primary" onclick="navigateTo('rfq')">
-              <span>RFQ Cart (${cartTotal})</span>
+              <span>RFQ (${cartTotal})</span>
+            </button>
+
+            <button class="mobile-menu-toggle-btn" onclick="toggleMobileMenu()" title="Open Navigation Menu">
+              ${ICONS.menu}
             </button>
           </div>
         </nav>
@@ -883,6 +900,58 @@ function renderFloatingWhatsApp() {
   `;
 }
 
+function renderMobileSidebar() {
+  const active = state.mobileMenuOpen ? 'active' : '';
+  return `
+    <div class="mobile-sidebar-overlay ${active}" onclick="closeMobileMenu()">
+      <aside class="mobile-sidebar-drawer" onclick="event.stopPropagation()">
+        <div class="mobile-sidebar-header">
+          <div class="brand-logo">
+            <div class="brand-icon">P</div>
+            <div class="brand-text">
+              <span class="brand-title">PIONEER</span>
+              <span class="brand-subtitle">Building Materials</span>
+            </div>
+          </div>
+          <button class="icon-btn" onclick="closeMobileMenu()" title="Close Menu">
+            ${ICONS.close}
+          </button>
+        </div>
+
+        <nav class="mobile-sidebar-nav">
+          <a href="#" onclick="navigateTo('home'); return false;" class="mobile-nav-link ${state.currentView === 'home' ? 'active' : ''}">
+            <span>🏠 Home</span>
+          </a>
+          <a href="#" onclick="navigateTo('categories'); return false;" class="mobile-nav-link ${state.currentView === 'categories' ? 'active' : ''}">
+            <span>📦 Material Categories</span>
+          </a>
+          <a href="#" onclick="navigateTo('products'); return false;" class="mobile-nav-link ${state.currentView === 'products' ? 'active' : ''}">
+            <span>🛠️ Products Directory</span>
+          </a>
+          <a href="#" onclick="navigateTo('rfq'); return false;" class="mobile-nav-link ${state.currentView === 'rfq' ? 'active' : ''}">
+            <span>📋 Request Quotation (RFQ)</span>
+          </a>
+          <a href="#" onclick="navigateTo('about'); return false;" class="mobile-nav-link ${state.currentView === 'about' ? 'active' : ''}">
+            <span>🏢 About Pioneer BMT</span>
+          </a>
+          <a href="#" onclick="navigateTo('contact'); return false;" class="mobile-nav-link ${state.currentView === 'contact' ? 'active' : ''}">
+            <span>📞 Contact & Location</span>
+          </a>
+        </nav>
+
+        <div class="mobile-sidebar-footer">
+          <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="btn btn-primary" style="width: 100%; justify-content: center;">
+            ${ICONS.phone} Call ${COMPANY_INFO.phones[0]}
+          </a>
+          <a href="https://wa.me/${COMPANY_INFO.whatsapp}" target="_blank" class="btn btn-whatsapp" style="width: 100%; justify-content: center;">
+            ${ICONS.whatsapp} WhatsApp Sales Desk
+          </a>
+        </div>
+      </aside>
+    </div>
+  `;
+}
+
 // Master App Renderer
 function renderApp() {
   const app = document.getElementById('app');
@@ -906,6 +975,7 @@ function renderApp() {
     ${renderFooter()}
     ${renderSearchModal()}
     ${renderFloatingWhatsApp()}
+    ${renderMobileSidebar()}
   `;
 }
 

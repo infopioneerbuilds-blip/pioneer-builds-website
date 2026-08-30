@@ -701,44 +701,108 @@ button, input, select, textarea {
   color: #64748b;
 }
 
-/* MANDATORY Reduced Motion Accessibility Wrapper */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* Mobile Navigation Hamburger Toggle Button */
+.mobile-menu-toggle-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-main);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-  .solutions-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .welcome-grid {
-    grid-template-columns: 1fr;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+.mobile-menu-toggle-btn:hover {
+  background: var(--color-bg-alt);
+  color: var(--color-primary-dark);
 }
 
-@media (max-width: 768px) {
-  .nav-links-menu {
-    display: none;
-  }
-  .solutions-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .tamba-hero-carousel {
-    height: 380px;
-  }
-  .carousel-headline {
-    font-size: var(--font-size-2xl);
-  }
+/* Mobile Sidebar Drawer Navigation Overlay */
+.mobile-sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.mobile-sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile Sidebar Drawer Box */
+.mobile-sidebar-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 85vw;
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  box-shadow: 8px 0 32px rgba(15, 23, 42, 0.2);
+}
+
+.mobile-sidebar-overlay.active .mobile-sidebar-drawer {
+  transform: translateX(0);
+}
+
+.mobile-sidebar-header {
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mobile-sidebar-nav {
+  padding: var(--space-4) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  color: var(--color-text-main);
+  background-color: var(--color-primary-light);
+  font-weight: 700;
+}
+
+.mobile-sidebar-footer {
+  padding: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: var(--color-bg);
 }
 
 /* Floating WhatsApp Quick Icon Button */
@@ -772,5 +836,101 @@ button, input, select, textarea {
   background-color: #20ba5a;
   color: #ffffff;
 }
+
+/* MANDATORY Reduced Motion Accessibility Wrapper */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Responsive Rules */
+@media (max-width: 992px) {
+  .solutions-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .welcome-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links-menu {
+    display: none;
+  }
+  .mobile-menu-toggle-btn {
+    display: flex;
+  }
+  .phone-link-btn span {
+    display: none;
+  }
+  .phone-link-btn {
+    padding: var(--space-2);
+    border-radius: 50%;
+  }
+  .tamba-navbar {
+    padding: var(--space-2) var(--space-4);
+  }
+  .solutions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .tamba-hero-carousel {
+    height: 420px;
+  }
+  .carousel-headline {
+    font-size: var(--font-size-2xl);
+  }
+  .carousel-subtext {
+    font-size: var(--font-size-base);
+  }
+  .welcome-grid {
+    grid-template-columns: 1fr;
+  }
+  .welcome-img-wrap {
+    height: 260px;
+  }
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-4);
+  }
+  .floating-whatsapp-btn {
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+  }
+  .floating-whatsapp-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .solutions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+  .tamba-hero-carousel {
+    height: 360px;
+  }
+  .carousel-caption-box {
+    padding: var(--space-4);
+  }
+  .carousel-headline {
+    font-size: 22px;
+  }
+}
+
 
 
