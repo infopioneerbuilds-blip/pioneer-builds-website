@@ -192,19 +192,20 @@ window.handleSendQuotationEmail = async function(e) {
     itemsSummary = "General building materials catalog & pricing inquiry.";
   } else {
     itemsSummary = state.boqCart.map((item, idx) => 
-      `${idx + 1}. ${item.name} | Qty: ${item.qty} ${item.unit || ''} | Spec: ${item.spec}`
-    ).join('\n');
+      `${idx + 1}. ${item.name}\n   • Quantity: ${item.qty} ${item.unit || ''}\n   • Spec: ${item.spec}`
+    ).join('\n\n');
   }
 
   const payload = {
-    _subject: `Pioneer BMT RFQ - ${name}`,
-    client_name: name,
-    client_phone: phone,
-    recipient_email: TARGET_EMAIL,
-    project_site_notes: notes || 'N/A',
-    boq_materials: itemsSummary,
-    company: "Pioneer Building Materials Trading LLC",
-    trn: COMPANY_INFO.trn
+    "_subject": `Pioneer BMT RFQ Quotation Request - ${name}`,
+    "_template": "table",
+    "_captcha": "false",
+    "Client / Contractor Name": name,
+    "Contact Phone / WhatsApp": phone,
+    "Delivery Location & Site Notes": notes || "No additional site notes specified",
+    "Requested Material Items (BOQ List)": itemsSummary,
+    "Supplier Company": COMPANY_INFO.name,
+    "Tax Registration TRN": COMPANY_INFO.trn
   };
 
   try {
