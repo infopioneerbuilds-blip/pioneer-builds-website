@@ -979,9 +979,11 @@ function renderApp() {
     default: bodyHtml = renderHomeView();
   }
 
+  const mainClass = state.currentView === 'home' ? 'main-home' : 'main-inner';
+
   app.innerHTML = `
     ${renderHeader()}
-    <main>${bodyHtml}</main>
+    <main class="${mainClass}">${bodyHtml}</main>
     ${renderFooter()}
     ${renderSearchModal()}
     ${renderFloatingWhatsApp()}
