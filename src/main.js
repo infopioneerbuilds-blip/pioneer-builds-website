@@ -2,7 +2,7 @@ import { COMPANY_INFO, CATEGORIES, PRODUCTS } from './data/products.js';
 
 // Application State
 const state = {
-  currentView: 'home', // 'home' | 'products' | 'category' | 'catalogue' | 'about' | 'contact' | 'rfq' | 'fleet'
+  currentView: 'home', // 'home' | 'categories' | 'products' | 'category' | 'about' | 'contact' | 'rfq'
   selectedCategory: null,
   searchQuery: '',
   boqCart: JSON.parse(localStorage.getItem('pioneer_boq_cart') || '[]'),
@@ -10,8 +10,14 @@ const state = {
   activeSlide: 0
 };
 
-// Hero Carousel Items matching Tamba Hardware hero slides
+// Hero Carousel Cover & Banner Slides
 const HERO_SLIDES = [
+  {
+    title: "Pioneer Building Materials Trading LLC",
+    subtitle: "Premier Wholesaler & Stockist of Certified Construction Materials, Timber, Steel Mesh & Site Fleet in Dubai UAE.",
+    image: "/cover.png",
+    catSlug: "aggregates-cement-concrete"
+  },
   {
     title: "Aggregates & Cement Supply",
     subtitle: "High grade Portland Cement, washed sand & aggregate gravel delivered direct to site across UAE.",
@@ -35,12 +41,6 @@ const HERO_SLIDES = [
     subtitle: "EN397 hard hat helmets, safety boots, split leather gloves, fall harnesses & hi-vis jackets.",
     image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&auto=format&fit=crop&q=80",
     catSlug: "safety-gear-ppe"
-  },
-  {
-    title: "Waterproofing & Construction Chemicals",
-    subtitle: "Polythene rolls, DPC membranes, cold bitumen, tile glue, PU foam & joint sealants.",
-    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1600&auto=format&fit=crop&q=80",
-    catSlug: "waterproofing-insulation-chemicals"
   }
 ];
 
@@ -149,11 +149,11 @@ function renderHeader() {
             </div>
           </a>
 
-          <!-- Center Navigation Links (Matching Tamba Hardware structure) -->
+          <!-- Center Navigation Links -->
           <ul class="nav-links-menu">
             <li><a href="#" onclick="navigateTo('home'); return false;" class="nav-item-link ${state.currentView === 'home' ? 'active' : ''}">Home</a></li>
+            <li><a href="#" onclick="navigateTo('categories'); return false;" class="nav-item-link ${state.currentView === 'categories' ? 'active' : ''}">Categories</a></li>
             <li><a href="#" onclick="navigateTo('products'); return false;" class="nav-item-link ${state.currentView === 'products' ? 'active' : ''}">Products</a></li>
-            <li><a href="#" onclick="navigateTo('catalogue'); return false;" class="nav-item-link ${state.currentView === 'catalogue' ? 'active' : ''}">Catalogue</a></li>
             <li><a href="#" onclick="navigateTo('about'); return false;" class="nav-item-link ${state.currentView === 'about' ? 'active' : ''}">About Us</a></li>
             <li><a href="#" onclick="navigateTo('contact'); return false;" class="nav-item-link ${state.currentView === 'contact' ? 'active' : ''}">Contact us</a></li>
           </ul>
@@ -227,7 +227,7 @@ function renderWelcomeSection() {
     <section class="tamba-welcome-section">
       <div class="container welcome-grid">
         <div class="welcome-img-wrap">
-          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&auto=format&fit=crop&q=80" alt="Pioneer Building Materials Warehouse" class="welcome-img">
+          <img src="/cover.png" alt="Pioneer Building Materials Warehouse Cover" class="welcome-img">
         </div>
         <div>
           <h2 class="welcome-gradient-title">Welcome to Pioneer Building Materials</h2>
@@ -362,26 +362,48 @@ function renderCategoryView() {
   `;
 }
 
-// CATALOGUE DOWNLOADS VIEW (/media/downloads)
-function renderCatalogueView() {
+// CATEGORIES PAGE VIEW (/categories)
+function renderCategoriesView() {
   return `
     <div class="container" style="padding: var(--space-16) 0;">
-      <div style="max-width: var(--container-narrow); margin: 0 auto; text-align: center;">
-        <h1 style="margin-bottom: var(--space-4);">Product Catalog PDF</h1>
-        <p style="margin-bottom: var(--space-8);">Download the complete official Pioneer Building Materials Trading LLC product catalog for offline reference.</p>
+      <div style="margin-bottom: var(--space-8); text-align: center; max-width: 760px; margin-left: auto; margin-right: auto;">
+        <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: inline-block; margin-bottom: var(--space-2);">
+          Building Material Divisions
+        </span>
+        <h1 style="font-size: var(--font-size-4xl); margin-bottom: var(--space-3); color: var(--color-text-main);">
+          Product Categories
+        </h1>
+        <p style="font-size: var(--font-size-lg); color: var(--color-text-muted);">
+          Browse our 121+ certified building materials, timber, steel, and safety gear organized by industry division.
+        </p>
+      </div>
 
-        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-8); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; align-items: center;">
-          <div style="width: 120px; height: 160px; background: var(--color-primary-light); border: 2px dashed var(--color-primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-6); font-size: 40px;">
-            📄
-          </div>
-          <h2 style="font-size: var(--font-size-xl); margin-bottom: var(--space-2);">Pioneer Product Catalog 2026</h2>
-          <p style="font-size: var(--font-size-sm); margin-bottom: var(--space-6);">Complete 8-Page Product Proof & Specifications (PDF format)</p>
-          
-          <a href="Catalog (Pioneer Building Material) Proof.pdf" download class="btn btn-primary">
-            ${ICONS.download}
-            <span>Download Catalog PDF</span>
-          </a>
-        </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-6);">
+        ${CATEGORIES.map(cat => {
+          const catProds = PRODUCTS.filter(p => p.catId === cat.id);
+          const firstProd = catProds[0];
+          const thumbImg = firstProd ? firstProd.image : '/cover.png';
+          return `
+            <div class="category-card-box" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 200ms ease, box-shadow 200ms ease;">
+              <div style="width: 100%; height: 200px; position: relative; overflow: hidden; background: var(--color-bg-alt);">
+                <img src="${thumbImg}" alt="${cat.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                <div style="position: absolute; top: 12px; right: 12px; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(4px); color: #ffffff; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 700;">
+                  ${catProds.length} Products
+                </div>
+              </div>
+              <div style="padding: var(--space-6); display: flex; flex-direction: column; flex-grow: 1;">
+                <h3 style="font-size: var(--font-size-xl); margin-bottom: var(--space-2); color: var(--color-text-main);">${cat.name}</h3>
+                <p style="font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: var(--space-6); flex-grow: 1; line-height: 1.5;">
+                  ${cat.description}
+                </p>
+                <button onclick="navigateTo('category', '${cat.slug}')" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                  <span>Explore ${cat.name}</span>
+                  ${ICONS.arrowRight}
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
       </div>
     </div>
   `;
@@ -549,8 +571,8 @@ function renderFooter() {
             <h4 class="footer-col-title">Quick Links</h4>
             <ul class="footer-links">
               <li><a href="#" onclick="navigateTo('home'); return false;" class="footer-link">Home</a></li>
+              <li><a href="#" onclick="navigateTo('categories'); return false;" class="footer-link">Categories</a></li>
               <li><a href="#" onclick="navigateTo('products'); return false;" class="footer-link">Products</a></li>
-              <li><a href="#" onclick="navigateTo('catalogue'); return false;" class="footer-link">Catalogue</a></li>
               <li><a href="#" onclick="navigateTo('about'); return false;" class="footer-link">About Us</a></li>
               <li><a href="#" onclick="navigateTo('contact'); return false;" class="footer-link">Contact us</a></li>
             </ul>
@@ -647,9 +669,9 @@ function renderApp() {
   let bodyHtml = '';
   switch (state.currentView) {
     case 'home': bodyHtml = renderHomeView(); break;
+    case 'categories': bodyHtml = renderCategoriesView(); break;
     case 'products': bodyHtml = renderProductsView(); break;
     case 'category': bodyHtml = renderCategoryView(); break;
-    case 'catalogue': bodyHtml = renderCatalogueView(); break;
     case 'about': bodyHtml = renderAboutView(); break;
     case 'contact': bodyHtml = renderContactView(); break;
     case 'rfq': bodyHtml = renderRfqView(); break;
