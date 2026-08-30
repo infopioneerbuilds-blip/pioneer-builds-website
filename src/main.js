@@ -261,25 +261,39 @@ window.handleSendQuotationWhatsApp = function(e) {
   showToast('Opening WhatsApp sales desk...');
 };
 
-// URL Navigation & Hash Router
+// Clean HTML5 History Navigation (PushState Router)
 window.navigateTo = function(view, catSlug = null) {
-  if (catSlug) {
-    window.location.hash = `#category/${catSlug}`;
+  let targetPath = '/';
+  if (view === 'home' || !view) {
+    targetPath = '/';
+  } else if (catSlug) {
+    targetPath = `/category/${catSlug}`;
   } else {
-    window.location.hash = `#${view}`;
+    targetPath = `/${view}`;
   }
+
+  if (window.location.pathname !== targetPath) {
+    window.history.pushState({ view, catSlug }, '', targetPath);
+  }
+  syncRouteFromPath();
 };
 
-function syncRouteFromHash() {
-  const rawHash = window.location.hash.replace(/^#\/?/, '') || 'home';
-  if (rawHash.startsWith('category/')) {
-    const catSlug = rawHash.replace('category/', '');
+function syncRouteFromPath() {
+  const pathname = window.location.pathname.replace(/\/$/, '') || '/';
+
+  if (pathname === '/' || pathname === '') {
+    state.currentView = 'home';
+    state.selectedCategory = null;
+  } else if (pathname.startsWith('/category/')) {
+    const catSlug = pathname.replace('/category/', '');
     state.currentView = 'category';
     state.selectedCategory = CATEGORIES.find(c => c.slug === catSlug) || null;
   } else {
-    state.currentView = rawHash;
+    const viewName = pathname.replace('/', '');
+    state.currentView = viewName || 'home';
     state.selectedCategory = null;
   }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderApp();
 }
@@ -875,11 +889,10 @@ function renderApp() {
   `;
 }
 
-// Initial Boot & Hash Router Event Listeners
+// Initial Boot & PushState History Router Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-  syncRouteFromHash();
-  window.addEventListener('hashchange', syncRouteFromHash);
-  window.addEventListener('popstate', syncRouteFromHash);
+  syncRouteFromPath();
+  window.addEventListener('popstate', syncRouteFromPath);
 
   setInterval(() => {
     if (state.currentView === 'home' && !state.searchModalOpen) {
