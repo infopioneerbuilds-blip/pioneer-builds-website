@@ -55,7 +55,9 @@ const ICONS = {
   download: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
   close: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
   arrowLeft: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`,
-  arrowRight: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`
+  arrowRight: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`,
+  location: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+  mail: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`
 };
 
 // Cart Helpers & Global Window Handlers
@@ -683,8 +685,8 @@ function renderAboutView() {
             <li><strong>Legal Name:</strong> Pioneer Building Materials Trading LLC</li>
             <li><strong>TRN Tax Registration:</strong> ${COMPANY_INFO.trn}</li>
             <li><strong>Headquarters:</strong> Dubai, United Arab Emirates</li>
-            <li><strong>Phone Desks:</strong> ${COMPANY_INFO.phones.join(' / ')}</li>
-            <li><strong>Email:</strong> ${COMPANY_INFO.emails.join(' / ')}</li>
+            <li><strong>Phone Desks:</strong> <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.phones[0]}</a> / <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.phones[1]}</a></li>
+            <li><strong>Email:</strong> <a href="mailto:${COMPANY_INFO.emails[0]}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.emails[0]}</a></li>
           </ul>
         </div>
       </div>
@@ -707,9 +709,19 @@ function renderContactView() {
           <p style="margin-bottom: var(--space-4);">Dubai, United Arab Emirates</p>
           
           <div style="display:flex; flex-direction:column; gap:var(--space-3); font-size:14px; margin-bottom:var(--space-6);">
-            <div><strong>📞 Phone:</strong> ${COMPANY_INFO.phones[0]} / ${COMPANY_INFO.phones[1]}</div>
-            <div><strong>✉️ Email:</strong> ${COMPANY_INFO.emails[0]}</div>
-            <div><strong>🆔 TRN:</strong> ${COMPANY_INFO.trn}</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="color:var(--color-primary-dark); display:flex; align-items:center;">${ICONS.phone}</span>
+              <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" style="color:var(--color-text-main); font-weight:600; text-decoration:underline;">${COMPANY_INFO.phones[0]}</a>
+              <span>/</span>
+              <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" style="color:var(--color-text-main); font-weight:600; text-decoration:underline;">${COMPANY_INFO.phones[1]}</a>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="color:var(--color-primary-dark); display:flex; align-items:center;">${ICONS.mail}</span>
+              <a href="mailto:${COMPANY_INFO.emails[0]}" style="color:var(--color-text-main); font-weight:600; text-decoration:underline;">${COMPANY_INFO.emails[0]}</a>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; color:var(--color-text-muted);">
+              <strong>TRN:</strong> ${COMPANY_INFO.trn}
+            </div>
           </div>
 
           <a href="${generateWhatsAppQuoteUrl()}" target="_blank" class="btn btn-whatsapp">
@@ -780,11 +792,24 @@ function renderFooter() {
           </div>
 
           <div>
-            <h4 class="footer-col-title">Contact</h4>
-            <ul class="footer-links">
-              <li style="color:#94a3b8; font-size:13px;">📍 ${COMPANY_INFO.address}</li>
-              <li style="color:#94a3b8; font-size:13px;">📞 ${COMPANY_INFO.phones[0]}</li>
-              <li style="color:#94a3b8; font-size:13px;">✉️ ${COMPANY_INFO.emails[0]}</li>
+            <h4 class="footer-col-title">Contact Us</h4>
+            <ul class="footer-links" style="display:flex; flex-direction:column; gap: var(--space-3);">
+              <li style="display:flex; align-items:center; gap:8px; color:#94a3b8; font-size:13px;">
+                <span style="color:var(--color-primary); display:flex; align-items:center;">${ICONS.location}</span>
+                <span>${COMPANY_INFO.address}</span>
+              </li>
+              <li style="display:flex; align-items:center; gap:8px; font-size:13px;">
+                <span style="color:var(--color-primary); display:flex; align-items:center;">${ICONS.phone}</span>
+                <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="footer-link" style="color:#94a3b8;">${COMPANY_INFO.phones[0]}</a>
+              </li>
+              <li style="display:flex; align-items:center; gap:8px; font-size:13px;">
+                <span style="color:var(--color-primary); display:flex; align-items:center;">${ICONS.phone}</span>
+                <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" class="footer-link" style="color:#94a3b8;">${COMPANY_INFO.phones[1]}</a>
+              </li>
+              <li style="display:flex; align-items:center; gap:8px; font-size:13px;">
+                <span style="color:var(--color-primary); display:flex; align-items:center;">${ICONS.mail}</span>
+                <a href="mailto:${COMPANY_INFO.emails[0]}" class="footer-link" style="color:#94a3b8;">${COMPANY_INFO.emails[0]}</a>
+              </li>
             </ul>
           </div>
         </div>
