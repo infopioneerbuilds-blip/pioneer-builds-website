@@ -1,5 +1,8 @@
 import { COMPANY_INFO, CATEGORIES, PRODUCTS } from './data/products.js';
 
+// Target email from environment variable (VITE_TARGET_EMAIL)
+const TARGET_EMAIL = import.meta.env.VITE_TARGET_EMAIL || 'info.pioneerbuilds@gmail.com';
+
 // Application State
 const state = {
   currentView: 'home', // 'home' | 'categories' | 'products' | 'category' | 'about' | 'contact' | 'rfq'
@@ -114,12 +117,12 @@ function showToast(msg) {
 }
 
 function generateEmailQuoteUrl(clientName = '', clientPhone = '', customNotes = '') {
-  const recipient = "info.pioneerbuilds@gmail.com";
+  const recipient = TARGET_EMAIL;
   const subject = `Pioneer BMT RFQ Quotation Request - ${clientName || 'Site Inquiry'}`;
   
   let body = `OFFICIAL RFQ QUOTATION REQUEST\n`;
   body += `Pioneer Building Materials Trading LLC | TRN: ${COMPANY_INFO.trn}\n`;
-  body += `Recipient: ${recipient}\n`;
+  body += `Target Recipient: ${recipient}\n`;
   body += `------------------------------------\n\n`;
 
   if (clientName) body += `CLIENT NAME / COMPANY: ${clientName}\n`;
@@ -144,7 +147,7 @@ function generateEmailQuoteUrl(clientName = '', clientPhone = '', customNotes = 
 function generateWhatsAppQuoteUrl(customNotes = '') {
   let text = `*OFFICIAL RFQ QUOTATION REQUEST*\n`;
   text += `Pioneer Building Materials Trading LLC | TRN: ${COMPANY_INFO.trn}\n`;
-  text += `Email Target: info.pioneerbuilds@gmail.com\n`;
+  text += `Email Target: ${TARGET_EMAIL}\n`;
   text += `------------------------------------\n\n`;
   
   if (state.boqCart.length === 0) {
@@ -162,16 +165,63 @@ function generateWhatsAppQuoteUrl(customNotes = '') {
   return `https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
+window.handleSendQuotationEmail = function(e) {
+  if (e) e.preventDefault();
+  const nameEl = document.getElementById('rfq-client-name');
+  const phoneEl = document.getElementById('rfq-client-phone');
+  const notesEl = document.getElementById('boq-notes');
+  
+  const name = nameEl ? nameEl.value : '';
+  const phone = phoneEl ? phoneEl.value : '';
+  const notes = notesEl ? notesEl.value : '';
+
+  const mailUrl = generateEmailQuoteUrl(name, phone, notes);
+  window.open(mailUrl, '_self');
+  showToast(`Opening Email client to send quotation to ${TARGET_EMAIL}!`);
+};
+
+window.handleSendQuotationWhatsApp = function(e) {
+  if (e) e.preventDefault();
+  const nameEl = document.getElementById('rfq-client-name');
+  const phoneEl = document.getElementById('rfq-client-phone');
+  const notesEl = document.getElementById('boq-notes');
+  
+  const name = nameEl ? nameEl.value : '';
+  const phone = phoneEl ? phoneEl.value : '';
+  const notes = notesEl ? notesEl.value : '';
+
+  let notesCombo = '';
+  if (name) notesCombo += `Client: ${name}\n`;
+  if (phone) notesCombo += `Phone: ${phone}\n`;
+  if (notes) notesCombo += `Site Notes: ${notes}\n`;
+
+  const waUrl = generateWhatsAppQuoteUrl(notesCombo);
+  window.open(waUrl, '_blank');
+  showToast('Opening WhatsApp sales desk...');
+};
+
+// URL Navigation & Hash Router
 window.navigateTo = function(view, catSlug = null) {
-  state.currentView = view;
   if (catSlug) {
+    window.location.hash = `#category/${catSlug}`;
+  } else {
+    window.location.hash = `#${view}`;
+  }
+};
+
+function syncRouteFromHash() {
+  const rawHash = window.location.hash.replace(/^#\/?/, '') || 'home';
+  if (rawHash.startsWith('category/')) {
+    const catSlug = rawHash.replace('category/', '');
+    state.currentView = 'category';
     state.selectedCategory = CATEGORIES.find(c => c.slug === catSlug) || null;
-  } else if (view !== 'category') {
+  } else {
+    state.currentView = rawHash;
     state.selectedCategory = null;
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderApp();
-};
+}
 
 // TAMBA HARDWARE HEADER NAVBAR
 function renderHeader() {
@@ -508,17 +558,10 @@ function renderRfqView() {
         <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6); height: fit-content;">
           <h3>Send Quotation Inquiry</h3>
           <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-bottom: var(--space-4);">
-            Target Recipient: <strong style="color: var(--color-text-main);">info.pioneerbuilds@gmail.com</strong>
+            Target Recipient: <strong style="color: var(--color-text-main);">${TARGET_EMAIL}</strong>
           </p>
 
-          <form onsubmit="
-            event.preventDefault();
-            const name = document.getElementById('rfq-client-name').value;
-            const phone = document.getElementById('rfq-client-phone').value;
-            const notes = document.getElementById('boq-notes').value;
-            window.location.href = generateEmailQuoteUrl(name, phone, notes);
-            showToast('Opening Email client to send quotation to info.pioneerbuilds@gmail.com!');
-          ">
+          <form onsubmit="handleSendQuotationEmail(event)">
             <div style="margin-bottom: var(--space-3);">
               <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Your Name / Company:</label>
               <input type="text" id="rfq-client-name" required placeholder="e.g. Al Habtoor Contracting" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
@@ -534,14 +577,11 @@ function renderRfqView() {
               <textarea id="boq-notes" rows="3" placeholder="Enter UAE site address, delivery date, specs..." style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3);">
-              <span>✉️ Send Quotation to info.pioneerbuilds@gmail.com</span>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3); font-weight:700;">
+              <span>Send Quotation</span>
             </button>
 
-            <button type="button" onclick="
-              const notes = document.getElementById('boq-notes').value;
-              window.open(generateWhatsAppQuoteUrl(notes), '_blank');
-            " class="btn btn-whatsapp" style="width:100%; justify-content:center;">
+            <button type="button" onclick="handleSendQuotationWhatsApp(event)" class="btn btn-whatsapp" style="width:100%; justify-content:center;">
               ${ICONS.whatsapp}
               <span>Send via WhatsApp</span>
             </button>
@@ -738,6 +778,17 @@ window.onSearchInput = function(val) {
   }
 };
 
+function renderFloatingWhatsApp() {
+  const text = encodeURIComponent("Hello Pioneer Building Materials, I have an inquiry regarding construction materials.");
+  const url = `https://wa.me/${COMPANY_INFO.whatsapp}?text=${text}`;
+  return `
+    <a href="${url}" target="_blank" rel="noopener" class="floating-whatsapp-btn" title="Chat with Pioneer Sales on WhatsApp">
+      ${ICONS.whatsapp}
+      <span>WhatsApp Us</span>
+    </a>
+  `;
+}
+
 // Master App Renderer
 function renderApp() {
   const app = document.getElementById('app');
@@ -760,12 +811,16 @@ function renderApp() {
     <main>${bodyHtml}</main>
     ${renderFooter()}
     ${renderSearchModal()}
+    ${renderFloatingWhatsApp()}
   `;
 }
 
-// Initial Boot & Auto-Slide Timer
+// Initial Boot & Hash Router Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-  renderApp();
+  syncRouteFromHash();
+  window.addEventListener('hashchange', syncRouteFromHash);
+  window.addEventListener('popstate', syncRouteFromHash);
+
   setInterval(() => {
     if (state.currentView === 'home' && !state.searchModalOpen) {
       state.activeSlide = (state.activeSlide + 1) % HERO_SLIDES.length;
