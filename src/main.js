@@ -203,9 +203,7 @@ window.handleSendQuotationEmail = async function(e) {
     "Client / Contractor Name": name,
     "Contact Phone / WhatsApp": phone,
     "Delivery Location & Site Notes": notes || "No additional site notes specified",
-    "Requested Material Items (BOQ List)": itemsSummary,
-    "Supplier Company": COMPANY_INFO.name,
-    "Tax Registration TRN": COMPANY_INFO.trn
+    "Requested Material Items (BOQ List)": itemsSummary
   };
 
   try {
