@@ -605,7 +605,7 @@ function renderRfqView() {
         <p>Review items in your quotation list and send your inquiry directly to <strong>info.pioneerbuilds@gmail.com</strong>.</p>
       </div>
 
-      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-8);">
+      <div class="rfq-layout-grid">
         <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-4);">
             <h3 style="margin:0;">Selected Material Items (${state.boqCart.length})</h3>
@@ -618,34 +618,36 @@ function renderRfqView() {
               <button onclick="navigateTo('products')" class="btn btn-primary">Browse Products</button>
             </div>
           ` : `
-            <table style="width:100%; border-collapse:collapse; margin-top: var(--space-4);">
-              <thead>
-                <tr style="border-bottom:1px solid var(--color-border); text-align:left;">
-                  <th style="padding:8px;">Item</th>
-                  <th style="padding:8px; width:130px;">Quantity</th>
-                  <th style="padding:8px; text-align:right;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${state.boqCart.map(item => `
-                  <tr style="border-bottom:1px solid var(--color-border-subtle);">
-                    <td style="padding:12px 8px;">
-                      <strong style="color:var(--color-text-main); font-size:14px;">${item.name}</strong>
-                      <div style="font-size:12px; color:var(--color-text-muted);">${item.spec}</div>
-                    </td>
-                    <td style="padding:12px 8px;">
-                      <div style="display:flex; align-items:center; gap:6px;">
-                        <input type="number" min="1" value="${item.qty}" onchange="updateBoqCartQty('${item.id}', this.value)" style="width:65px; padding:4px 8px; border:1px solid var(--color-border); border-radius:4px; font-weight:700;">
-                        <span style="font-size:11px; color:var(--color-text-subtle);">${item.unit || ''}</span>
-                      </div>
-                    </td>
-                    <td style="padding:12px 8px; text-align:right;">
-                      <button onclick="removeFromBoqCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600; font-size:13px;">Remove</button>
-                    </td>
+            <div class="rfq-table-wrapper">
+              <table style="width:100%; border-collapse:collapse; margin-top: var(--space-4);">
+                <thead>
+                  <tr style="border-bottom:1px solid var(--color-border); text-align:left;">
+                    <th style="padding:8px;">Item</th>
+                    <th style="padding:8px; width:130px;">Quantity</th>
+                    <th style="padding:8px; text-align:right;">Action</th>
                   </tr>
-                `).join('')}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  ${state.boqCart.map(item => `
+                    <tr style="border-bottom:1px solid var(--color-border-subtle);">
+                      <td style="padding:12px 8px;">
+                        <strong style="color:var(--color-text-main); font-size:14px;">${item.name}</strong>
+                        <div style="font-size:12px; color:var(--color-text-muted);">${item.spec}</div>
+                      </td>
+                      <td style="padding:12px 8px;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                          <input type="number" min="1" value="${item.qty}" onchange="updateBoqCartQty('${item.id}', this.value)" style="width:65px; padding:4px 8px; border:1px solid var(--color-border); border-radius:4px; font-weight:700;">
+                          <span style="font-size:11px; color:var(--color-text-subtle);">${item.unit || ''}</span>
+                        </div>
+                      </td>
+                      <td style="padding:12px 8px; text-align:right;">
+                        <button onclick="removeFromBoqCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600; font-size:13px;">Remove</button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
           `}
         </div>
 
@@ -719,7 +721,7 @@ function renderContactView() {
         <p>Get in touch with our sales team in Dubai for instant product quotes.</p>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8);">
+      <div class="contact-layout-grid">
         <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6);">
           <h3>Pioneer BMT Office</h3>
           <p style="margin-bottom: var(--space-4);">Dubai, United Arab Emirates</p>
