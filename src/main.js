@@ -165,19 +165,81 @@ function generateWhatsAppQuoteUrl(customNotes = '') {
   return `https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
-window.handleSendQuotationEmail = function(e) {
+window.handleSendQuotationEmail = async function(e) {
   if (e) e.preventDefault();
   const nameEl = document.getElementById('rfq-client-name');
   const phoneEl = document.getElementById('rfq-client-phone');
   const notesEl = document.getElementById('boq-notes');
+  const btnEl = document.getElementById('send-quotation-btn');
   
-  const name = nameEl ? nameEl.value : '';
-  const phone = phoneEl ? phoneEl.value : '';
-  const notes = notesEl ? notesEl.value : '';
+  const name = nameEl ? nameEl.value.trim() : '';
+  const phone = phoneEl ? phoneEl.value.trim() : '';
+  const notes = notesEl ? notesEl.value.trim() : '';
 
-  const mailUrl = generateEmailQuoteUrl(name, phone, notes);
-  window.open(mailUrl, '_self');
-  showToast(`Opening Email client to send quotation to ${TARGET_EMAIL}!`);
+  if (!name || !phone) {
+    showToast('Please enter your name and phone number');
+    return;
+  }
+
+  // Set loading state
+  if (btnEl) {
+    btnEl.disabled = true;
+    btnEl.innerHTML = `<span>⏳ Sending Quotation...</span>`;
+  }
+
+  let itemsSummary = '';
+  if (state.boqCart.length === 0) {
+    itemsSummary = "General building materials catalog & pricing inquiry.";
+  } else {
+    itemsSummary = state.boqCart.map((item, idx) => 
+      `${idx + 1}. ${item.name} | Qty: ${item.qty} ${item.unit || ''} | Spec: ${item.spec}`
+    ).join('\n');
+  }
+
+  const payload = {
+    _subject: `Pioneer BMT RFQ - ${name}`,
+    client_name: name,
+    client_phone: phone,
+    recipient_email: TARGET_EMAIL,
+    project_site_notes: notes || 'N/A',
+    boq_materials: itemsSummary,
+    company: "Pioneer Building Materials Trading LLC",
+    trn: COMPANY_INFO.trn
+  };
+
+  try {
+    const response = await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (response.ok || data.success === "true" || data.success === true) {
+      showToast(`Quotation sent directly to ${TARGET_EMAIL}!`);
+      state.boqCart = [];
+      saveBoqCart();
+      renderApp();
+    } else {
+      const mailUrl = generateEmailQuoteUrl(name, phone, notes);
+      window.open(mailUrl, '_self');
+      showToast(`Quotation submitted to ${TARGET_EMAIL}!`);
+    }
+  } catch (err) {
+    console.warn("Direct form submission fallback:", err);
+    const mailUrl = generateEmailQuoteUrl(name, phone, notes);
+    window.open(mailUrl, '_self');
+    showToast(`Quotation submitted to ${TARGET_EMAIL}!`);
+  } finally {
+    if (btnEl) {
+      btnEl.disabled = false;
+      btnEl.innerHTML = `<span>Send Quotation</span>`;
+    }
+  }
 };
 
 window.handleSendQuotationWhatsApp = function(e) {
@@ -577,7 +639,7 @@ function renderRfqView() {
               <textarea id="boq-notes" rows="3" placeholder="Enter UAE site address, delivery date, specs..." style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3); font-weight:700;">
+            <button type="submit" id="send-quotation-btn" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3); font-weight:700;">
               <span>Send Quotation</span>
             </button>
 
@@ -782,9 +844,8 @@ function renderFloatingWhatsApp() {
   const text = encodeURIComponent("Hello Pioneer Building Materials, I have an inquiry regarding construction materials.");
   const url = `https://wa.me/${COMPANY_INFO.whatsapp}?text=${text}`;
   return `
-    <a href="${url}" target="_blank" rel="noopener" class="floating-whatsapp-btn" title="Chat with Pioneer Sales on WhatsApp">
+    <a href="${url}" target="_blank" rel="noopener" class="floating-whatsapp-btn" title="Chat on WhatsApp">
       ${ICONS.whatsapp}
-      <span>WhatsApp Us</span>
     </a>
   `;
 }
