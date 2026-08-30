@@ -922,22 +922,22 @@ function renderMobileSidebar() {
 
         <nav class="mobile-sidebar-nav">
           <a href="#" onclick="navigateTo('home'); return false;" class="mobile-nav-link ${state.currentView === 'home' ? 'active' : ''}">
-            <span>🏠 Home</span>
+            <span>Home</span>
           </a>
           <a href="#" onclick="navigateTo('categories'); return false;" class="mobile-nav-link ${state.currentView === 'categories' ? 'active' : ''}">
-            <span>📦 Material Categories</span>
+            <span>Material Categories</span>
           </a>
           <a href="#" onclick="navigateTo('products'); return false;" class="mobile-nav-link ${state.currentView === 'products' ? 'active' : ''}">
-            <span>🛠️ Products Directory</span>
+            <span>Products Directory</span>
           </a>
           <a href="#" onclick="navigateTo('rfq'); return false;" class="mobile-nav-link ${state.currentView === 'rfq' ? 'active' : ''}">
-            <span>📋 Request Quotation (RFQ)</span>
+            <span>Request Quotation (RFQ)</span>
           </a>
           <a href="#" onclick="navigateTo('about'); return false;" class="mobile-nav-link ${state.currentView === 'about' ? 'active' : ''}">
-            <span>🏢 About Pioneer BMT</span>
+            <span>About Pioneer BMT</span>
           </a>
           <a href="#" onclick="navigateTo('contact'); return false;" class="mobile-nav-link ${state.currentView === 'contact' ? 'active' : ''}">
-            <span>📞 Contact & Location</span>
+            <span>Contact & Location</span>
           </a>
         </nav>
 
