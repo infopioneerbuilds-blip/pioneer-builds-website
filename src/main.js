@@ -417,28 +417,15 @@ function renderHeader() {
   `;
 }
 
-// 1. HERO SECTION WITH IMAGE file_00000000362881f9a9fe771fa943b030.png AND ANIMATED TITLE
+// 1. TOP MAIN IMAGE & ANIMATED TITLE SECTION
 function renderHeroSection() {
   return `
-    <section class="tamba-hero-carousel" style="background-image: url('/cover.png'); background-size: cover; background-position: center;">
-      <div class="carousel-overlay" style="background: linear-gradient(180deg, rgba(30, 41, 59, 0.70) 0%, rgba(30, 41, 59, 0.88) 100%);"></div>
-      <div class="container" style="position: relative; z-index: 10; height: 100%; display: flex; align-items: center; justify-content: center;">
-        <div class="carousel-caption-box" style="padding-top: 60px;">
-          <h1 class="hero-animated-title">Welcome to Pioneer Building Materials</h1>
-          <p class="carousel-subtext" style="max-width: 720px;">
-            Leading Wholesaler & Stockist of Certified Architectural Materials, Marine Plywood, Timber, Structural Steel Mesh, Waterproofing & Tipper Truck Rental in Dubai, UAE.
-          </p>
-          <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
-            <button onclick="navigateTo('categories')" class="btn btn-primary" style="padding: 14px 28px; font-size: 15px;">
-              <span>Explore Categories</span>
-              ${ICONS.arrowRight}
-            </button>
-            <button onclick="navigateTo('cart')" class="btn btn-secondary" style="padding: 14px 28px; font-size: 15px; background: rgba(255,255,255,0.15); color: #ffffff; border-color: rgba(255,255,255,0.4); backdrop-filter: blur(8px);">
-              ${ICONS.cart}
-              <span>View Cart</span>
-            </button>
-          </div>
-        </div>
+    <section class="hero-main-image-section">
+      <div class="hero-main-img-container">
+        <img src="/cover.png" alt="Pioneer Building Materials" class="hero-main-standalone-img">
+      </div>
+      <div class="welcome-title-banner">
+        <h1 class="hero-animated-title-standalone">Welcome to Pioneer Building Materials</h1>
       </div>
     </section>
   `;

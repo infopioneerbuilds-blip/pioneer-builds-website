@@ -1073,7 +1073,50 @@ button, input, select, textarea {
   }
 }
 
-/* Redesigned Homepage Hero & Sections Styling */
+/* Hero Main Image & Title Section (No Overlay Text or Buttons on Image) */
+.hero-main-image-section {
+  width: 100%;
+  padding-top: 90px;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+.hero-main-img-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+.hero-main-standalone-img {
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+  display: block;
+}
+
+.welcome-title-banner {
+  text-align: center;
+  padding: var(--space-10) var(--space-6) var(--space-4);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-animated-title-standalone {
+  font-size: clamp(28px, 4.5vw, 52px);
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.15;
+  background: linear-gradient(135deg, #1E293B 0%, #3F8F8F 50%, #1E293B 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: heroGradientShift 6s ease infinite, heroFadeSlideUp 0.9s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+}
 
 /* Animated Hero Entrance */
 .hero-animated-title {
