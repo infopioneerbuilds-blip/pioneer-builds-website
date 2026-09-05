@@ -941,8 +941,16 @@ button, input, select, textarea {
     width: 100%;
   }
 
+  /* Mobile Navigation Bar positioned cleanly at top, followed by Hero Image below */
   .tamba-header-wrap {
-    padding: 6px 0;
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    padding: var(--space-3) var(--space-3);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border-subtle);
+    pointer-events: auto;
   }
 
   .tamba-navbar {
@@ -952,6 +960,7 @@ button, input, select, textarea {
     box-sizing: border-box;
     border-radius: 9999px;
     box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    background: var(--color-surface);
   }
 
   .brand-logo {
@@ -973,19 +982,14 @@ button, input, select, textarea {
     letter-spacing: 0.02em;
   }
 
-  .phone-link-btn {
-    display: none;
-  }
-
-  .nav-links-menu {
-    display: none;
-  }
-
+  .phone-link-btn,
+  .nav-links-menu,
   .desktop-rfq-btn {
     display: none;
   }
 
-  .mobile-cart-badge-btn {
+  .mobile-cart-badge-btn,
+  .mobile-menu-toggle-btn {
     display: flex;
   }
 
@@ -999,10 +1003,6 @@ button, input, select, textarea {
     background: transparent;
     width: 36px;
     height: 36px;
-  }
-
-  .mobile-menu-toggle-btn {
-    display: flex;
   }
 
   /* RFQ & Contact 1-Column Mobile Layout */
@@ -1022,54 +1022,28 @@ button, input, select, textarea {
   .solutions-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .tamba-hero-carousel {
-    height: 420px;
-  }
-  .carousel-headline {
-    font-size: var(--font-size-2xl);
-  }
-  .carousel-subtext {
-    font-size: var(--font-size-base);
-  }
-  .welcome-grid {
-    grid-template-columns: 1fr;
-  }
-  .welcome-img-wrap {
-    height: 260px;
-  }
-  .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: var(--space-4);
-  }
-  .floating-whatsapp-btn {
-    bottom: 20px;
-    right: 20px;
-    width: 48px;
-    height: 48px;
-  }
-  .floating-whatsapp-btn svg {
-    width: 24px;
-    height: 24px;
-  }
 
-  /* Mobile Hero Main Image (Framed card with top header spacing) */
+  /* Hero Cover Image positioned right below mobile navbar (nav bar then image) */
   .hero-main-image-section {
-    padding-top: 68px;
+    padding-top: 0;
   }
 
   .hero-main-img-container {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 var(--space-3);
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   .hero-main-standalone-img {
+    width: 100%;
     height: auto;
     max-height: none;
     object-fit: contain;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-border);
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    display: block;
   }
 
   .welcome-title-banner {
