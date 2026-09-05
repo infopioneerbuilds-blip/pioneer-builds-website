@@ -379,7 +379,7 @@ function renderHeader() {
         <nav class="tamba-navbar">
           <!-- Brand Logo -->
           <a href="#" onclick="navigateTo('home'); return false;" class="brand-logo">
-            <div class="brand-icon">P</div>
+            <img src="/logo.jpeg" alt="Pioneer Logo" class="brand-icon-img">
             <div class="brand-text">
               <span class="brand-title">PIONEER</span>
               <span class="brand-subtitle">Building Materials LLC</span>
@@ -926,7 +926,7 @@ function renderFooter() {
         <div class="footer-grid">
           <div>
             <div class="brand-logo" style="margin-bottom: var(--space-4);">
-              <div class="brand-icon" style="background:#1E293B; color:#ffffff;">P</div>
+              <img src="/logo.jpeg" alt="Pioneer Logo" class="brand-icon-img">
               <div class="brand-text">
                 <span class="brand-title" style="color:#1E293B;">PIONEER</span>
                 <span class="brand-subtitle" style="color:#1E293B;">Building Materials LLC</span>
@@ -1061,7 +1061,7 @@ function renderMobileSidebar() {
       <aside class="mobile-sidebar-drawer" onclick="event.stopPropagation()">
         <div class="mobile-sidebar-header">
           <div class="brand-logo">
-            <div class="brand-icon">P</div>
+            <img src="/logo.jpeg" alt="Pioneer Logo" class="brand-icon-img">
             <div class="brand-text">
               <span class="brand-title">PIONEER</span>
               <span class="brand-subtitle">Building Materials</span>

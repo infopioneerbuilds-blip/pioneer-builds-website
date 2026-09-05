@@ -236,6 +236,17 @@ button, input, select, textarea {
   font-size: var(--font-size-xl);
 }
 
+.brand-icon-img {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
 .brand-title {
   font-family: var(--font-display);
   font-size: var(--font-size-base);
