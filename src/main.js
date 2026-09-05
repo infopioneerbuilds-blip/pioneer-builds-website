@@ -13,7 +13,6 @@ const BRAND_IMAGE_IDS = [
   '1QlIYIG--spoyIJNrRfTe5MUHIg0KppZw',
   '1FU6KsRqaZ7hBGayjV3j3AsU3SP-sLdda',
   '1q6Q6-gJ-vKoZ2nOpQ9vP8RQL74KNWzIC',
-  '1vCzrlKAR2ru8Egeouu-VBF7NJBzWBGse',
   '1xkJU109zsRdLWMa8c_j7ZmtRGgMztoWc',
   '11r0HvNLVgELCI83P-e0a1lPY_R4xzHxz',
   '1cc64FwoSbLkV9xWykAPDmjFta1rBenGl',
@@ -31,29 +30,24 @@ const BRAND_IMAGE_IDS = [
   '1hECM7ZJiz90JbpHK7qeNpRdIfglYq__j',
   '1_SUxt4NtuuBIBdg60HYEFYfh1nvSkO5p',
   '1uWecWN0n4fYh7CXZ1IIXfJz7CtmsyRcB',
-  '1UZ2It-RiGRR3DVEwE3gf6_wnoFhbKyHD'
+  '16QuOaL9Wln5ErijmD6FF1UDHLsw98ZMD',
+  '1nGfvMnwKRRv_GYDh8hQ5rQ0rsVGjOIo9'
 ];
 
 // Fleet Trucks Google Drive Direct IDs
 const FLEET_TRUCKS = [
   {
-    name: "3 Meter Cubic Tipper",
-    spec: "3m³ Compact Tipper Truck with driver for rapid site delivery across Dubai & UAE urban zones.",
-    capacity: "3m³ Load Capacity",
+    capacity: "3 Meter Cubic Capacity",
     image: "https://lh3.googleusercontent.com/d/1L918lwizbD3OSMSTcHf0dGDrTHopp52X=w1000",
     badge: "Light Fleet"
   },
   {
-    name: "5 Meter Cubic Tipper",
-    spec: "5m³ Medium Duty Dump Truck engineered for aggregate, dune sand & blockwork site supply.",
-    capacity: "5m³ Load Capacity",
+    capacity: "5 Meter Cubic Capacity",
     image: "https://lh3.googleusercontent.com/d/1eSa9J74_A7eoHoTHYbShHskMZWimddqj=w1000",
     badge: "Medium Fleet"
   },
   {
-    name: "20 Meter Cubic Tipper",
-    spec: "20m³ Heavy Duty 10-Wheel Tipper Truck for bulk quarry aggregate, road sub-base & foundation haulage.",
-    capacity: "20m³ Load Capacity",
+    capacity: "20 Meter Cubic Capacity",
     image: "https://lh3.googleusercontent.com/d/1LyZMfRtRvanbPhbT6FMfIQMxl61oU53h=w1000",
     badge: "Heavy Fleet"
   }
@@ -557,9 +551,8 @@ function renderFleetSection() {
                 <img src="${truck.image}" alt="${truck.name}" class="fleet-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80'">
                 <span class="fleet-badge">${truck.badge}</span>
               </div>
-              <div class="fleet-card-body" style="text-align: center; padding: 16px 20px 20px;">
-                <h3 class="fleet-card-title" style="margin-bottom: 6px;">${truck.name}</h3>
-                <div style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--color-primary-dark); margin: 0;">
+              <div class="fleet-card-body" style="text-align: center; padding: 18px 20px;">
+                <div style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 800; color: var(--color-primary-dark); margin: 0;">
                   ${ICONS.truckSmall}
                   <span>${truck.capacity}</span>
                 </div>
