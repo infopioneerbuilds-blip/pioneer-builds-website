@@ -620,18 +620,18 @@ function renderWhyChooseUsSection() {
           <div class="why-card">
             <div class="why-icon-box">${ICONS.badgeCheck}</div>
             <h3 class="why-card-title">Certified Quality</h3>
-            <p class="why-card-desc">All timber, steel, cement & waterproofing items comply with UAE municipality standards & BS EN specifications.</p>
+            <p class="why-card-desc">All supplied building materials are factory-tested and certified to comply with strict UAE municipality standards and international specifications.</p>
           </div>
 
           <div class="why-card">
             <div class="why-icon-box">${ICONS.truckFast}</div>
             <h3 class="why-card-title">In-House Logistics</h3>
-            <p class="why-card-desc">Private fleet of 3-ton pickups and 20m³ heavy tipper dump trucks ensuring prompt site delivery across all Emirates.</p>
+            <p class="why-card-desc">In-house transport fleet including 3 ton, 5 ton, 20 ton tippers and more, ensuring rapid site delivery across Dubai & all UAE Emirates.</p>
           </div>
 
           <div class="why-card">
             <div class="why-icon-box">${ICONS.tagPercent}</div>
-            <h3 class="why-card-title">Wholesale Rates</h3>
+            <h3 class="why-card-title">Competitive Rates</h3>
             <p class="why-card-desc">Direct factory pricing with transparent volume discounts for commercial contractors and project managers.</p>
           </div>
 
@@ -949,7 +949,7 @@ function renderFooter() {
           </div>
 
           <div>
-            <h4 class="footer-col-title">Top Solutions</h4>
+            <h4 class="footer-col-title">Our Products</h4>
             <ul class="footer-links">
               ${CATEGORIES.slice(0, 5).map(c => `
                 <li><a href="#" onclick="navigateTo('category', '${c.slug}'); return false;" class="footer-link">${c.name}</a></li>
