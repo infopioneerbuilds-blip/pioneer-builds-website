@@ -1175,8 +1175,12 @@ function initSwipers() {
   if (projEl && !projEl.swiper) {
     new window.Swiper(projEl, {
       slidesPerView: 1,
-      spaceBetween: 24,
+      spaceBetween: 20,
       loop: true,
+      allowTouchMove: true,
+      grabCursor: true,
+      touchEventsTarget: 'wrapper',
+      simulateTouch: true,
       autoplay: {
         delay: 4000,
         disableOnInteraction: false
@@ -1190,8 +1194,8 @@ function initSwipers() {
         prevEl: '.projects-swiper .swiper-button-prev'
       },
       breakpoints: {
-        640: { slidesPerView: 2 },
-        992: { slidesPerView: 3 }
+        640: { slidesPerView: 2, spaceBetween: 24 },
+        992: { slidesPerView: 3, spaceBetween: 24 }
       }
     });
   }

@@ -1434,6 +1434,26 @@ button, input, select, textarea {
   letter-spacing: 0.05em;
 }
 
+@media (max-width: 768px) {
+  .projects-swiper .swiper-button-next,
+  .projects-swiper .swiper-button-prev {
+    display: none !important;
+  }
+  .projects-swiper .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: var(--color-text-subtle);
+  }
+  .projects-swiper .swiper-pagination-bullet-active {
+    width: 24px;
+    border-radius: var(--radius-pill);
+    background: var(--color-primary-dark);
+  }
+  .project-img-wrap {
+    height: 210px;
+  }
+}
+
 /* Why Choose Us Section (Vector Icons, No Emojis) */
 .why-section {
   padding: var(--space-16) 0;
