@@ -465,12 +465,11 @@ function renderOurProductsSlider() {
                   <div class="category-hero-overlay"></div>
                   <div class="category-hero-content">
                     <h3 class="category-hero-title">${cat.name}</h3>
-                    <p class="category-hero-desc">${cat.description}</p>
-                    <button onclick="navigateTo('category', '${cat.slug}')" class="btn btn-primary" style="padding: 14px 32px; font-size: 15px; font-weight: 800;">
-                      <span>Explore Now</span>
-                      ${ICONS.arrowRight}
-                    </button>
                   </div>
+                  <button onclick="navigateTo('category', '${cat.slug}')" class="btn btn-primary category-explore-btn-br">
+                    <span>Explore Now</span>
+                    ${ICONS.arrowRight}
+                  </button>
                 </div>
               </div>
             `;
