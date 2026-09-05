@@ -557,16 +557,11 @@ function renderFleetSection() {
                 <img src="${truck.image}" alt="${truck.name}" class="fleet-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80'">
                 <span class="fleet-badge">${truck.badge}</span>
               </div>
-              <div class="fleet-card-body">
-                <h3 class="fleet-card-title">${truck.name}</h3>
-                <div style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); margin-bottom: var(--space-3);">
+              <div class="fleet-card-body" style="text-align: center; padding: 16px 20px 20px;">
+                <h3 class="fleet-card-title" style="margin-bottom: 6px;">${truck.name}</h3>
+                <div style="font-size: 13px; font-weight: 800; color: var(--color-primary-dark); margin: 0;">
                   🚛 ${truck.capacity}
                 </div>
-                <p class="fleet-card-desc">${truck.spec}</p>
-                <button onclick="addToCartById('pbm-002'); navigateTo('cart');" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                  <span>Book / Inquire Fleet</span>
-                  ${ICONS.arrowRight}
-                </button>
               </div>
             </div>
           `).join('')}
