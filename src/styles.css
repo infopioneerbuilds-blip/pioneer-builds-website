@@ -184,19 +184,17 @@ button, input, select, textarea {
   background-color: #15803d;
 }
 
-/* Header Navbar (Positioned at top of page) */
+/* Floating Translucent Pill Header Navbar (Floats over hero image) */
 .tamba-header-wrap {
-  position: sticky;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: var(--space-3) 0;
-  background: rgba(248, 250, 250, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--color-border-subtle);
-  pointer-events: auto;
+  padding: var(--space-4) 0;
+  background: transparent;
+  border-bottom: none;
+  pointer-events: none;
 }
 
 .tamba-navbar {
@@ -207,15 +205,15 @@ button, input, select, textarea {
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: var(--radius-pill);
   padding: var(--space-2) var(--space-6);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
   gap: var(--space-4);
 }
 
 .main-inner {
-  padding-top: var(--space-6);
+  padding-top: 90px;
 }
 
 .brand-logo {
@@ -1075,29 +1073,30 @@ button, input, select, textarea {
   }
 }
 
-/* Hero Main Image & Title Section (No Overlay Text or Buttons on Image) */
+/* Hero Main Image & Title Section (Full screen width with floating navbar over image) */
 .hero-main-image-section {
   width: 100%;
-  padding-top: var(--space-4);
+  padding-top: 0;
   background: var(--color-bg);
   overflow: hidden;
+  position: relative;
 }
 
 .hero-main-img-container {
   width: 100%;
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 0 var(--space-4);
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .hero-main-standalone-img {
   width: 100%;
   height: auto;
-  max-height: none;
-  object-fit: contain;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-border);
+  max-height: 85vh;
+  object-fit: cover;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
   display: block;
 }
 
