@@ -436,52 +436,44 @@ function renderHeroSection() {
   `;
 }
 
-// 2. OUR PRODUCTS - CATEGORY SLIDES (SWIPER)
+// 2. OUR PRODUCTS - FULL SCREEN CATEGORY HERO SLIDES (SWIPER)
 function renderOurProductsSlider() {
   return `
-    <section class="tamba-solutions-section" style="padding: var(--space-16) 0; background: var(--color-bg);">
-      <div class="container">
-        <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-10);">
-          <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
-            Material Divisions
-          </span>
-          <h2 style="font-size: var(--font-size-3xl);">Our Products</h2>
-          <p style="margin: 8px auto 0;">Explore our 11 product divisions featuring 121+ certified building materials.</p>
-        </div>
+    <section class="products-hero-slider-section">
+      <div class="container" style="margin-bottom: var(--space-8); text-align: center; max-width: 750px;">
+        <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
+          Material Divisions
+        </span>
+        <h2 style="font-size: var(--font-size-3xl);">Our Products</h2>
+        <p style="margin: 8px auto 0;">Explore our 11 full material divisions featuring certified building products.</p>
+      </div>
 
-        <div class="swiper product-categories-swiper" style="padding-bottom: 50px;">
-          <div class="swiper-wrapper">
-            ${CATEGORIES.map(cat => {
-              const firstProd = PRODUCTS.find(p => p.catId === cat.id);
-              const thumbImg = firstProd ? firstProd.image : '/cover.png';
-              return `
-                <div class="swiper-slide">
-                  <div class="solution-card" style="height: 100%; display: flex; flex-direction: column;" onclick="navigateTo('category', '${cat.slug}')">
-                    <div class="solution-thumb-box" style="height: 220px;">
-                      <img src="${thumbImg}" alt="${cat.name}" class="solution-thumb-img" loading="lazy">
-                      <span style="position: absolute; top: 12px; right: 12px; background: rgba(30,41,59,0.85); backdrop-filter: blur(4px); color: #ffffff; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 700;">
-                        ${cat.itemCount} Items
-                      </span>
-                    </div>
-                    <div class="solution-card-body" style="padding: var(--space-6); display: flex; flex-direction: column; flex-grow: 1;">
-                      <h3 style="font-size: var(--font-size-lg); margin-bottom: var(--space-2); color: var(--color-text-main);">${cat.name}</h3>
-                      <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-bottom: var(--space-6); flex-grow: 1; line-height: 1.5;">
-                        ${cat.description}
-                      </p>
-                      <button onclick="event.stopPropagation(); navigateTo('category', '${cat.slug}')" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                        <span>Explore Now</span>
-                        ${ICONS.arrowRight}
-                      </button>
-                    </div>
+      <div class="swiper full-screen-products-swiper">
+        <div class="swiper-wrapper">
+          ${CATEGORIES.map(cat => {
+            const firstProd = PRODUCTS.find(p => p.catId === cat.id);
+            const thumbImg = firstProd ? firstProd.image : '/cover.png';
+            return `
+              <div class="swiper-slide">
+                <div class="category-hero-slide" style="background-image: url('${thumbImg}');">
+                  <div class="category-hero-overlay"></div>
+                  <div class="category-hero-content">
+                    <span class="category-hero-badge">${cat.itemCount} Products Available</span>
+                    <h3 class="category-hero-title">${cat.name}</h3>
+                    <p class="category-hero-desc">${cat.description}</p>
+                    <button onclick="navigateTo('category', '${cat.slug}')" class="btn btn-primary" style="padding: 14px 32px; font-size: 15px; font-weight: 800;">
+                      <span>Explore Now</span>
+                      ${ICONS.arrowRight}
+                    </button>
                   </div>
                 </div>
-              `;
-            }).join('')}
-          </div>
-          <div class="swiper-pagination"></div>
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
+              </div>
+            `;
+          }).join('')}
         </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
       </div>
     </section>
   `;
@@ -1128,29 +1120,28 @@ function renderApp() {
 function initSwipers() {
   if (typeof window.Swiper === 'undefined') return;
 
-  // 1. Categories Swiper
-  const catEl = document.querySelector('.product-categories-swiper');
+  // 1. Full Screen Categories Hero Swiper
+  const catEl = document.querySelector('.full-screen-products-swiper');
   if (catEl && !catEl.swiper) {
     new window.Swiper(catEl, {
       slidesPerView: 1,
-      spaceBetween: 24,
+      spaceBetween: 0,
       loop: true,
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true
+      },
       autoplay: {
-        delay: 3500,
+        delay: 4500,
         disableOnInteraction: false
       },
       pagination: {
-        el: '.product-categories-swiper .swiper-pagination',
+        el: '.full-screen-products-swiper .swiper-pagination',
         clickable: true
       },
       navigation: {
-        nextEl: '.product-categories-swiper .swiper-button-next',
-        prevEl: '.product-categories-swiper .swiper-button-prev'
-      },
-      breakpoints: {
-        640: { slidesPerView: 2 },
-        992: { slidesPerView: 3 },
-        1200: { slidesPerView: 4 }
+        nextEl: '.full-screen-products-swiper .swiper-button-next',
+        prevEl: '.full-screen-products-swiper .swiper-button-prev'
       }
     });
   }
