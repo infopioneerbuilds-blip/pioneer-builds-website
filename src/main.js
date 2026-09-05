@@ -382,7 +382,7 @@ function renderHeader() {
             <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="brand-icon-img">
             <div class="brand-text">
               <span class="brand-title">PIONEER</span>
-              <span class="brand-subtitle">Building Materials LLC</span>
+              <span class="brand-subtitle">Building Materials Trading LLC</span>
             </div>
           </a>
 
@@ -929,7 +929,7 @@ function renderFooter() {
               <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="brand-icon-img">
               <div class="brand-text">
                 <span class="brand-title" style="color:#1E293B;">PIONEER</span>
-                <span class="brand-subtitle" style="color:#1E293B;">Building Materials LLC</span>
+                <span class="brand-subtitle" style="color:#1E293B;">Building Materials Trading LLC</span>
               </div>
             </div>
             <p style="font-size: 14px; color: #1E293B; margin-bottom: var(--space-4); font-weight: 500;">
@@ -1064,7 +1064,7 @@ function renderMobileSidebar() {
             <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="brand-icon-img">
             <div class="brand-text">
               <span class="brand-title">PIONEER</span>
-              <span class="brand-subtitle">Building Materials</span>
+              <span class="brand-subtitle">Building Materials Trading LLC</span>
             </div>
           </div>
           <button class="icon-btn" onclick="closeMobileMenu()" title="Close Menu">
