@@ -3,96 +3,141 @@ import { COMPANY_INFO, CATEGORIES, PRODUCTS } from './data/products.js';
 // Target email from environment variable (VITE_TARGET_EMAIL)
 const TARGET_EMAIL = import.meta.env.VITE_TARGET_EMAIL || 'info.pioneerbuilds@gmail.com';
 
-// Application State
-const state = {
-  currentView: 'home', // 'home' | 'categories' | 'products' | 'category' | 'about' | 'contact' | 'rfq'
-  selectedCategory: null,
-  searchQuery: '',
-  boqCart: JSON.parse(localStorage.getItem('pioneer_boq_cart') || '[]'),
-  searchModalOpen: false,
-  mobileMenuOpen: false,
-  activeSlide: 0
-};
+// 27 Google Drive Brand Image IDs from user folder
+const BRAND_IMAGE_IDS = [
+  '1UZ2It-RiGRR3DVEwE3gf6_wnoFhbKyHD', '1uWecWN0n4fYh7CXZ1IIXfJz7CtmsyRcB',
+  '1_SUxt4NtuuBIBdg60HYEFYfh1nvSkO5p', '1hECM7ZJiz90JbpHK7qeNpRdIfglYq__j',
+  '1RmCjQYSCdMO3oOnaB8MSffdRq6i7B7m3', '1S37UG2PeKlu9RY_B95eM_2gReQ5vfPqq',
+  '1H715MwKjachfFZyENDRx8NE7UqMf4iv-', '1lNM0oO1afDB2iSQfItb1lyVo341XNh09',
+  '1gm_6yb2Kxp4O6wPQSQz5aN1xOZKRn3Or', '1qbCOXO3d71sDZAKTO70a3um2d9ehod80',
+  '10mbnT9I_xN0BG85ItcqiflTayieCM6qi', '1bWS160R6fj10z63UULVks9vve9ThmeD5',
+  '1uN0vYbsGeEUqU5J7eq9VJpk6g2a4CYJK', '1ZWkRsbt_duloavcwraU0VOJ05fy-5cO7',
+  '1FWkU9WZUYZU7Hx4Wz04NFSLnx3ehA5Bg', '1cc64FwoSbLkV9xWykAPDmjFta1rBenGl',
+  '11r0HvNLVgELCI83P-e0a1lPY_R4xzHxz', '1xkJU109zsRdLWMa8c_j7ZmtRGgMztoWc',
+  '1vCzrlKAR2ru8Egeouu-VBF7NJBzWBGse', '1q6Q6-gJ-vKoZ2nOpQ9vP8RQL74KNWzIC',
+  '1FU6KsRqaZ7hBGayjV3j3AsU3SP-sLdda', '1QlIYIG--spoyIJNrRfTe5MUHIg0KppZw',
+  '1qlnMGDJ6ARc1anunONkDVFSQFnUYGDGd', '17gfGSf8-2SWhon2hU36b0d1XBc8c1ZGh',
+  '1giLGFs1duXvwO7XE4t7b_7ATYEoeaO-H', '1zAm_nQGsl5jrzV_yKfwGZyZXFpDFgTo2',
+  '1Gk7WePrF9kfbVT5GzCw0th6jgjdXpcOB'
+];
 
-// Hero Carousel Cover & Banner Slides
-const HERO_SLIDES = [
+// Fleet Trucks Google Drive Direct IDs
+const FLEET_TRUCKS = [
   {
-    title: "Pioneer Building Materials Trading LLC",
-    subtitle: "Premier Wholesaler & Stockist of Certified Construction Materials, Timber, Steel Mesh & Site Fleet in Dubai UAE.",
-    image: "/cover.png",
-    catSlug: "aggregates-cement-concrete"
+    name: "3 Meter Cubic Tipper",
+    spec: "3m³ Compact Tipper Truck with driver for rapid site delivery across Dubai & UAE urban zones.",
+    capacity: "3m³ Load Capacity",
+    image: "https://drive.google.com/thumbnail?id=1L918lwizbD3OSMSTcHf0dGDrTHopp52X&sz=w1000",
+    badge: "Light Fleet"
   },
   {
-    title: "Aggregates & Cement Supply",
-    subtitle: "High grade Portland Cement, washed sand & aggregate gravel delivered direct to site across UAE.",
-    image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1600&auto=format&fit=crop&q=80",
-    catSlug: "aggregates-cement-concrete"
+    name: "5 Meter Cubic Tipper",
+    spec: "5m³ Medium Duty Dump Truck engineered for aggregate, dune sand & blockwork site supply.",
+    capacity: "5m³ Load Capacity",
+    image: "https://drive.google.com/thumbnail?id=1eSa9J74_A7eoHoTHYbShHskMZWimddqj&sz=w1000",
+    badge: "Medium Fleet"
   },
   {
-    title: "Marine Plywood & Formwork Timber",
-    subtitle: "Phenolic film-faced marine ply, whitewood timber joists, tie rods, props & scaffolding couplers.",
-    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1600&auto=format&fit=crop&q=80",
-    catSlug: "timber-plywood-formwork"
-  },
-  {
-    title: "BRC Mesh & Structural Steel",
-    subtitle: "High yield welded wire fabric mesh sheets, binding wire rolls, C channels & steel lintels.",
-    image: "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=1600&auto=format&fit=crop&q=80",
-    catSlug: "steel-mesh-structural-metal"
-  },
-  {
-    title: "PPE & Site Safety Equipment",
-    subtitle: "EN397 hard hat helmets, safety boots, split leather gloves, fall harnesses & hi-vis jackets.",
-    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&auto=format&fit=crop&q=80",
-    catSlug: "safety-gear-ppe"
+    name: "20 Meter Cubic Tipper",
+    spec: "20m³ Heavy Duty 10-Wheel Tipper Truck for bulk quarry aggregate, road sub-base & foundation haulage.",
+    capacity: "20m³ Load Capacity",
+    image: "https://drive.google.com/thumbnail?id=1LyZMfRtRvanbPhbT6FMfIQMxl61oU53h&sz=w1000",
+    badge: "Heavy Fleet"
   }
 ];
 
-// SVG Icons
+// Projects Showcase
+const PROJECTS_BUILD = [
+  {
+    title: "Burj Crown Residential Tower",
+    location: "Downtown Dubai",
+    image: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?w=800&auto=format&fit=crop&q=80",
+    supplied: "Supplied: Portland Cement, Marine Plywood & BRC Welded Mesh"
+  },
+  {
+    title: "Dubai South Logistics Park",
+    location: "Jebel Ali Freezone",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&auto=format&fit=crop&q=80",
+    supplied: "Supplied: Bulk Crushed Aggregates, Sand & 20m³ Tipper Fleet Rental"
+  },
+  {
+    title: "Ras Al Khor Commercial Complex",
+    location: "Dubai Industrial Zone",
+    image: "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=800&auto=format&fit=crop&q=80",
+    supplied: "Supplied: Structural Steel Beams, C-Channels & Heavy Anchor Bolts"
+  },
+  {
+    title: "Dubai Marina Waterfront Towers",
+    location: "Dubai Marina",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80",
+    supplied: "Supplied: Waterproofing Bitumen Membrane, DPC & Floor Protection"
+  },
+  {
+    title: "Jumeirah Village Circle Heights",
+    location: "JVC Dubai",
+    image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&auto=format&fit=crop&q=80",
+    supplied: "Supplied: Site Safety Gear PPE, Scaffolding Couplers & Whitewood Timber"
+  }
+];
+
+// Vector SVG Icons (No Emojis)
 const ICONS = {
   search: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
   phone: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`,
   whatsapp: `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.01c0 2.13.665 4.108 1.8 5.732L2 22l4.382-1.744A9.957 9.957 0 0012 22.02c5.523 0 10-4.484 10-10.01C22 6.484 17.523 2 12 2zm.006 18.016a7.973 7.973 0 01-4.07-1.107l-.292-.174-2.6.1.688-2.533-.19-.303A7.974 7.974 0 014.008 12.01c0-4.411 3.585-7.997 8.002-7.997 4.411 0 7.992 3.586 7.992 7.997 0 4.415-3.58 8.006-7.996 8.006zm4.38-5.986c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.013-.373-1.93-1.19-.714-.637-1.196-1.425-1.336-1.665-.14-.24-.015-.37.105-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.48-.4-.41-.54-.42l-.46-.01c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2.01 0 1.19.86 2.33.98 2.49.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.2-.16-.44-.28z"/></svg>`,
-  download: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
   close: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
-  arrowLeft: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`,
   arrowRight: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`,
   location: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
   mail: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`,
-  menu: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`
+  menu: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`,
+  cart: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>`,
+  badgeCheck: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+  truckFast: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>`,
+  tagPercent: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>`,
+  headset: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>`
 };
 
-// Cart Helpers & Global Window Handlers
-function saveBoqCart() {
-  localStorage.setItem('pioneer_boq_cart', JSON.stringify(state.boqCart));
+// Application State
+const state = {
+  currentView: 'home', // 'home' | 'categories' | 'category' | 'about' | 'contact' | 'cart'
+  selectedCategory: null,
+  searchQuery: '',
+  cart: JSON.parse(localStorage.getItem('pioneer_cart') || localStorage.getItem('pioneer_boq_cart') || '[]'),
+  searchModalOpen: false,
+  mobileMenuOpen: false
+};
+
+// Cart LocalStorage Sync
+function saveCart() {
+  localStorage.setItem('pioneer_cart', JSON.stringify(state.cart));
 }
 
-window.addToBoqCartById = function(productId, quantity = 1) {
+window.addToCartById = function(productId, quantity = 1) {
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return;
-  const existing = state.boqCart.find(item => item.id === product.id);
+  const existing = state.cart.find(item => item.id === product.id);
   if (existing) {
     existing.qty += quantity;
   } else {
-    state.boqCart.push({ ...product, qty: quantity });
+    state.cart.push({ ...product, qty: quantity });
   }
-  saveBoqCart();
-  showToast(`Added "${product.name}" to your RFQ List!`);
+  saveCart();
+  showToast(`Added "${product.name}" to your Cart!`);
   renderApp();
 };
 
-window.removeFromBoqCart = function(productId) {
-  state.boqCart = state.boqCart.filter(item => item.id !== productId);
-  saveBoqCart();
-  showToast('Item removed from RFQ List');
+window.removeFromCart = function(productId) {
+  state.cart = state.cart.filter(item => item.id !== productId);
+  saveCart();
+  showToast('Item removed from Cart');
   renderApp();
 };
 
-window.updateBoqCartQty = function(productId, qty) {
-  const item = state.boqCart.find(i => i.id === productId);
+window.updateCartQty = function(productId, qty) {
+  const item = state.cart.find(i => i.id === productId);
   if (item) {
     item.qty = Math.max(1, parseInt(qty) || 1);
-    saveBoqCart();
+    saveCart();
     renderApp();
   }
 };
@@ -103,10 +148,10 @@ function showToast(msg) {
     toast = document.createElement('div');
     toast.id = 'toast-notification';
     toast.style.cssText = `
-      position: fixed; bottom: 24px; right: 24px; z-index: 3000;
+      position: fixed; bottom: 24px; right: 24px; z-index: 3500;
       background: #1E293B; color: #ffffff; padding: 12px 20px;
-      border-radius: 8px; font-size: 14px; font-weight: 500;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-left: 4px solid #80C0C0;
+      border-radius: 8px; font-size: 14px; font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25); border-left: 4px solid #80C0C0;
       transition: opacity 200ms ease-out, transform 200ms ease-out;
     `;
     document.body.appendChild(toast);
@@ -120,61 +165,61 @@ function showToast(msg) {
   }, 3000);
 }
 
-function generateEmailQuoteUrl(clientName = '', clientPhone = '', customNotes = '') {
+function generateEmailCartUrl(clientName = '', clientPhone = '', customNotes = '') {
   const recipient = TARGET_EMAIL;
-  const subject = `Pioneer BMT RFQ Quotation Request - ${clientName || 'Site Inquiry'}`;
+  const subject = `Pioneer BMT Order Inquiry - ${clientName || 'Site Order'}`;
   
-  let body = `OFFICIAL RFQ QUOTATION REQUEST\n`;
+  let body = `OFFICIAL PIONEER BMT CART ORDER INQUIRY\n`;
   body += `Pioneer Building Materials Trading LLC\n`;
   body += `Target Recipient: ${recipient}\n`;
   body += `------------------------------------\n\n`;
 
   if (clientName) body += `CLIENT NAME / COMPANY: ${clientName}\n`;
   if (clientPhone) body += `PHONE / WHATSAPP: ${clientPhone}\n`;
-  if (customNotes) body += `SITE LOCATION / PROJECT NOTES:\n${customNotes}\n`;
+  if (customNotes) body += `SITE LOCATION / NOTES:\n${customNotes}\n`;
   body += `------------------------------------\n\n`;
 
-  if (state.boqCart.length === 0) {
-    body += `Inquiry Details: Requesting pricing catalog for general building materials.\n`;
+  if (state.cart.length === 0) {
+    body += `Inquiry Details: Requesting catalog pricing & site delivery options.\n`;
   } else {
-    body += `ITEMS INQUIRED (BOQ LIST):\n`;
-    state.boqCart.forEach((item, index) => {
+    body += `CART ITEMS ORDERED:\n`;
+    state.cart.forEach((item, index) => {
       body += `${index + 1}. ${item.name}\n   Qty: ${item.qty} ${item.unit || ''} | Spec: ${item.spec}\n\n`;
     });
   }
 
-  body += `Please reply with unit pricing, stock availability, and site delivery rates across UAE.\nThank you!`;
+  body += `Please reply with current stock availability, unit pricing & site delivery schedule in UAE.\nThank you!`;
   
   return `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-function generateWhatsAppQuoteUrl(customNotes = '') {
-  let text = `*OFFICIAL RFQ QUOTATION REQUEST*\n`;
+function generateWhatsAppCartUrl(customNotes = '') {
+  let text = `*OFFICIAL PIONEER BMT CART ORDER*\n`;
   text += `Pioneer Building Materials Trading LLC\n`;
   text += `Email Target: ${TARGET_EMAIL}\n`;
   text += `------------------------------------\n\n`;
   
-  if (state.boqCart.length === 0) {
-    text += `Hello Sales Team, I would like to inquire about building material pricing.\n`;
+  if (state.cart.length === 0) {
+    text += `Hello Sales Team, I would like to place a materials inquiry.\n`;
   } else {
-    text += `*ITEMS INQUIRED (BOQ LIST):*\n`;
-    state.boqCart.forEach((item, index) => {
+    text += `*SELECTED CART ITEMS:*\n`;
+    state.cart.forEach((item, index) => {
       text += `${index + 1}. *${item.name}*\n   Qty: ${item.qty} ${item.unit || ''} | Spec: ${item.spec}\n`;
     });
   }
 
   if (customNotes) text += `\n*PROJECT NOTES:* ${customNotes}\n`;
-  text += `\nPlease provide availability, unit pricing & site delivery rates. Thank you!`;
+  text += `\nPlease confirm pricing & site delivery logistics. Thank you!`;
   
   return `https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
-window.handleSendQuotationEmail = async function(e) {
+window.handleSendCartOrderEmail = async function(e) {
   if (e) e.preventDefault();
-  const nameEl = document.getElementById('rfq-client-name');
-  const phoneEl = document.getElementById('rfq-client-phone');
-  const notesEl = document.getElementById('boq-notes');
-  const btnEl = document.getElementById('send-quotation-btn');
+  const nameEl = document.getElementById('cart-client-name');
+  const phoneEl = document.getElementById('cart-client-phone');
+  const notesEl = document.getElementById('cart-notes');
+  const btnEl = document.getElementById('send-cart-order-btn');
   
   const name = nameEl ? nameEl.value.trim() : '';
   const phone = phoneEl ? phoneEl.value.trim() : '';
@@ -185,29 +230,28 @@ window.handleSendQuotationEmail = async function(e) {
     return;
   }
 
-  // Set loading state
   if (btnEl) {
     btnEl.disabled = true;
-    btnEl.innerHTML = `<span>⏳ Sending Quotation...</span>`;
+    btnEl.innerHTML = `<span>⏳ Submitting Order...</span>`;
   }
 
   let itemsSummary = '';
-  if (state.boqCart.length === 0) {
-    itemsSummary = "General building materials catalog & pricing inquiry.";
+  if (state.cart.length === 0) {
+    itemsSummary = "General building materials catalog & site inquiry.";
   } else {
-    itemsSummary = state.boqCart.map((item, idx) => 
+    itemsSummary = state.cart.map((item, idx) => 
       `${idx + 1}. ${item.name}\n   • Quantity: ${item.qty} ${item.unit || ''}\n   • Spec: ${item.spec}`
     ).join('\n\n');
   }
 
   const payload = {
-    "_subject": `Pioneer BMT RFQ Quotation Request - ${name}`,
+    "_subject": `Pioneer BMT Cart Order - ${name}`,
     "_template": "table",
     "_captcha": "false",
     "Client / Contractor Name": name,
     "Contact Phone / WhatsApp": phone,
     "Delivery Location & Site Notes": notes || "No additional site notes specified",
-    "Requested Material Items (BOQ List)": itemsSummary
+    "Cart Material Items": itemsSummary
   };
 
   try {
@@ -223,33 +267,32 @@ window.handleSendQuotationEmail = async function(e) {
     const data = await response.json();
 
     if (response.ok || data.success === "true" || data.success === true) {
-      showToast(`Quotation sent directly to ${TARGET_EMAIL}!`);
-      state.boqCart = [];
-      saveBoqCart();
+      showToast(`Order sent directly to ${TARGET_EMAIL}!`);
+      state.cart = [];
+      saveCart();
       renderApp();
     } else {
-      const mailUrl = generateEmailQuoteUrl(name, phone, notes);
+      const mailUrl = generateEmailCartUrl(name, phone, notes);
       window.open(mailUrl, '_self');
-      showToast(`Quotation submitted to ${TARGET_EMAIL}!`);
+      showToast(`Order submitted to ${TARGET_EMAIL}!`);
     }
   } catch (err) {
-    console.warn("Direct form submission fallback:", err);
-    const mailUrl = generateEmailQuoteUrl(name, phone, notes);
+    const mailUrl = generateEmailCartUrl(name, phone, notes);
     window.open(mailUrl, '_self');
-    showToast(`Quotation submitted to ${TARGET_EMAIL}!`);
+    showToast(`Order submitted to ${TARGET_EMAIL}!`);
   } finally {
     if (btnEl) {
       btnEl.disabled = false;
-      btnEl.innerHTML = `<span>Send Quotation</span>`;
+      btnEl.innerHTML = `<span>Submit Cart Order</span>`;
     }
   }
 };
 
-window.handleSendQuotationWhatsApp = function(e) {
+window.handleSendCartOrderWhatsApp = function(e) {
   if (e) e.preventDefault();
-  const nameEl = document.getElementById('rfq-client-name');
-  const phoneEl = document.getElementById('rfq-client-phone');
-  const notesEl = document.getElementById('boq-notes');
+  const nameEl = document.getElementById('cart-client-name');
+  const phoneEl = document.getElementById('cart-client-phone');
+  const notesEl = document.getElementById('cart-notes');
   
   const name = nameEl ? nameEl.value : '';
   const phone = phoneEl ? phoneEl.value : '';
@@ -260,7 +303,7 @@ window.handleSendQuotationWhatsApp = function(e) {
   if (phone) notesCombo += `Phone: ${phone}\n`;
   if (notes) notesCombo += `Site Notes: ${notes}\n`;
 
-  const waUrl = generateWhatsAppQuoteUrl(notesCombo);
+  const waUrl = generateWhatsAppCartUrl(notesCombo);
   window.open(waUrl, '_blank');
   showToast('Opening WhatsApp sales desk...');
 };
@@ -305,7 +348,12 @@ function syncRouteFromPath() {
     state.selectedCategory = CATEGORIES.find(c => c.slug === catSlug) || null;
   } else {
     const viewName = pathname.replace('/', '');
-    state.currentView = viewName || 'home';
+    // If user hits /products, redirect to /categories
+    if (viewName === 'products') {
+      state.currentView = 'categories';
+    } else {
+      state.currentView = viewName || 'home';
+    }
     state.selectedCategory = null;
   }
 
@@ -313,9 +361,9 @@ function syncRouteFromPath() {
   renderApp();
 }
 
-// TAMBA HARDWARE HEADER NAVBAR
+// HEADER NAVBAR
 function renderHeader() {
-  const cartTotal = state.boqCart.reduce((sum, item) => sum + item.qty, 0);
+  const cartTotal = state.cart.reduce((sum, item) => sum + item.qty, 0);
 
   return `
     <header class="tamba-header-wrap">
@@ -333,8 +381,7 @@ function renderHeader() {
           <!-- Center Navigation Links -->
           <ul class="nav-links-menu">
             <li><a href="#" onclick="navigateTo('home'); return false;" class="nav-item-link ${state.currentView === 'home' ? 'active' : ''}">Home</a></li>
-            <li><a href="#" onclick="navigateTo('categories'); return false;" class="nav-item-link ${state.currentView === 'categories' ? 'active' : ''}">Categories</a></li>
-            <li><a href="#" onclick="navigateTo('products'); return false;" class="nav-item-link ${state.currentView === 'products' ? 'active' : ''}">Products</a></li>
+            <li><a href="#" onclick="navigateTo('categories'); return false;" class="nav-item-link ${state.currentView === 'categories' || state.currentView === 'category' ? 'active' : ''}">Categories</a></li>
             <li><a href="#" onclick="navigateTo('about'); return false;" class="nav-item-link ${state.currentView === 'about' ? 'active' : ''}">About Us</a></li>
             <li><a href="#" onclick="navigateTo('contact'); return false;" class="nav-item-link ${state.currentView === 'contact' ? 'active' : ''}">Contact us</a></li>
           </ul>
@@ -345,20 +392,18 @@ function renderHeader() {
               ${ICONS.search}
             </button>
 
-            <a href="tel:${COMPANY_INFO.phones[0]}" class="phone-link-btn">
+            <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="phone-link-btn">
               ${ICONS.phone}
               <span>${COMPANY_INFO.phones[0]}</span>
             </a>
 
-            <button class="btn btn-primary desktop-rfq-btn" onclick="navigateTo('rfq')">
-              <span>RFQ (${cartTotal})</span>
+            <button class="btn btn-primary desktop-rfq-btn" onclick="navigateTo('cart')">
+              ${ICONS.cart}
+              <span>Cart (${cartTotal})</span>
             </button>
 
-            <button class="mobile-cart-badge-btn" onclick="navigateTo('rfq')" title="View Quotation List">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-              </svg>
+            <button class="mobile-cart-badge-btn" onclick="navigateTo('cart')" title="View Shopping Cart">
+              ${ICONS.cart}
               ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
             </button>
 
@@ -372,100 +417,243 @@ function renderHeader() {
   `;
 }
 
-// TAMBA HARDWARE HERO CAROUSEL
-function renderHeroCarousel() {
-  const slide = HERO_SLIDES[state.activeSlide];
-
+// 1. HERO SECTION WITH IMAGE file_00000000362881f9a9fe771fa943b030.png AND ANIMATED TITLE
+function renderHeroSection() {
   return `
-    <section class="tamba-hero-carousel">
-      ${HERO_SLIDES.map((s, idx) => `
-        <div class="carousel-slide ${idx === state.activeSlide ? 'active' : ''}" style="background-image: url('${s.image}');">
-          <div class="carousel-overlay"></div>
-          <div class="carousel-caption-box">
-            <h1 class="carousel-headline">${s.title}</h1>
-            <p class="carousel-subtext">${s.subtitle}</p>
-            <button onclick="navigateTo('category', '${s.catSlug}')" class="btn btn-primary">
-              <span>Explore Now</span>
+    <section class="tamba-hero-carousel" style="background-image: url('/cover.png'); background-size: cover; background-position: center;">
+      <div class="carousel-overlay" style="background: linear-gradient(180deg, rgba(30, 41, 59, 0.70) 0%, rgba(30, 41, 59, 0.88) 100%);"></div>
+      <div class="container" style="position: relative; z-index: 10; height: 100%; display: flex; align-items: center; justify-content: center;">
+        <div class="carousel-caption-box" style="padding-top: 60px;">
+          <h1 class="hero-animated-title">Welcome to Pioneer Building Materials</h1>
+          <p class="carousel-subtext" style="max-width: 720px;">
+            Leading Wholesaler & Stockist of Certified Architectural Materials, Marine Plywood, Timber, Structural Steel Mesh, Waterproofing & Tipper Truck Rental in Dubai, UAE.
+          </p>
+          <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <button onclick="navigateTo('categories')" class="btn btn-primary" style="padding: 14px 28px; font-size: 15px;">
+              <span>Explore Categories</span>
               ${ICONS.arrowRight}
+            </button>
+            <button onclick="navigateTo('cart')" class="btn btn-secondary" style="padding: 14px 28px; font-size: 15px; background: rgba(255,255,255,0.15); color: #ffffff; border-color: rgba(255,255,255,0.4); backdrop-filter: blur(8px);">
+              ${ICONS.cart}
+              <span>View Cart</span>
             </button>
           </div>
         </div>
-      `).join('')}
-
-      <button class="carousel-arrow prev" onclick="changeSlide(-1)">${ICONS.arrowLeft}</button>
-      <button class="carousel-arrow next" onclick="changeSlide(1)">${ICONS.arrowRight}</button>
-
-      <div class="carousel-controls">
-        ${HERO_SLIDES.map((_, idx) => `
-          <button class="carousel-dot ${idx === state.activeSlide ? 'active' : ''}" onclick="goToSlide(${idx})"></button>
-        `).join('')}
       </div>
     </section>
   `;
 }
 
-window.changeSlide = function(delta) {
-  state.activeSlide = (state.activeSlide + delta + HERO_SLIDES.length) % HERO_SLIDES.length;
-  renderApp();
-};
-
-window.goToSlide = function(idx) {
-  state.activeSlide = idx;
-  renderApp();
-};
-
-// TAMBA HARDWARE WELCOME SECTION ("Image - Text" Split)
-function renderWelcomeSection() {
+// 2. OUR PRODUCTS - CATEGORY SLIDES (SWIPER)
+function renderOurProductsSlider() {
   return `
-    <section class="tamba-welcome-section">
-      <div class="container welcome-grid">
-        <div class="welcome-img-wrap">
-          <img src="/cover.png" alt="Pioneer Building Materials Warehouse Cover" class="welcome-img">
-        </div>
-        <div>
-          <h2 class="welcome-gradient-title">Welcome to Pioneer Building Materials</h2>
-          <div class="welcome-badge">Direct UAE Wholesaler & Stockist</div>
-          <p style="margin-bottom: var(--space-4);">
-            Pioneer Building Materials Trading LLC has been a trusted supplier in the UAE construction market for over two decades, delivering certified architectural hardware, structural timber, steel mesh, waterproofing membranes, and site safety products.
-          </p>
-          <p style="margin-bottom: var(--space-6);">
-            We supply civil contractors, MEP engineers, and industrial projects with over 121 catalogued building products supported by our private fleet of 3-ton pickups and heavy dump trucks for site delivery across Dubai and all Emirates.
-          </p>
-          <button onclick="navigateTo('about')" class="btn btn-secondary">Learn More</button>
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-// TAMBA HARDWARE "OUR SOLUTIONS" CATEGORY GRID (1:1 Square Cards)
-function renderOurSolutionsSection() {
-  return `
-    <section class="tamba-solutions-section">
+    <section class="tamba-solutions-section" style="padding: var(--space-16) 0; background: var(--color-bg);">
       <div class="container">
-        <h2 class="section-centered-title">Our Solutions</h2>
+        <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-10);">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
+            Material Divisions
+          </span>
+          <h2 style="font-size: var(--font-size-3xl);">Our Products</h2>
+          <p style="margin: 8px auto 0;">Explore our 11 product divisions featuring 121+ certified building materials.</p>
+        </div>
 
-        <div class="solutions-grid">
-          ${CATEGORIES.map(cat => {
-            const firstProd = PRODUCTS.find(p => p.catId === cat.id);
-            const thumbImg = firstProd ? firstProd.image : 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&auto=format&fit=crop&q=80';
-            return `
-              <div class="solution-card" onclick="navigateTo('category', '${cat.slug}')">
-                <div class="solution-thumb-box">
-                  <img src="${thumbImg}" alt="${cat.name}" class="solution-thumb-img" loading="lazy">
+        <div class="swiper product-categories-swiper" style="padding-bottom: 50px;">
+          <div class="swiper-wrapper">
+            ${CATEGORIES.map(cat => {
+              const firstProd = PRODUCTS.find(p => p.catId === cat.id);
+              const thumbImg = firstProd ? firstProd.image : '/cover.png';
+              return `
+                <div class="swiper-slide">
+                  <div class="solution-card" style="height: 100%; display: flex; flex-direction: column;" onclick="navigateTo('category', '${cat.slug}')">
+                    <div class="solution-thumb-box" style="height: 220px;">
+                      <img src="${thumbImg}" alt="${cat.name}" class="solution-thumb-img" loading="lazy">
+                      <span style="position: absolute; top: 12px; right: 12px; background: rgba(30,41,59,0.85); backdrop-filter: blur(4px); color: #ffffff; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 700;">
+                        ${cat.itemCount} Items
+                      </span>
+                    </div>
+                    <div class="solution-card-body" style="padding: var(--space-6); display: flex; flex-direction: column; flex-grow: 1;">
+                      <h3 style="font-size: var(--font-size-lg); margin-bottom: var(--space-2); color: var(--color-text-main);">${cat.name}</h3>
+                      <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-bottom: var(--space-6); flex-grow: 1; line-height: 1.5;">
+                        ${cat.description}
+                      </p>
+                      <button onclick="event.stopPropagation(); navigateTo('category', '${cat.slug}')" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                        <span>Explore Now</span>
+                        ${ICONS.arrowRight}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div class="solution-card-body">
-                  <h3 class="solution-card-title">${cat.name}</h3>
+              `;
+            }).join('')}
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// 3. BRANDS WE OFFER - CONTINUOUS MOVING MARQUEE (PAUSE ON HOVER)
+function renderBrandsSection() {
+  return `
+    <section class="brands-section">
+      <div class="container" style="margin-bottom: var(--space-8); text-align: center;">
+        <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
+          Global Partnerships
+        </span>
+        <h2 style="font-size: var(--font-size-3xl);">Brands We Offer</h2>
+        <p style="margin: 6px auto 0;">Authorised stockist & distributor of world-class construction brands across the Middle East.</p>
+      </div>
+
+      <div class="brands-marquee-wrap">
+        <div class="brands-marquee-track">
+          ${BRAND_IMAGE_IDS.concat(BRAND_IMAGE_IDS).map((id, index) => `
+            <div class="brand-card-logo" title="Authorised Brand Partner">
+              <img src="https://drive.google.com/thumbnail?id=${id}&sz=w400" alt="Brand Logo ${index + 1}" loading="lazy" onerror="this.src='/cover.png'">
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// 4. OUR FLEET SECTION (3 TIPPERS)
+function renderFleetSection() {
+  return `
+    <section class="fleet-section">
+      <div class="container">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-8);">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
+            Logistics & Transport Hire
+          </span>
+          <h2 style="font-size: var(--font-size-3xl);">Our Fleet</h2>
+          <p style="margin: 8px auto 0;">In-house heavy tipper truck fleet available for site material delivery and dump transport rental across Dubai & all UAE Emirates.</p>
+        </div>
+
+        <div class="fleet-grid">
+          ${FLEET_TRUCKS.map((truck, idx) => `
+            <div class="fleet-card">
+              <div class="fleet-img-wrap">
+                <img src="${truck.image}" alt="${truck.name}" class="fleet-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80'">
+                <span class="fleet-badge">${truck.badge}</span>
+              </div>
+              <div class="fleet-card-body">
+                <h3 class="fleet-card-title">${truck.name}</h3>
+                <div style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); margin-bottom: var(--space-3);">
+                  🚛 ${truck.capacity}
+                </div>
+                <p class="fleet-card-desc">${truck.spec}</p>
+                <button onclick="addToCartById('pbm-002'); navigateTo('cart');" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                  <span>Book / Inquire Fleet</span>
+                  ${ICONS.arrowRight}
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// 5. PROJECTS WE HELP BUILD SECTION (SWIPER ANIMATED SLIDES)
+function renderProjectsSection() {
+  return `
+    <section class="projects-section">
+      <div class="container">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-10);">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
+            Proven Track Record
+          </span>
+          <h2 style="font-size: var(--font-size-3xl);">Projects We Help Build</h2>
+          <p style="margin: 8px auto 0;">Key landmarks, commercial complexes, and infrastructure sites supplied with Pioneer building materials.</p>
+        </div>
+
+        <div class="swiper projects-swiper" style="padding-bottom: 50px;">
+          <div class="swiper-wrapper">
+            ${PROJECTS_BUILD.map(proj => `
+              <div class="swiper-slide">
+                <div class="project-card">
+                  <div class="project-img-wrap">
+                    <img src="${proj.image}" alt="${proj.title}" class="project-img" loading="lazy">
+                  </div>
+                  <div class="project-card-body">
+                    <span class="project-location">${proj.location}</span>
+                    <h3 class="project-title">${proj.title}</h3>
+                    <p style="font-size: 12px; color: var(--color-text-subtle); margin-top: 4px;">${proj.supplied}</p>
+                  </div>
                 </div>
               </div>
-            `;
-          }).join('')}
+            `).join('')}
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
         </div>
       </div>
     </section>
   `;
 }
 
+// 6. WHY CHOOSE US SECTION (VECTOR ICONS, NO EMOJIS)
+function renderWhyChooseUsSection() {
+  return `
+    <section class="why-section">
+      <div class="container">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-8);">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
+            Why Pioneer BMT
+          </span>
+          <h2 style="font-size: var(--font-size-3xl);">Why Choose Us</h2>
+          <p style="margin: 8px auto 0;">Empowering contractor partners with certified materials, reliable transport, and competitive wholesale terms.</p>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-icon-box">${ICONS.badgeCheck}</div>
+            <h3 class="why-card-title">Certified Quality</h3>
+            <p class="why-card-desc">All timber, steel, cement & waterproofing items comply with UAE municipality standards & BS EN specifications.</p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon-box">${ICONS.truckFast}</div>
+            <h3 class="why-card-title">In-House Logistics</h3>
+            <p class="why-card-desc">Private fleet of 3-ton pickups and 20m³ heavy tipper dump trucks ensuring prompt site delivery across all Emirates.</p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon-box">${ICONS.tagPercent}</div>
+            <h3 class="why-card-title">Wholesale Rates</h3>
+            <p class="why-card-desc">Direct factory pricing with transparent volume discounts for commercial contractors and project managers.</p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon-box">${ICONS.headset}</div>
+            <h3 class="why-card-title">24/7 Sales Support</h3>
+            <p class="why-card-desc">Dedicated engineering sales team providing instant WhatsApp quotes, BOQ estimates, and technical advice.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// HOME VIEW RENDERER
+function renderHomeView() {
+  return `
+    ${renderHeroSection()}
+    ${renderOurProductsSlider()}
+    ${renderBrandsSection()}
+    ${renderFleetSection()}
+    ${renderProjectsSection()}
+    ${renderWhyChooseUsSection()}
+  `;
+}
+
+// PRODUCT CARD UTILITY
 function renderProductCard(p) {
   const cat = CATEGORIES.find(c => c.id === p.catId);
   return `
@@ -479,8 +667,8 @@ function renderProductCard(p) {
         <p class="product-card-spec">${p.spec}</p>
         <div class="product-card-footer">
           <span style="font-size: 11px; font-weight: 600; color: var(--color-text-subtle);">${p.unit || 'Standard Unit'}</span>
-          <button onclick="addToBoqCartById('${p.id}')" class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; font-weight: 700;">
-            + Add to RFQ
+          <button onclick="addToCartById('${p.id}')" class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; font-weight: 700;">
+            + Add to Cart
           </button>
         </div>
       </div>
@@ -488,64 +676,18 @@ function renderProductCard(p) {
   `;
 }
 
-// HOME VIEW
-function renderHomeView() {
-  return `
-    ${renderHeroCarousel()}
-    ${renderWelcomeSection()}
-    ${renderOurSolutionsSection()}
-  `;
-}
-
-// PRODUCTS VIEW (/products)
-function renderProductsView() {
-  let filtered = PRODUCTS;
-  if (state.selectedCategory) {
-    filtered = PRODUCTS.filter(p => p.catId === state.selectedCategory.id);
-  }
-  if (state.searchQuery) {
-    const q = state.searchQuery.toLowerCase();
-    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q));
-  }
-
-  return `
-    <div class="container" style="padding: var(--space-16) 0;">
-      <div style="margin-bottom: var(--space-8);">
-        <h1 style="margin-bottom: var(--space-2);">Products Directory</h1>
-        <p>Explore 121+ certified building materials and hardware items.</p>
-      </div>
-
-      <!-- Category Filter Tabs -->
-      <div style="display: flex; gap: var(--space-3); margin-bottom: var(--space-8); flex-wrap: wrap;">
-        <button onclick="navigateTo('products')" class="btn ${!state.selectedCategory ? 'btn-primary' : 'btn-secondary'}">
-          All (121)
-        </button>
-        ${CATEGORIES.map(c => `
-          <button onclick="navigateTo('category', '${c.slug}')" class="btn ${state.selectedCategory && state.selectedCategory.id === c.id ? 'btn-primary' : 'btn-secondary'}" style="font-size: 13px;">
-            ${c.name} (${c.itemCount})
-          </button>
-        `).join('')}
-      </div>
-
-      <div class="product-grid">
-        ${filtered.map(p => renderProductCard(p)).join('')}
-      </div>
-    </div>
-  `;
-}
-
-// CATEGORY LANDING VIEW
+// CATEGORY LANDING VIEW (/category/:slug)
 function renderCategoryView() {
-  if (!state.selectedCategory) return renderProductsView();
+  if (!state.selectedCategory) return renderCategoriesView();
   const cat = state.selectedCategory;
   const catProducts = PRODUCTS.filter(p => p.catId === cat.id);
 
   return `
     <div class="container" style="padding: var(--space-16) 0;">
       <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-8); margin-bottom: var(--space-8);">
-        <h1 style="color: var(--color-primary); margin-bottom: var(--space-2);">${cat.name}</h1>
+        <h1 style="color: var(--color-primary-dark); margin-bottom: var(--space-2);">${cat.name}</h1>
         <p style="font-size: var(--font-size-lg); margin-bottom: var(--space-4);">${cat.description}</p>
-        <div style="font-size: var(--font-size-sm); font-weight: 600;">📦 ${catProducts.length} Items Available in UAE Stock</div>
+        <div style="font-size: var(--font-size-sm); font-weight: 700; color: var(--color-text-main);">📦 ${catProducts.length} Items Available in UAE Stock</div>
       </div>
 
       <div class="product-grid">
@@ -602,28 +744,28 @@ function renderCategoriesView() {
   `;
 }
 
-// RFQ BOQ CART VIEW (/rfq)
-function renderRfqView() {
-  const isCartEmpty = state.boqCart.length === 0;
+// SHOPPING CART VIEW (/cart)
+function renderCartView() {
+  const isCartEmpty = state.cart.length === 0;
 
   return `
     <div class="container" style="padding: var(--space-16) 0;">
       <div style="margin-bottom: var(--space-8);">
-        <h1>Request for Quotation (RFQ)</h1>
-        <p>Review items in your quotation list and send your inquiry directly to <strong>info.pioneerbuilds@gmail.com</strong>.</p>
+        <h1>Shopping Cart</h1>
+        <p>Review items in your cart and submit your order inquiry directly to <strong>info.pioneerbuilds@gmail.com</strong>.</p>
       </div>
 
       <div class="rfq-layout-grid">
         <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-4);">
-            <h3 style="margin:0;">Selected Material Items (${state.boqCart.length})</h3>
-            ${!isCartEmpty ? `<button onclick="state.boqCart=[]; saveBoqCart(); renderApp();" style="font-size:12px; color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600;">Clear List</button>` : ''}
+            <h3 style="margin:0;">Cart Items (${state.cart.length})</h3>
+            ${!isCartEmpty ? `<button onclick="state.cart=[]; saveCart(); renderApp();" style="font-size:12px; color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600;">Clear Cart</button>` : ''}
           </div>
 
           ${isCartEmpty ? `
             <div style="padding: var(--space-12) 0; text-align: center;">
-              <p style="margin-bottom: var(--space-4);">Your quotation list is empty.</p>
-              <button onclick="navigateTo('products')" class="btn btn-primary">Browse Products</button>
+              <p style="margin-bottom: var(--space-4);">Your cart is currently empty.</p>
+              <button onclick="navigateTo('categories')" class="btn btn-primary">Browse Categories</button>
             </div>
           ` : `
             <div class="rfq-table-wrapper">
@@ -636,7 +778,7 @@ function renderRfqView() {
                   </tr>
                 </thead>
                 <tbody>
-                  ${state.boqCart.map(item => `
+                  ${state.cart.map(item => `
                     <tr style="border-bottom:1px solid var(--color-border-subtle);">
                       <td style="padding:12px 8px;">
                         <strong style="color:var(--color-text-main); font-size:14px;">${item.name}</strong>
@@ -644,12 +786,12 @@ function renderRfqView() {
                       </td>
                       <td style="padding:12px 8px;">
                         <div style="display:flex; align-items:center; gap:6px;">
-                          <input type="number" min="1" value="${item.qty}" onchange="updateBoqCartQty('${item.id}', this.value)" style="width:65px; padding:4px 8px; border:1px solid var(--color-border); border-radius:4px; font-weight:700;">
+                          <input type="number" min="1" value="${item.qty}" onchange="updateCartQty('${item.id}', this.value)" style="width:65px; padding:4px 8px; border:1px solid var(--color-border); border-radius:4px; font-weight:700;">
                           <span style="font-size:11px; color:var(--color-text-subtle);">${item.unit || ''}</span>
                         </div>
                       </td>
                       <td style="padding:12px 8px; text-align:right;">
-                        <button onclick="removeFromBoqCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600; font-size:13px;">Remove</button>
+                        <button onclick="removeFromCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600; font-size:13px;">Remove</button>
                       </td>
                     </tr>
                   `).join('')}
@@ -660,34 +802,34 @@ function renderRfqView() {
         </div>
 
         <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6); height: fit-content;">
-          <h3>Send Quotation Inquiry</h3>
+          <h3>Submit Cart Order</h3>
           <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-bottom: var(--space-4);">
-            Target Recipient: <strong style="color: var(--color-text-main);">${TARGET_EMAIL}</strong>
+            Direct Sales Desk Email: <strong style="color: var(--color-text-main);">${TARGET_EMAIL}</strong>
           </p>
 
-          <form onsubmit="handleSendQuotationEmail(event)">
+          <form onsubmit="handleSendCartOrderEmail(event)">
             <div style="margin-bottom: var(--space-3);">
               <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Your Name / Company:</label>
-              <input type="text" id="rfq-client-name" required placeholder="e.g. Al Habtoor Contracting" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
+              <input type="text" id="cart-client-name" required placeholder="e.g. Al Habtoor Contracting" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
             </div>
 
             <div style="margin-bottom: var(--space-3);">
               <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Mobile / WhatsApp Number:</label>
-              <input type="tel" id="rfq-client-phone" required placeholder="+971 50 123 4567" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
+              <input type="tel" id="cart-client-phone" required placeholder="+971 50 123 4567" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
             </div>
 
             <div style="margin-bottom: var(--space-4);">
               <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Delivery Location / Project Notes:</label>
-              <textarea id="boq-notes" rows="3" placeholder="Enter UAE site address, delivery date, specs..." style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;"></textarea>
+              <textarea id="cart-notes" rows="3" placeholder="Enter UAE site address, delivery date, specs..." style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;"></textarea>
             </div>
 
-            <button type="submit" id="send-quotation-btn" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3); font-weight:700;">
-              <span>Send Quotation</span>
+            <button type="submit" id="send-cart-order-btn" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3); font-weight:700;">
+              <span>Submit Cart Order</span>
             </button>
 
-            <button type="button" onclick="handleSendQuotationWhatsApp(event)" class="btn btn-whatsapp" style="width:100%; justify-content:center;">
+            <button type="button" onclick="handleSendCartOrderWhatsApp(event)" class="btn btn-whatsapp" style="width:100%; justify-content:center;">
               ${ICONS.whatsapp}
-              <span>Send via WhatsApp</span>
+              <span>Send Cart via WhatsApp</span>
             </button>
           </form>
         </div>
@@ -726,7 +868,7 @@ function renderContactView() {
     <div class="container" style="padding: var(--space-16) 0;">
       <div style="margin-bottom: var(--space-8);">
         <h1>Contact Us</h1>
-        <p>Get in touch with our sales team in Dubai for instant product quotes.</p>
+        <p>Get in touch with our sales team in Dubai for instant product quotes & site delivery options.</p>
       </div>
 
       <div class="contact-layout-grid">
@@ -747,7 +889,7 @@ function renderContactView() {
             </div>
           </div>
 
-          <a href="${generateWhatsAppQuoteUrl()}" target="_blank" class="btn btn-whatsapp">
+          <a href="${generateWhatsAppCartUrl()}" target="_blank" class="btn btn-whatsapp">
             ${ICONS.whatsapp} Chat on WhatsApp
           </a>
         </div>
@@ -775,6 +917,7 @@ function renderContactView() {
   `;
 }
 
+// SITE FOOTER (PRIMARY MAIN THEME COLOR BACKGROUND)
 function renderFooter() {
   return `
     <footer class="site-footer">
@@ -782,14 +925,14 @@ function renderFooter() {
         <div class="footer-grid">
           <div>
             <div class="brand-logo" style="margin-bottom: var(--space-4);">
-              <div class="brand-icon" style="background:#80C0C0; color:#1E293B;">P</div>
+              <div class="brand-icon" style="background:#1E293B; color:#ffffff;">P</div>
               <div class="brand-text">
-                <span class="brand-title" style="color:#ffffff;">PIONEER</span>
-                <span class="brand-subtitle" style="color:#80C0C0;">Building Materials LLC</span>
+                <span class="brand-title" style="color:#1E293B;">PIONEER</span>
+                <span class="brand-subtitle" style="color:#1E293B;">Building Materials LLC</span>
               </div>
             </div>
-            <p style="font-size: 14px; color: #94a3b8; margin-bottom: var(--space-4);">
-              Premier supplier of building materials, safety gear, timber, steel, and site transport across the UAE.
+            <p style="font-size: 14px; color: #1E293B; margin-bottom: var(--space-4); font-weight: 500;">
+              Premier wholesale distributor of building materials, timber, steel, safety gear, and heavy dump trucks across Dubai & UAE.
             </p>
           </div>
 
@@ -798,7 +941,7 @@ function renderFooter() {
             <ul class="footer-links">
               <li><a href="#" onclick="navigateTo('home'); return false;" class="footer-link">Home</a></li>
               <li><a href="#" onclick="navigateTo('categories'); return false;" class="footer-link">Categories</a></li>
-              <li><a href="#" onclick="navigateTo('products'); return false;" class="footer-link">Products</a></li>
+              <li><a href="#" onclick="navigateTo('cart'); return false;" class="footer-link">Shopping Cart</a></li>
               <li><a href="#" onclick="navigateTo('about'); return false;" class="footer-link">About Us</a></li>
               <li><a href="#" onclick="navigateTo('contact'); return false;" class="footer-link">Contact us</a></li>
             </ul>
@@ -816,21 +959,21 @@ function renderFooter() {
           <div>
             <h4 class="footer-col-title">Contact Us</h4>
             <ul class="footer-links" style="display:flex; flex-direction:column; gap: var(--space-3);">
-              <li style="display:flex; align-items:center; gap:8px; color:#94a3b8; font-size:13px;">
-                <span style="color:var(--color-primary); display:flex; align-items:center;">${ICONS.location}</span>
+              <li style="display:flex; align-items:center; gap:8px; color:#1E293B; font-size:13px; font-weight:600;">
+                <span style="color:#1E293B; display:flex; align-items:center;">${ICONS.location}</span>
                 <span>${COMPANY_INFO.address}</span>
               </li>
               <li style="display:flex; align-items:center; gap:8px; font-size:13px;">
-                <span style="color:var(--color-primary); display:flex; align-items:center;">${ICONS.phone}</span>
-                <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="footer-link" style="color:#94a3b8;">${COMPANY_INFO.phones[0]}</a>
+                <span style="color:#1E293B; display:flex; align-items:center;">${ICONS.phone}</span>
+                <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="footer-link">${COMPANY_INFO.phones[0]}</a>
               </li>
               <li style="display:flex; align-items:center; gap:8px; font-size:13px;">
-                <span style="color:var(--color-primary); display:flex; align-items:center;">${ICONS.phone}</span>
-                <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" class="footer-link" style="color:#94a3b8;">${COMPANY_INFO.phones[1]}</a>
+                <span style="color:#1E293B; display:flex; align-items:center;">${ICONS.phone}</span>
+                <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" class="footer-link">${COMPANY_INFO.phones[1]}</a>
               </li>
               <li style="display:flex; align-items:center; gap:8px; font-size:13px;">
-                <span style="color:var(--color-primary); display:flex; align-items:center;">${ICONS.mail}</span>
-                <a href="mailto:${COMPANY_INFO.emails[0]}" class="footer-link" style="color:#94a3b8;">${COMPANY_INFO.emails[0]}</a>
+                <span style="color:#1E293B; display:flex; align-items:center;">${ICONS.mail}</span>
+                <a href="mailto:${COMPANY_INFO.emails[0]}" class="footer-link">${COMPANY_INFO.emails[0]}</a>
               </li>
             </ul>
           </div>
@@ -861,12 +1004,12 @@ function renderSearchModal() {
 
         <div style="max-height: 400px; overflow-y: auto; padding: 12px 0;">
           ${results.map(p => `
-            <div style="padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="closeSearchModal(); addToBoqCart(PRODUCTS.find(i=>i.id==='${p.id}')); navigateTo('rfq');">
+            <div style="padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="closeSearchModal(); addToCartById('${p.id}'); navigateTo('cart');">
               <div>
                 <div style="font-weight: 700; font-size: 14px;">${p.name}</div>
                 <div style="font-size: 12px; color: var(--color-text-muted);">${p.spec}</div>
               </div>
-              <button class="btn btn-primary" style="font-size: 11px; padding: 4px 8px;">+ Add RFQ</button>
+              <button class="btn btn-primary" style="font-size: 11px; padding: 4px 8px;">+ Add to Cart</button>
             </div>
           `).join('')}
         </div>
@@ -901,7 +1044,7 @@ window.onSearchInput = function(val) {
 };
 
 function renderFloatingWhatsApp() {
-  const text = encodeURIComponent("Hello Pioneer Building Materials, I have an inquiry regarding construction materials.");
+  const text = encodeURIComponent("Hello Pioneer Building Materials, I would like to inquire about building products.");
   const url = `https://wa.me/${COMPANY_INFO.whatsapp}?text=${text}`;
   return `
     <a href="${url}" target="_blank" rel="noopener" class="floating-whatsapp-btn" title="Chat on WhatsApp">
@@ -932,14 +1075,11 @@ function renderMobileSidebar() {
           <a href="#" onclick="navigateTo('home'); return false;" class="mobile-nav-link ${state.currentView === 'home' ? 'active' : ''}">
             <span>Home</span>
           </a>
-          <a href="#" onclick="navigateTo('categories'); return false;" class="mobile-nav-link ${state.currentView === 'categories' ? 'active' : ''}">
+          <a href="#" onclick="navigateTo('categories'); return false;" class="mobile-nav-link ${state.currentView === 'categories' || state.currentView === 'category' ? 'active' : ''}">
             <span>Material Categories</span>
           </a>
-          <a href="#" onclick="navigateTo('products'); return false;" class="mobile-nav-link ${state.currentView === 'products' ? 'active' : ''}">
-            <span>Products Directory</span>
-          </a>
-          <a href="#" onclick="navigateTo('rfq'); return false;" class="mobile-nav-link ${state.currentView === 'rfq' ? 'active' : ''}">
-            <span>Request Quotation (RFQ)</span>
+          <a href="#" onclick="navigateTo('cart'); return false;" class="mobile-nav-link ${state.currentView === 'cart' ? 'active' : ''}">
+            <span>Shopping Cart</span>
           </a>
           <a href="#" onclick="navigateTo('about'); return false;" class="mobile-nav-link ${state.currentView === 'about' ? 'active' : ''}">
             <span>About Pioneer BMT</span>
@@ -971,11 +1111,10 @@ function renderApp() {
   switch (state.currentView) {
     case 'home': bodyHtml = renderHomeView(); break;
     case 'categories': bodyHtml = renderCategoriesView(); break;
-    case 'products': bodyHtml = renderProductsView(); break;
     case 'category': bodyHtml = renderCategoryView(); break;
     case 'about': bodyHtml = renderAboutView(); break;
     case 'contact': bodyHtml = renderContactView(); break;
-    case 'rfq': bodyHtml = renderRfqView(); break;
+    case 'cart': bodyHtml = renderCartView(); break;
     default: bodyHtml = renderHomeView();
   }
 
@@ -989,17 +1128,70 @@ function renderApp() {
     ${renderFloatingWhatsApp()}
     ${renderMobileSidebar()}
   `;
+
+  // Initialize Swipers after DOM update
+  initSwipers();
+}
+
+function initSwipers() {
+  if (typeof window.Swiper === 'undefined') return;
+
+  // 1. Categories Swiper
+  const catEl = document.querySelector('.product-categories-swiper');
+  if (catEl && !catEl.swiper) {
+    new window.Swiper(catEl, {
+      slidesPerView: 1,
+      spaceBetween: 24,
+      loop: true,
+      autoplay: {
+        delay: 3500,
+        disableOnInteraction: false
+      },
+      pagination: {
+        el: '.product-categories-swiper .swiper-pagination',
+        clickable: true
+      },
+      navigation: {
+        nextEl: '.product-categories-swiper .swiper-button-next',
+        prevEl: '.product-categories-swiper .swiper-button-prev'
+      },
+      breakpoints: {
+        640: { slidesPerView: 2 },
+        992: { slidesPerView: 3 },
+        1200: { slidesPerView: 4 }
+      }
+    });
+  }
+
+  // 2. Projects Swiper
+  const projEl = document.querySelector('.projects-swiper');
+  if (projEl && !projEl.swiper) {
+    new window.Swiper(projEl, {
+      slidesPerView: 1,
+      spaceBetween: 24,
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false
+      },
+      pagination: {
+        el: '.projects-swiper .swiper-pagination',
+        clickable: true
+      },
+      navigation: {
+        nextEl: '.projects-swiper .swiper-button-next',
+        prevEl: '.projects-swiper .swiper-button-prev'
+      },
+      breakpoints: {
+        640: { slidesPerView: 2 },
+        992: { slidesPerView: 3 }
+      }
+    });
+  }
 }
 
 // Initial Boot & PushState History Router Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
   syncRouteFromPath();
   window.addEventListener('popstate', syncRouteFromPath);
-
-  setInterval(() => {
-    if (state.currentView === 'home' && !state.searchModalOpen) {
-      state.activeSlide = (state.activeSlide + 1) % HERO_SLIDES.length;
-      renderApp();
-    }
-  }, 4000);
 });

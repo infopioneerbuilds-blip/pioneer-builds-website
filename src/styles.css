@@ -664,8 +664,8 @@ button, input, select, textarea {
 
 /* Footer */
 .site-footer {
-  background-color: var(--color-text-main);
-  color: #cbd5e1;
+  background-color: var(--color-primary);
+  color: #1E293B;
   padding: var(--space-16) 0 var(--space-8);
   margin-top: auto;
 }
@@ -678,9 +678,12 @@ button, input, select, textarea {
 }
 
 .footer-col-title {
-  color: #ffffff;
+  color: #1E293B;
   font-size: var(--font-size-base);
+  font-weight: 800;
   margin-bottom: var(--space-4);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .footer-links {
@@ -691,23 +694,26 @@ button, input, select, textarea {
 }
 
 .footer-link {
-  color: #94a3b8;
+  color: #1E293B;
   font-size: var(--font-size-sm);
-  transition: color 150ms var(--ease-out);
+  font-weight: 600;
+  transition: color 150ms var(--ease-out), transform 150ms var(--ease-out);
 }
 
 .footer-link:hover {
-  color: #ffffff;
+  color: #0F172A;
+  text-decoration: underline;
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(30, 41, 59, 0.18);
   padding-top: var(--space-6);
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: var(--font-size-xs);
-  color: #64748b;
+  color: #334155;
+  font-weight: 600;
 }
 
 /* Layout Grids */
@@ -1067,6 +1073,319 @@ button, input, select, textarea {
   }
 }
 
+/* Redesigned Homepage Hero & Sections Styling */
 
+/* Animated Hero Entrance */
+.hero-animated-title {
+  font-size: clamp(32px, 5vw, 56px);
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: var(--space-4);
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffffff 0%, #80C0C0 50%, #E2F5F5 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: heroGradientShift 6s ease infinite, heroFadeSlideUp 0.9s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+}
 
+@keyframes heroGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
+@keyframes heroFadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Brands We Offer - Infinite Auto-Scrolling Carousel (Pause on Hover) */
+.brands-section {
+  padding: var(--space-16) 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.brands-marquee-wrap {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.brands-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex-shrink: 0;
+  animation: marqueeScroll 35s linear infinite;
+}
+
+.brands-marquee-wrap:hover .brands-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.brand-card-logo {
+  width: 140px;
+  height: 80px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  flex-shrink: 0;
+}
+
+.brand-card-logo:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.brand-card-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(20%);
+  transition: filter 200ms ease;
+}
+
+.brand-card-logo:hover img {
+  filter: grayscale(0%);
+}
+
+/* Our Fleet Section */
+.fleet-section {
+  padding: var(--space-16) 0;
+  background: var(--color-bg-alt);
+}
+
+.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.fleet-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.fleet-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.fleet-img-wrap {
+  width: 100%;
+  height: 240px;
+  position: relative;
+  background: #1E293B;
+  overflow: hidden;
+}
+
+.fleet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.fleet-card:hover .fleet-img {
+  transform: scale(1.06);
+}
+
+.fleet-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--color-primary);
+  color: #1E293B;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.fleet-card-body {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.fleet-card-title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-main);
+  margin-bottom: var(--space-2);
+}
+
+.fleet-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+  flex-grow: 1;
+  line-height: 1.5;
+}
+
+/* Projects We Help Build Showcase */
+.projects-section {
+  padding: var(--space-16) 0;
+  background: var(--color-surface);
+}
+
+.project-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.project-img-wrap {
+  width: 100%;
+  height: 260px;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.project-card:hover .project-img {
+  transform: scale(1.05);
+}
+
+.project-card-body {
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.project-title {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: var(--color-text-main);
+  margin-bottom: var(--space-1);
+}
+
+.project-location {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Why Choose Us Section (Vector Icons, No Emojis) */
+.why-section {
+  padding: var(--space-16) 0;
+  background: linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+.why-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.why-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.why-icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4);
+  transition: background 200ms ease, transform 200ms ease;
+}
+
+.why-card:hover .why-icon-box {
+  background: var(--color-primary);
+  color: #1E293B;
+  transform: scale(1.1);
+}
+
+.why-card-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-main);
+  margin-bottom: var(--space-2);
+}
+
+.why-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* Responsive Media Queries for Redesigned Sections */
+@media (max-width: 992px) {
+  .fleet-grid {
+    grid-template-columns: 1fr;
+  }
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+}
