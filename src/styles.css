@@ -1116,23 +1116,26 @@ button, input, select, textarea {
 .welcome-title-banner {
   text-align: center;
   padding: var(--space-10) var(--space-6) var(--space-4);
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
   perspective: 1000px;
+  overflow: hidden;
 }
 
 .hero-animated-title-standalone {
-  font-size: clamp(28px, 4.8vw, 54px);
+  font-size: clamp(15px, 3.5vw, 44px);
   font-family: var(--font-display);
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.2;
   color: var(--color-text-main);
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   justify-content: center;
   align-items: center;
   gap: 0.3em;
   margin-bottom: var(--space-3);
+  width: 100%;
 }
 
 .anim-word {
