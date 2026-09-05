@@ -1521,7 +1521,7 @@ button, input, select, textarea {
 .category-hero-slide {
   position: relative;
   width: 100%;
-  height: 520px;
+  height: 540px;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -1529,13 +1529,62 @@ button, input, select, textarea {
   justify-content: center;
   text-align: center;
   padding: var(--space-8) var(--space-6);
+  overflow: hidden;
 }
 
 .category-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.50) 0%, rgba(15, 23, 42, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.88) 100%);
   z-index: 1;
+}
+
+/* Archilovers Day 27 Counter Pill */
+.category-hero-counter {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+.swiper-slide .category-hero-counter {
+  transform: translateY(-15px);
+  opacity: 0;
+}
+
+.swiper-slide-active .category-hero-counter {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: 0.15s;
+}
+
+.slide-num-current {
+  color: var(--color-primary);
+  font-size: 15px;
+}
+
+.slide-num-slash {
+  opacity: 0.5;
+  font-weight: 400;
+}
+
+.slide-num-total {
+  opacity: 0.75;
 }
 
 .category-hero-content {
@@ -1546,27 +1595,54 @@ button, input, select, textarea {
   margin: 0 auto;
 }
 
-.category-hero-badge {
+/* Archilovers Day 27 Text Reveal Mask (Clip-path/Overflow hidden) */
+.hero-tag-clip,
+.hero-title-clip {
+  overflow: hidden;
+  display: block;
+  padding: 4px 0;
+}
+
+.category-hero-arch-tag {
   display: inline-block;
-  background: var(--color-primary);
-  color: #1E293B;
   font-size: 12px;
   font-weight: 800;
-  padding: 6px 16px;
-  border-radius: var(--radius-pill);
-  margin-bottom: var(--space-4);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.16em;
+  color: var(--color-primary);
   text-transform: uppercase;
-  box-shadow: 0 4px 14px rgba(128, 192, 192, 0.4);
+  margin-bottom: 4px;
+}
+
+.swiper-slide .category-hero-arch-tag {
+  transform: translateY(110%);
+  opacity: 0;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.2s, opacity 0.5s ease 0.2s;
+}
+
+.swiper-slide-active .category-hero-arch-tag {
+  transform: translateY(0%);
+  opacity: 1;
 }
 
 .category-hero-title {
-  font-size: clamp(28px, 4.2vw, 46px);
+  font-size: clamp(28px, 4.2vw, 48px);
   color: #ffffff;
   font-family: var(--font-display);
   font-weight: 800;
   margin: 0;
   line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.swiper-slide .category-hero-title {
+  transform: translateY(110%);
+  opacity: 0;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, opacity 0.6s ease 0.3s;
+}
+
+.swiper-slide-active .category-hero-title {
+  transform: translateY(0%);
+  opacity: 1;
 }
 
 .category-explore-btn-br {
@@ -1587,6 +1663,16 @@ button, input, select, textarea {
 }
 
 @media (max-width: 768px) {
+  .category-hero-counter {
+    top: 16px;
+    left: 16px;
+    font-size: 11px;
+    padding: 4px 12px;
+  }
+  .slide-num-current {
+    font-size: 13px;
+  }
+
   .category-explore-btn-br {
     bottom: 16px;
     right: 16px;
@@ -1682,7 +1768,7 @@ button, input, select, textarea {
   }
 }
 
-/* 4-Piece Grid Shatter / 3D Fragment Flip Animation */
+/* 4-Piece Grid Shatter / 3D Fragment Flip Animation (Archilovers Day 27 Style) */
 .slide-shatter-grid {
   position: absolute;
   inset: 0;
@@ -1701,7 +1787,7 @@ button, input, select, textarea {
   background-size: 200% 200%;
   transform-style: preserve-3d;
   backface-visibility: hidden;
-  transition: transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.75s ease, filter 0.75s ease;
+  transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.85s ease, filter 0.85s ease;
 }
 
 .tile-piece.tile-tl {
@@ -1710,37 +1796,37 @@ button, input, select, textarea {
 }
 .tile-piece.tile-tr {
   background-position: 100% 0%;
-  transition-delay: 100ms;
+  transition-delay: 110ms;
 }
 .tile-piece.tile-bl {
   background-position: 0% 100%;
-  transition-delay: 180ms;
+  transition-delay: 200ms;
 }
 .tile-piece.tile-br {
   background-position: 100% 100%;
-  transition-delay: 260ms;
+  transition-delay: 300ms;
 }
 
-/* Slide Transition States: Tiles flip over in 3D perspective space */
+/* Slide Transition States: 4 Tiles 3D fragment flip into space */
 .swiper-slide .tile-piece.tile-tl {
-  transform: rotateY(180deg) rotateX(-45deg) scale(0.65);
+  transform: rotateY(180deg) rotateX(-50deg) scale(0.6);
   opacity: 0;
-  filter: brightness(1.5) blur(4px);
+  filter: brightness(1.6) blur(6px);
 }
 .swiper-slide .tile-piece.tile-tr {
-  transform: rotateY(-180deg) rotateX(45deg) scale(0.65);
+  transform: rotateY(-180deg) rotateX(50deg) scale(0.6);
   opacity: 0;
-  filter: brightness(1.5) blur(4px);
+  filter: brightness(1.6) blur(6px);
 }
 .swiper-slide .tile-piece.tile-bl {
-  transform: rotateY(180deg) rotateX(45deg) scale(0.65);
+  transform: rotateY(180deg) rotateX(50deg) scale(0.6);
   opacity: 0;
-  filter: brightness(1.5) blur(4px);
+  filter: brightness(1.6) blur(6px);
 }
 .swiper-slide .tile-piece.tile-br {
-  transform: rotateY(-180deg) rotateX(-45deg) scale(0.65);
+  transform: rotateY(-180deg) rotateX(-50deg) scale(0.6);
   opacity: 0;
-  filter: brightness(1.5) blur(4px);
+  filter: brightness(1.6) blur(6px);
 }
 
 .swiper-slide-active .tile-piece {

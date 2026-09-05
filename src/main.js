@@ -450,9 +450,11 @@ function renderOurProductsSlider() {
 
       <div class="swiper full-screen-products-swiper">
         <div class="swiper-wrapper">
-          ${CATEGORIES.map(cat => {
+          ${CATEGORIES.map((cat, index) => {
             const firstProd = PRODUCTS.find(p => p.catId === cat.id);
             const thumbImg = firstProd ? firstProd.image : '/cover.png';
+            const numCurrent = String(index + 1).padStart(2, '0');
+            const numTotal = String(CATEGORIES.length).padStart(2, '0');
             return `
               <div class="swiper-slide">
                 <div class="category-hero-slide" style="background-image: url('${thumbImg}');">
@@ -463,8 +465,18 @@ function renderOurProductsSlider() {
                     <div class="tile-piece tile-br" style="background-image: url('${thumbImg}');"></div>
                   </div>
                   <div class="category-hero-overlay"></div>
+                  <div class="category-hero-counter">
+                    <span class="slide-num-current">${numCurrent}</span>
+                    <span class="slide-num-slash">/</span>
+                    <span class="slide-num-total">${numTotal}</span>
+                  </div>
                   <div class="category-hero-content">
-                    <h3 class="category-hero-title">${cat.name}</h3>
+                    <div class="hero-tag-clip">
+                      <span class="category-hero-arch-tag">PIONEER DIVISION ${numCurrent}</span>
+                    </div>
+                    <div class="hero-title-clip">
+                      <h3 class="category-hero-title">${cat.name}</h3>
+                    </div>
                   </div>
                   <button onclick="navigateTo('category', '${cat.slug}')" class="btn btn-primary category-explore-btn-br">
                     <span>Explore Now</span>
