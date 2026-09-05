@@ -436,7 +436,7 @@ function renderHeroSection() {
   `;
 }
 
-// 2. OUR PRODUCTS - FULL SCREEN CATEGORY HERO SLIDES (SWIPER)
+// 2. OUR PRODUCTS - FULL SCREEN CATEGORY HERO SLIDES WITH 4-PIECE FLIP ANIMATION
 function renderOurProductsSlider() {
   return `
     <section class="products-hero-slider-section">
@@ -456,6 +456,12 @@ function renderOurProductsSlider() {
             return `
               <div class="swiper-slide">
                 <div class="category-hero-slide" style="background-image: url('${thumbImg}');">
+                  <div class="slide-shatter-grid">
+                    <div class="tile-piece tile-tl" style="background-image: url('${thumbImg}');"></div>
+                    <div class="tile-piece tile-tr" style="background-image: url('${thumbImg}');"></div>
+                    <div class="tile-piece tile-bl" style="background-image: url('${thumbImg}');"></div>
+                    <div class="tile-piece tile-br" style="background-image: url('${thumbImg}');"></div>
+                  </div>
                   <div class="category-hero-overlay"></div>
                   <div class="category-hero-content">
                     <span class="category-hero-badge">${cat.itemCount} Products Available</span>
