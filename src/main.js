@@ -436,7 +436,7 @@ function renderHeroSection() {
   `;
 }
 
-// 2. OUR PRODUCTS - FULL SCREEN CATEGORY HERO SLIDES WITH 4 VERTICAL SLICES FLIP ANIMATION
+// 2. OUR PRODUCTS - FULL SCREEN CATEGORY HERO SLIDES WITH 4-PIECE FLIP ANIMATION
 function renderOurProductsSlider() {
   return `
     <section class="products-hero-slider-section">
@@ -456,15 +456,14 @@ function renderOurProductsSlider() {
             return `
               <div class="swiper-slide">
                 <div class="category-hero-slide" style="background-image: url('${thumbImg}');">
-                  <div class="slide-vertical-slices">
-                    <div class="slice-panel slice-1" style="background-image: url('${thumbImg}');"></div>
-                    <div class="slice-panel slice-2" style="background-image: url('${thumbImg}');"></div>
-                    <div class="slice-panel slice-3" style="background-image: url('${thumbImg}');"></div>
-                    <div class="slice-panel slice-4" style="background-image: url('${thumbImg}');"></div>
+                  <div class="slide-shatter-grid">
+                    <div class="tile-piece tile-tl" style="background-image: url('${thumbImg}');"></div>
+                    <div class="tile-piece tile-tr" style="background-image: url('${thumbImg}');"></div>
+                    <div class="tile-piece tile-bl" style="background-image: url('${thumbImg}');"></div>
+                    <div class="tile-piece tile-br" style="background-image: url('${thumbImg}');"></div>
                   </div>
                   <div class="category-hero-overlay"></div>
                   <div class="category-hero-content">
-                    <span class="category-hero-badge">${cat.itemCount} Products Available</span>
                     <h3 class="category-hero-title">${cat.name}</h3>
                     <p class="category-hero-desc">${cat.description}</p>
                     <button onclick="navigateTo('category', '${cat.slug}')" class="btn btn-primary" style="padding: 14px 32px; font-size: 15px; font-weight: 800;">
@@ -676,8 +675,7 @@ function renderCategoryView() {
     <div class="container" style="padding: var(--space-16) 0;">
       <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-8); margin-bottom: var(--space-8);">
         <h1 style="color: var(--color-primary-dark); margin-bottom: var(--space-2);">${cat.name}</h1>
-        <p style="font-size: var(--font-size-lg); margin-bottom: var(--space-4);">${cat.description}</p>
-        <div style="font-size: var(--font-size-sm); font-weight: 700; color: var(--color-text-main);">📦 ${catProducts.length} Items Available in UAE Stock</div>
+        <p style="font-size: var(--font-size-lg);">${cat.description}</p>
       </div>
 
       <div class="product-grid">
@@ -712,9 +710,6 @@ function renderCategoriesView() {
             <div class="category-card-box" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 200ms ease, box-shadow 200ms ease;">
               <div style="width: 100%; height: 200px; position: relative; overflow: hidden; background: var(--color-bg-alt);">
                 <img src="${thumbImg}" alt="${cat.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                <div style="position: absolute; top: 12px; right: 12px; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(4px); color: #ffffff; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 700;">
-                  ${catProds.length} Products
-                </div>
               </div>
               <div style="padding: var(--space-6); display: flex; flex-direction: column; flex-grow: 1;">
                 <h3 style="font-size: var(--font-size-xl); margin-bottom: var(--space-2); color: var(--color-text-main);">${cat.name}</h3>

@@ -1049,6 +1049,12 @@ button, input, select, textarea {
   .welcome-title-banner {
     padding: var(--space-6) var(--space-4) var(--space-2);
   }
+
+  /* Hide Swiper next/prev navigation arrows on mobile screens (hand gesture swipe navigation) */
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none !important;
+  }
 }
 
 
@@ -1633,69 +1639,69 @@ button, input, select, textarea {
   }
 }
 
-/* 4 Vertical Asymmetric Slice Shatter / 3D Flip Transition */
-.slide-vertical-slices {
+/* 4-Piece Grid Shatter / 3D Fragment Flip Animation */
+.slide-shatter-grid {
   position: absolute;
   inset: 0;
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr 1.25fr 0.75fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   z-index: 2;
   pointer-events: none;
   perspective: 1200px;
   overflow: hidden;
 }
 
-.slice-panel {
+.tile-piece {
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
+  background-size: 200% 200%;
   transform-style: preserve-3d;
   backface-visibility: hidden;
-  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease, filter 0.8s ease;
+  transition: transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.75s ease, filter 0.75s ease;
 }
 
-.slice-panel.slice-1 {
-  background-position: 0% center;
+.tile-piece.tile-tl {
+  background-position: 0% 0%;
   transition-delay: 0ms;
 }
-.slice-panel.slice-2 {
-  background-position: 33% center;
-  transition-delay: 110ms;
+.tile-piece.tile-tr {
+  background-position: 100% 0%;
+  transition-delay: 100ms;
 }
-.slice-panel.slice-3 {
-  background-position: 66% center;
-  transition-delay: 220ms;
+.tile-piece.tile-bl {
+  background-position: 0% 100%;
+  transition-delay: 180ms;
 }
-.slice-panel.slice-4 {
-  background-position: 100% center;
-  transition-delay: 330ms;
-}
-
-/* 3D Vertical Slice Flip Animation States */
-.swiper-slide .slice-panel.slice-1 {
-  transform: rotateY(180deg) translateY(-25px) scale(0.75);
-  opacity: 0;
-  filter: brightness(1.6) blur(6px);
-}
-.swiper-slide .slice-panel.slice-2 {
-  transform: rotateY(-180deg) translateY(25px) scale(0.75);
-  opacity: 0;
-  filter: brightness(1.6) blur(6px);
-}
-.swiper-slide .slice-panel.slice-3 {
-  transform: rotateY(180deg) translateY(-25px) scale(0.75);
-  opacity: 0;
-  filter: brightness(1.6) blur(6px);
-}
-.swiper-slide .slice-panel.slice-4 {
-  transform: rotateY(-180deg) translateY(25px) scale(0.75);
-  opacity: 0;
-  filter: brightness(1.6) blur(6px);
+.tile-piece.tile-br {
+  background-position: 100% 100%;
+  transition-delay: 260ms;
 }
 
-.swiper-slide-active .slice-panel {
-  transform: rotateY(0deg) translateY(0) scale(1) !important;
+/* Slide Transition States: Tiles flip over in 3D perspective space */
+.swiper-slide .tile-piece.tile-tl {
+  transform: rotateY(180deg) rotateX(-45deg) scale(0.65);
+  opacity: 0;
+  filter: brightness(1.5) blur(4px);
+}
+.swiper-slide .tile-piece.tile-tr {
+  transform: rotateY(-180deg) rotateX(45deg) scale(0.65);
+  opacity: 0;
+  filter: brightness(1.5) blur(4px);
+}
+.swiper-slide .tile-piece.tile-bl {
+  transform: rotateY(180deg) rotateX(45deg) scale(0.65);
+  opacity: 0;
+  filter: brightness(1.5) blur(4px);
+}
+.swiper-slide .tile-piece.tile-br {
+  transform: rotateY(-180deg) rotateX(-45deg) scale(0.65);
+  opacity: 0;
+  filter: brightness(1.5) blur(4px);
+}
+
+.swiper-slide-active .tile-piece {
+  transform: rotateY(0deg) rotateX(0deg) scale(1) !important;
   opacity: 1 !important;
   filter: brightness(1) blur(0) !important;
 }
