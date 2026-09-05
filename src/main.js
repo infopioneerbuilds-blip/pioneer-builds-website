@@ -436,7 +436,7 @@ function renderHeroSection() {
   `;
 }
 
-// 2. OUR PRODUCTS - FULL SCREEN CATEGORY HERO SLIDES WITH 4-PIECE FLIP ANIMATION
+// 2. OUR PRODUCTS - FULL SCREEN CATEGORY HERO SLIDES WITH 4 VERTICAL SLICES FLIP ANIMATION
 function renderOurProductsSlider() {
   return `
     <section class="products-hero-slider-section">
@@ -456,11 +456,11 @@ function renderOurProductsSlider() {
             return `
               <div class="swiper-slide">
                 <div class="category-hero-slide" style="background-image: url('${thumbImg}');">
-                  <div class="slide-shatter-grid">
-                    <div class="tile-piece tile-tl" style="background-image: url('${thumbImg}');"></div>
-                    <div class="tile-piece tile-tr" style="background-image: url('${thumbImg}');"></div>
-                    <div class="tile-piece tile-bl" style="background-image: url('${thumbImg}');"></div>
-                    <div class="tile-piece tile-br" style="background-image: url('${thumbImg}');"></div>
+                  <div class="slide-vertical-slices">
+                    <div class="slice-panel slice-1" style="background-image: url('${thumbImg}');"></div>
+                    <div class="slice-panel slice-2" style="background-image: url('${thumbImg}');"></div>
+                    <div class="slice-panel slice-3" style="background-image: url('${thumbImg}');"></div>
+                    <div class="slice-panel slice-4" style="background-image: url('${thumbImg}');"></div>
                   </div>
                   <div class="category-hero-overlay"></div>
                   <div class="category-hero-content">
