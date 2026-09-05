@@ -425,7 +425,12 @@ function renderHeroSection() {
         <img src="/cover.png" alt="Pioneer Building Materials" class="hero-main-standalone-img">
       </div>
       <div class="welcome-title-banner">
-        <h1 class="hero-animated-title-standalone">Welcome to Pioneer Building Materials</h1>
+        <h1 class="hero-animated-title-standalone">
+          <span class="anim-word word-1">Welcome</span>
+          <span class="anim-word word-2">to</span>
+          <span class="anim-word word-highlight">Pioneer Building Materials</span>
+        </h1>
+        <div class="welcome-accent-line"></div>
       </div>
     </section>
   `;

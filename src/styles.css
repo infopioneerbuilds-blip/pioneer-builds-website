@@ -1098,23 +1098,85 @@ button, input, select, textarea {
   display: block;
 }
 
+/* Animated Welcome Title Banner & Staggered Transitions */
 .welcome-title-banner {
   text-align: center;
   padding: var(--space-10) var(--space-6) var(--space-4);
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
+  perspective: 1000px;
 }
 
 .hero-animated-title-standalone {
-  font-size: clamp(28px, 4.5vw, 52px);
+  font-size: clamp(28px, 4.8vw, 54px);
   font-family: var(--font-display);
   font-weight: 800;
-  line-height: 1.15;
-  background: linear-gradient(135deg, #1E293B 0%, #3F8F8F 50%, #1E293B 100%);
+  line-height: 1.25;
+  color: var(--color-text-main);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3em;
+  margin-bottom: var(--space-3);
+}
+
+.anim-word {
+  display: inline-block;
+  opacity: 0;
+  transform-origin: bottom center;
+  animation: titleWordReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-word.word-1 {
+  animation-delay: 0.15s;
+  color: #1E293B;
+}
+
+.anim-word.word-2 {
+  animation-delay: 0.3s;
+  color: #334155;
+}
+
+.anim-word.word-highlight {
+  animation-delay: 0.45s;
+  background: linear-gradient(135deg, #1E293B 0%, #3F8F8F 50%, #80C0C0 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: heroGradientShift 6s ease infinite, heroFadeSlideUp 0.9s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  animation: titleWordReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards, titleShimmer 5s ease-in-out infinite alternate;
+}
+
+.welcome-accent-line {
+  width: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #80C0C0, transparent);
+  border-radius: var(--radius-pill);
+  margin: 0 auto;
+  animation: accentExpand 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+}
+
+@keyframes titleWordReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) rotateX(-25deg) scale(0.92);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes titleShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@keyframes accentExpand {
+  0% { width: 0; opacity: 0; }
+  100% { width: 140px; opacity: 1; }
 }
 
 /* Animated Hero Entrance */
