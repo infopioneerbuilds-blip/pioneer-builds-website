@@ -27,21 +27,21 @@ const FLEET_TRUCKS = [
     name: "3 Meter Cubic Tipper",
     spec: "3m³ Compact Tipper Truck with driver for rapid site delivery across Dubai & UAE urban zones.",
     capacity: "3m³ Load Capacity",
-    image: "https://drive.google.com/thumbnail?id=1L918lwizbD3OSMSTcHf0dGDrTHopp52X&sz=w1000",
+    image: "https://lh3.googleusercontent.com/d/1L918lwizbD3OSMSTcHf0dGDrTHopp52X=w1000",
     badge: "Light Fleet"
   },
   {
     name: "5 Meter Cubic Tipper",
     spec: "5m³ Medium Duty Dump Truck engineered for aggregate, dune sand & blockwork site supply.",
     capacity: "5m³ Load Capacity",
-    image: "https://drive.google.com/thumbnail?id=1eSa9J74_A7eoHoTHYbShHskMZWimddqj&sz=w1000",
+    image: "https://lh3.googleusercontent.com/d/1eSa9J74_A7eoHoTHYbShHskMZWimddqj=w1000",
     badge: "Medium Fleet"
   },
   {
     name: "20 Meter Cubic Tipper",
     spec: "20m³ Heavy Duty 10-Wheel Tipper Truck for bulk quarry aggregate, road sub-base & foundation haulage.",
     capacity: "20m³ Load Capacity",
-    image: "https://drive.google.com/thumbnail?id=1LyZMfRtRvanbPhbT6FMfIQMxl61oU53h&sz=w1000",
+    image: "https://lh3.googleusercontent.com/d/1LyZMfRtRvanbPhbT6FMfIQMxl61oU53h=w1000",
     badge: "Heavy Fleet"
   }
 ];
@@ -511,7 +511,7 @@ function renderBrandsSection() {
         <div class="brands-marquee-track">
           ${BRAND_IMAGE_IDS.concat(BRAND_IMAGE_IDS).map((id, index) => `
             <div class="brand-card-logo" title="Authorised Brand Partner">
-              <img src="https://drive.google.com/thumbnail?id=${id}&sz=w400" alt="Brand Logo ${index + 1}" loading="lazy" onerror="this.src='/cover.png'">
+              <img src="https://lh3.googleusercontent.com/d/${id}=w600" alt="Brand Logo ${(index % BRAND_IMAGE_IDS.length) + 1}" loading="lazy">
             </div>
           `).join('')}
         </div>
