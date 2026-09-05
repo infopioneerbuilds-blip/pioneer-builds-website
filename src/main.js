@@ -518,7 +518,6 @@ function renderBrandsSection() {
           Global Partnerships
         </span>
         <h2 style="font-size: var(--font-size-3xl);">Brands We Offer</h2>
-        <p style="margin: 6px auto 0;">Authorised stockist & distributor of world-class construction brands across the Middle East.</p>
       </div>
 
       <div class="brands-marquee-wrap">
@@ -597,7 +596,6 @@ function renderProjectsSection() {
                   <div class="project-card-body">
                     <span class="project-location">${proj.location}</span>
                     <h3 class="project-title">${proj.title}</h3>
-                    <p style="font-size: 12px; color: var(--color-text-subtle); margin-top: 4px;">${proj.supplied}</p>
                   </div>
                 </div>
               </div>
