@@ -5,20 +5,33 @@ const TARGET_EMAIL = import.meta.env.VITE_TARGET_EMAIL || 'info.pioneerbuilds@gm
 
 // 27 Google Drive Brand Image IDs from user folder
 const BRAND_IMAGE_IDS = [
-  '1UZ2It-RiGRR3DVEwE3gf6_wnoFhbKyHD', '1uWecWN0n4fYh7CXZ1IIXfJz7CtmsyRcB',
-  '1_SUxt4NtuuBIBdg60HYEFYfh1nvSkO5p', '1hECM7ZJiz90JbpHK7qeNpRdIfglYq__j',
-  '1RmCjQYSCdMO3oOnaB8MSffdRq6i7B7m3', '1S37UG2PeKlu9RY_B95eM_2gReQ5vfPqq',
-  '1H715MwKjachfFZyENDRx8NE7UqMf4iv-', '1lNM0oO1afDB2iSQfItb1lyVo341XNh09',
-  '1gm_6yb2Kxp4O6wPQSQz5aN1xOZKRn3Or', '1qbCOXO3d71sDZAKTO70a3um2d9ehod80',
-  '10mbnT9I_xN0BG85ItcqiflTayieCM6qi', '1bWS160R6fj10z63UULVks9vve9ThmeD5',
-  '1uN0vYbsGeEUqU5J7eq9VJpk6g2a4CYJK', '1ZWkRsbt_duloavcwraU0VOJ05fy-5cO7',
-  '1FWkU9WZUYZU7Hx4Wz04NFSLnx3ehA5Bg', '1cc64FwoSbLkV9xWykAPDmjFta1rBenGl',
-  '11r0HvNLVgELCI83P-e0a1lPY_R4xzHxz', '1xkJU109zsRdLWMa8c_j7ZmtRGgMztoWc',
-  '1vCzrlKAR2ru8Egeouu-VBF7NJBzWBGse', '1q6Q6-gJ-vKoZ2nOpQ9vP8RQL74KNWzIC',
-  '1FU6KsRqaZ7hBGayjV3j3AsU3SP-sLdda', '1QlIYIG--spoyIJNrRfTe5MUHIg0KppZw',
-  '1qlnMGDJ6ARc1anunONkDVFSQFnUYGDGd', '17gfGSf8-2SWhon2hU36b0d1XBc8c1ZGh',
-  '1giLGFs1duXvwO7XE4t7b_7ATYEoeaO-H', '1zAm_nQGsl5jrzV_yKfwGZyZXFpDFgTo2',
-  '1Gk7WePrF9kfbVT5GzCw0th6jgjdXpcOB'
+  '1Gk7WePrF9kfbVT5GzCw0th6jgjdXpcOB',
+  '1zAm_nQGsl5jrzV_yKfwGZyZXFpDFgTo2',
+  '1giLGFs1duXvwO7XE4t7b_7ATYEoeaO-H',
+  '17gfGSf8-2SWhon2hU36b0d1XBc8c1ZGh',
+  '1qlnMGDJ6ARc1anunONkDVFSQFnUYGDGd',
+  '1QlIYIG--spoyIJNrRfTe5MUHIg0KppZw',
+  '1FU6KsRqaZ7hBGayjV3j3AsU3SP-sLdda',
+  '1q6Q6-gJ-vKoZ2nOpQ9vP8RQL74KNWzIC',
+  '1vCzrlKAR2ru8Egeouu-VBF7NJBzWBGse',
+  '1xkJU109zsRdLWMa8c_j7ZmtRGgMztoWc',
+  '11r0HvNLVgELCI83P-e0a1lPY_R4xzHxz',
+  '1cc64FwoSbLkV9xWykAPDmjFta1rBenGl',
+  '1FWkU9WZUYZU7Hx4Wz04NFSLnx3ehA5Bg',
+  '1ZWkRsbt_duloavcwraU0VOJ05fy-5cO7',
+  '1uN0vYbsGeEUqU5J7eq9VJpk6g2a4CYJK',
+  '1bWS160R6fj10z63UULVks9vve9ThmeD5',
+  '10mbnT9I_xN0BG85ItcqiflTayieCM6qi',
+  '1qbCOXO3d71sDZAKTO70a3um2d9ehod80',
+  '1gm_6yb2Kxp4O6wPQSQz5aN1xOZKRn3Or',
+  '1lNM0oO1afDB2iSQfItb1lyVo341XNh09',
+  '1H715MwKjachfFZyENDRx8NE7UqMf4iv-',
+  '1S37UG2PeKlu9RY_B95eM_2gReQ5vfPqq',
+  '1RmCjQYSCdMO3oOnaB8MSffdRq6i7B7m3',
+  '1hECM7ZJiz90JbpHK7qeNpRdIfglYq__j',
+  '1_SUxt4NtuuBIBdg60HYEFYfh1nvSkO5p',
+  '1uWecWN0n4fYh7CXZ1IIXfJz7CtmsyRcB',
+  '1UZ2It-RiGRR3DVEwE3gf6_wnoFhbKyHD'
 ];
 
 // Fleet Trucks Google Drive Direct IDs
@@ -511,7 +524,11 @@ function renderBrandsSection() {
         <div class="brands-marquee-track">
           ${BRAND_IMAGE_IDS.concat(BRAND_IMAGE_IDS).map((id, index) => `
             <div class="brand-card-logo" title="Authorised Brand Partner">
-              <img src="https://lh3.googleusercontent.com/d/${id}=w600" alt="Brand Logo ${(index % BRAND_IMAGE_IDS.length) + 1}" loading="lazy">
+              <img src="https://lh3.googleusercontent.com/d/${id}=w600" 
+                   alt="Brand Logo ${(index % BRAND_IMAGE_IDS.length) + 1}" 
+                   loading="lazy" 
+                   referrerpolicy="no-referrer"
+                   onerror="if(!this.dataset.retry){this.dataset.retry=1;this.src='https://drive.google.com/thumbnail?id=${id}&sz=w600';}">
             </div>
           `).join('')}
         </div>
@@ -537,7 +554,7 @@ function renderFleetSection() {
           ${FLEET_TRUCKS.map((truck, idx) => `
             <div class="fleet-card">
               <div class="fleet-img-wrap">
-                <img src="${truck.image}" alt="${truck.name}" class="fleet-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80'">
+                <img src="${truck.image}" alt="${truck.name}" class="fleet-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80'">
                 <span class="fleet-badge">${truck.badge}</span>
               </div>
               <div class="fleet-card-body">
