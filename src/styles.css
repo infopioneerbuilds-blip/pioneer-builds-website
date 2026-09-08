@@ -184,36 +184,142 @@ button, input, select, textarea {
   background-color: #15803d;
 }
 
-/* Floating Translucent Pill Header Navbar (Floats over hero image) */
+/* ============================================================
+   SCROLL-ACTIVATED STICKY NAV (Home view: hidden until hero ends)
+   ============================================================ */
+.sticky-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 350ms cubic-bezier(0.215, 0.61, 0.355, 1), opacity 350ms ease;
+  pointer-events: none;
+}
+
+.sticky-nav-bar.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sticky-nav-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 12px var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.sticky-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.sticky-brand-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.sticky-brand-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+}
+
+.sticky-nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  list-style: none;
+}
+
+.sticky-nav-links a {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 150ms ease;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.sticky-nav-links a:hover {
+  color: #ffffff;
+}
+
+.sticky-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sticky-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.sticky-icon-btn:hover {
+  background: rgba(128, 192, 192, 0.25);
+  border-color: rgba(128, 192, 192, 0.5);
+  color: #ffffff;
+}
+
+/* ============================================================
+   STANDARD NAVBAR (non-home pages: always visible at top)
+   ============================================================ */
+/* Floating Translucent Pill Header Navbar */
 .tamba-header-wrap {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
   padding: var(--space-4) 0;
-  background: transparent;
-  border-bottom: none;
-  pointer-events: none;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .tamba-navbar {
-  pointer-events: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--color-surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   padding: var(--space-2) var(--space-6);
-  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+  box-shadow: var(--shadow-sm);
   gap: var(--space-4);
 }
 
 .main-inner {
-  padding-top: 90px;
+  padding-top: 0;
 }
 
 .brand-logo {
@@ -1050,34 +1156,60 @@ button, input, select, textarea {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Hero Cover Image positioned right below mobile navbar (nav bar then image) */
-  .hero-main-image-section {
-    padding-top: 0;
+  /* Immersive hero: mobile adaptations */
+  .immersive-hero {
+    height: 100svh; /* safe viewport height for mobile browsers with address bar */
+    min-height: 520px;
   }
 
-  .hero-main-img-container {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
+  /* On mobile: hide bottom pill nav row, show hamburger button top-right */
+  .immersive-nav-pills {
+    display: none;
   }
 
-  .hero-main-standalone-img {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
-    display: block;
+  .immersive-bottom-bar {
+    justify-content: flex-end;
+    padding: 0 20px;
+    bottom: 28px;
   }
 
-  .welcome-title-banner {
-    padding: var(--space-6) var(--space-4) var(--space-2);
+  .immersive-hamburger {
+    display: flex;
   }
 
-  /* Hide Swiper next/prev navigation arrows on mobile screens (hand gesture swipe navigation) */
+  .immersive-logo {
+    left: 20px;
+    top: 20px;
+  }
+
+  .immersive-logo-img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .immersive-logo-name {
+    font-size: 14px;
+  }
+
+  .immersive-top-right {
+    right: 20px;
+    top: 20px;
+  }
+
+  .immersive-headline-wrap {
+    width: 92%;
+  }
+
+  /* Sticky nav: on mobile, hide the text links, keep icons */
+  .sticky-nav-links {
+    display: none;
+  }
+
+  .sticky-nav-inner {
+    padding: 10px var(--space-4);
+  }
+
+  /* Hide Swiper next/prev navigation arrows on mobile screens */
   .swiper-button-next,
   .swiper-button-prev {
     display: none !important;
@@ -1104,117 +1236,275 @@ button, input, select, textarea {
   }
 }
 
-/* Hero Main Image & Title Section (Full screen width with floating navbar over image) */
-.hero-main-image-section {
-  width: 100%;
-  padding-top: 0;
-  background: var(--color-bg);
-  overflow: hidden;
+/* ============================================================
+   IMMERSIVE FULL-BLEED HERO (100vh, buttons inside photo)
+   ============================================================ */
+.immersive-hero {
   position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.hero-main-img-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
+/* Background image layer */
+.immersive-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
-.hero-main-standalone-img {
+.immersive-hero-img {
   width: 100%;
-  height: auto;
-  max-height: 85vh;
+  height: 100%;
   object-fit: cover;
-  border-radius: 0;
-  border: none;
-  box-shadow: none;
+  object-position: center;
   display: block;
 }
 
-/* Animated Welcome Title Banner & Staggered Transitions */
-.welcome-title-banner {
-  text-align: center;
-  padding: var(--space-10) var(--space-6) var(--space-4);
-  max-width: 1200px;
-  margin: 0 auto;
-  perspective: 1000px;
-  overflow: hidden;
+/* Cinematic dark gradient overlay (lighter at top, denser at bottom) */
+.immersive-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 14, 24, 0.45) 0%,
+    rgba(10, 14, 24, 0.25) 35%,
+    rgba(10, 14, 24, 0.35) 60%,
+    rgba(10, 14, 24, 0.72) 100%
+  );
 }
 
-.hero-animated-title-standalone {
-  font-size: clamp(15px, 3.5vw, 44px);
-  font-family: var(--font-display);
-  font-weight: 800;
-  line-height: 1.2;
-  color: var(--color-text-main);
+/* -- Logo: top-left floating on photo -- */
+.immersive-logo {
+  position: absolute;
+  top: 28px;
+  left: 32px;
+  z-index: 10;
+  animation: heroFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.immersive-logo-link {
   display: flex;
-  flex-wrap: nowrap;
-  white-space: nowrap;
-  justify-content: center;
   align-items: center;
-  gap: 0.3em;
-  margin-bottom: var(--space-3);
-  width: 100%;
+  gap: 10px;
+  text-decoration: none;
 }
 
-.anim-word {
-  display: inline-block;
+.immersive-logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+}
+
+.immersive-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.immersive-logo-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.immersive-logo-sub {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+/* -- Top-right: search + cart + hamburger -- */
+.immersive-top-right {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  animation: heroFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.immersive-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 200ms ease, border-color 200ms ease, transform 150ms ease;
+}
+
+.immersive-icon-btn:hover {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.45);
+  transform: scale(1.07);
+}
+
+/* Hide hamburger on desktop (desktop has bottom pills) */
+.immersive-hamburger {
+  display: none;
+}
+
+/* -- Center headline -- */
+.immersive-headline-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+  width: 90%;
+  max-width: 820px;
+}
+
+.immersive-headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 20px;
+}
+
+.immersive-line {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 7.5vw, 96px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.4);
   opacity: 0;
-  color: #1E293B;
-  transform-origin: bottom center;
-  animation: titleWordReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: translateY(32px);
+  animation: heroLineUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: block;
 }
 
-.anim-word.word-1,
-.anim-word.word-2,
-.anim-word.word-highlight {
-  color: #1E293B;
-  background: none;
-  -webkit-text-fill-color: #1E293B;
+.immersive-line.line-1 { animation-delay: 0.25s; }
+.immersive-line.line-2 {
+  animation-delay: 0.42s;
+  color: #80C0C0;
+  font-size: clamp(42px, 7.5vw, 96px);
 }
 
-.anim-word.word-1 {
-  animation-delay: 0.15s;
+.immersive-subline {
+  font-size: clamp(13px, 1.5vw, 17px);
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  opacity: 0;
+  animation: heroLineUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  max-width: 100%;
 }
 
-.anim-word.word-2 {
-  animation-delay: 0.3s;
+/* -- Bottom bar: frosted nav pills + CTA -- */
+.immersive-bottom-bar {
+  position: absolute;
+  bottom: 36px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  opacity: 0;
+  animation: heroLineUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
 }
 
-.anim-word.word-highlight {
-  animation-delay: 0.45s;
-}
-
-.welcome-accent-line {
-  width: 0;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, #80C0C0, transparent);
+.immersive-nav-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 14, 24, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-pill);
-  margin: 0 auto;
-  animation: accentExpand 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+  padding: 6px 8px;
 }
 
-@keyframes titleWordReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) rotateX(-25deg) scale(0.92);
-    filter: blur(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) rotateX(0deg) scale(1);
-    filter: blur(0);
-  }
+.immersive-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: background 200ms ease, color 200ms ease;
+  white-space: nowrap;
 }
 
-@keyframes titleShimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+.immersive-pill:hover,
+.immersive-pill.active {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
 }
 
-@keyframes accentExpand {
-  0% { width: 0; opacity: 0; }
-  100% { width: 140px; opacity: 1; }
+/* Glowing teal CTA button */
+.immersive-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: #80C0C0;
+  color: #0F172A;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 0 0 rgba(128, 192, 192, 0.5);
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+  animation: ctaPulse 3s ease-in-out 1.5s infinite;
+  flex-shrink: 0;
+}
+
+.immersive-cta-btn:hover {
+  transform: translateY(-2px);
+  background: #67ACAC;
+  box-shadow: 0 8px 32px rgba(128, 192, 192, 0.55);
+  animation: none;
+}
+
+@keyframes heroLineUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroFadeDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ctaPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(128, 192, 192, 0.5); }
+  50% { box-shadow: 0 0 0 14px rgba(128, 192, 192, 0); }
+}
+
+/* main-home: no top padding, hero starts at top of viewport */
+.main-home > section:first-child {
+  margin-top: 0;
 }
 
 /* Animated Hero Entrance */

@@ -369,12 +369,41 @@ function syncRouteFromPath() {
 // HEADER NAVBAR
 function renderHeader() {
   const cartTotal = state.cart.reduce((sum, item) => sum + item.qty, 0);
+  // On home view, render the sticky scroll-activated nav only
+  // On other views, render the standard always-visible nav
+  if (state.currentView === 'home') {
+    return `
+      <!-- Scroll-activated sticky nav: hidden on load, fades in after hero -->
+      <header class="sticky-nav-bar" id="sticky-nav-bar">
+        <div class="sticky-nav-inner">
+          <a href="#" onclick="navigateTo('home'); return false;" class="sticky-brand">
+            <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="sticky-brand-img">
+            <span class="sticky-brand-name">PIONEER</span>
+          </a>
+          <ul class="sticky-nav-links">
+            <li><a href="#" onclick="navigateTo('home'); return false;">Home</a></li>
+            <li><a href="#" onclick="navigateTo('categories'); return false;">Products</a></li>
+            <li><a href="#" onclick="navigateTo('about'); return false;">About</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
+          </ul>
+          <div class="sticky-nav-actions">
+            <button class="sticky-icon-btn" onclick="openSearchModal()" title="Search Products">${ICONS.search}</button>
+            <button class="sticky-icon-btn sticky-cart-btn" onclick="navigateTo('cart')" title="Cart">
+              ${ICONS.cart}
+              ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
+            </button>
+            <button class="sticky-icon-btn" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
+          </div>
+        </div>
+      </header>
+    `;
+  }
 
+  // Standard navbar for non-home pages
   return `
     <header class="tamba-header-wrap">
       <div class="container">
         <nav class="tamba-navbar">
-          <!-- Brand Logo -->
           <a href="#" onclick="navigateTo('home'); return false;" class="brand-logo">
             <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="brand-icon-img">
             <div class="brand-text">
@@ -382,39 +411,25 @@ function renderHeader() {
               <span class="brand-subtitle">Building Materials Trading LLC</span>
             </div>
           </a>
-
-          <!-- Center Navigation Links -->
           <ul class="nav-links-menu">
-            <li><a href="#" onclick="navigateTo('home'); return false;" class="nav-item-link ${state.currentView === 'home' ? 'active' : ''}">Home</a></li>
+            <li><a href="#" onclick="navigateTo('home'); return false;" class="nav-item-link">Home</a></li>
             <li><a href="#" onclick="navigateTo('categories'); return false;" class="nav-item-link ${state.currentView === 'categories' || state.currentView === 'category' ? 'active' : ''}">Categories</a></li>
             <li><a href="#" onclick="navigateTo('about'); return false;" class="nav-item-link ${state.currentView === 'about' ? 'active' : ''}">About Us</a></li>
-            <li><a href="#" onclick="navigateTo('contact'); return false;" class="nav-item-link ${state.currentView === 'contact' ? 'active' : ''}">Contact us</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;" class="nav-item-link ${state.currentView === 'contact' ? 'active' : ''}">Contact</a></li>
           </ul>
-
-          <!-- Right Action Utility Group -->
           <div class="nav-actions-group">
-            <button class="icon-btn" onclick="openSearchModal()" title="Search 121+ Products">
-              ${ICONS.search}
-            </button>
-
+            <button class="icon-btn" onclick="openSearchModal()" title="Search">${ICONS.search}</button>
             <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="phone-link-btn">
-              ${ICONS.phone}
-              <span>${COMPANY_INFO.phones[0]}</span>
+              ${ICONS.phone}<span>${COMPANY_INFO.phones[0]}</span>
             </a>
-
             <button class="btn btn-primary desktop-rfq-btn" onclick="navigateTo('cart')">
-              ${ICONS.cart}
-              <span>Cart (${cartTotal})</span>
+              ${ICONS.cart}<span>Cart (${cartTotal})</span>
             </button>
-
-            <button class="mobile-cart-badge-btn" onclick="navigateTo('cart')" title="View Shopping Cart">
+            <button class="mobile-cart-badge-btn" onclick="navigateTo('cart')" title="Cart">
               ${ICONS.cart}
               ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
             </button>
-
-            <button class="mobile-menu-toggle-btn" onclick="toggleMobileMenu()" title="Open Navigation Menu">
-              ${ICONS.menu}
-            </button>
+            <button class="mobile-menu-toggle-btn" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
           </div>
         </nav>
       </div>
@@ -422,20 +437,59 @@ function renderHeader() {
   `;
 }
 
-// 1. TOP MAIN IMAGE & ANIMATED TITLE SECTION
+// 1. FULL-BLEED IMMERSIVE HERO — Logo top-left, headline centre, bottom nav pills + CTA
 function renderHeroSection() {
+  const cartTotal = state.cart.reduce((sum, item) => sum + item.qty, 0);
   return `
-    <section class="hero-main-image-section">
-      <div class="hero-main-img-container">
-        <img src="/cover.png" alt="Pioneer Building Materials" class="hero-main-standalone-img">
+    <section class="immersive-hero" id="immersive-hero">
+      <!-- Background image -->
+      <div class="immersive-hero-bg">
+        <img src="/cover.png" alt="Pioneer Building Materials" class="immersive-hero-img" fetchpriority="high">
+        <div class="immersive-hero-overlay"></div>
       </div>
-      <div class="welcome-title-banner">
-        <h1 class="hero-animated-title-standalone">
-          <span class="anim-word word-1">Welcome</span>
-          <span class="anim-word word-2">to</span>
-          <span class="anim-word word-highlight">Pioneer Building Materials</span>
+
+      <!-- Top-left: Logo (floating on photo) -->
+      <div class="immersive-logo">
+        <a href="#" onclick="navigateTo('home'); return false;" class="immersive-logo-link">
+          <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="immersive-logo-img">
+          <div class="immersive-logo-text">
+            <span class="immersive-logo-name">PIONEER</span>
+            <span class="immersive-logo-sub">Building Materials Trading LLC</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Top-right: Cart + Search (floating) -->
+      <div class="immersive-top-right">
+        <button class="immersive-icon-btn" onclick="openSearchModal()" title="Search Products">${ICONS.search}</button>
+        <button class="immersive-icon-btn immersive-cart-btn" onclick="navigateTo('cart')" title="Cart">
+          ${ICONS.cart}
+          ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
+        </button>
+        <button class="immersive-icon-btn immersive-hamburger" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
+      </div>
+
+      <!-- Center: Main headline -->
+      <div class="immersive-headline-wrap">
+        <h1 class="immersive-headline">
+          <span class="immersive-line line-1">Building Materials.</span>
+          <span class="immersive-line line-2">Delivered.</span>
         </h1>
-        <div class="welcome-accent-line"></div>
+        <p class="immersive-subline">Pioneer Building Materials Trading LLC — Supplying UAE since Day 1</p>
+      </div>
+
+      <!-- Bottom: Frosted glass nav pills + Get a Quote CTA -->
+      <div class="immersive-bottom-bar">
+        <nav class="immersive-nav-pills">
+          <a href="#" onclick="navigateTo('home'); return false;" class="immersive-pill ${state.currentView === 'home' ? 'active' : ''}">Home</a>
+          <a href="#" onclick="navigateTo('categories'); return false;" class="immersive-pill">Products</a>
+          <a href="#" onclick="navigateTo('about'); return false;" class="immersive-pill">About</a>
+          <a href="#" onclick="navigateTo('contact'); return false;" class="immersive-pill">Contact</a>
+        </nav>
+        <a href="https://wa.me/${COMPANY_INFO.whatsapp}" target="_blank" rel="noopener" class="immersive-cta-btn">
+          Get a Quote
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
     </section>
   `;
@@ -1119,6 +1173,33 @@ function renderApp() {
 
   // Initialize Swipers after DOM update
   initSwipers();
+
+  // Scroll-activated sticky nav: only on home view
+  if (state.currentView === 'home') {
+    initStickyNav();
+  }
+}
+
+function initStickyNav() {
+  const hero = document.getElementById('immersive-hero');
+  const stickyNav = document.getElementById('sticky-nav-bar');
+  if (!hero || !stickyNav) return;
+
+  // Cleanup any previous listener
+  if (window._stickyNavHandler) {
+    window.removeEventListener('scroll', window._stickyNavHandler);
+  }
+
+  window._stickyNavHandler = function() {
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    if (heroBottom <= 60) {
+      stickyNav.classList.add('visible');
+    } else {
+      stickyNav.classList.remove('visible');
+    }
+  };
+
+  window.addEventListener('scroll', window._stickyNavHandler, { passive: true });
 }
 
 function initSwipers() {
