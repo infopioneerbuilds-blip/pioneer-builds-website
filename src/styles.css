@@ -982,7 +982,13 @@ button, input, select, textarea {
   }
 
   .brand-subtitle {
-    display: none;
+    display: block;
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-top: 1px;
   }
 
   .brand-title {
@@ -1141,27 +1147,29 @@ button, input, select, textarea {
 .anim-word {
   display: inline-block;
   opacity: 0;
+  color: #1E293B;
   transform-origin: bottom center;
   animation: titleWordReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.anim-word.word-1,
+.anim-word.word-2,
+.anim-word.word-highlight {
+  color: #1E293B;
+  background: none;
+  -webkit-text-fill-color: #1E293B;
+}
+
 .anim-word.word-1 {
   animation-delay: 0.15s;
-  color: #1E293B;
 }
 
 .anim-word.word-2 {
   animation-delay: 0.3s;
-  color: #334155;
 }
 
 .anim-word.word-highlight {
   animation-delay: 0.45s;
-  background: linear-gradient(135deg, #1E293B 0%, #3F8F8F 50%, #80C0C0 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: titleWordReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards, titleShimmer 5s ease-in-out infinite alternate;
 }
 
 .welcome-accent-line {

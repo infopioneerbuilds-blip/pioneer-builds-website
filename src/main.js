@@ -37,19 +37,16 @@ const BRAND_IMAGE_IDS = [
 // Fleet Trucks Google Drive Direct IDs
 const FLEET_TRUCKS = [
   {
-    capacity: "3 Meter Cubic Capacity",
-    image: "https://lh3.googleusercontent.com/d/1L918lwizbD3OSMSTcHf0dGDrTHopp52X=w1000",
-    badge: "Light Fleet"
+    capacity: "3 Cubic Meter Capacity",
+    image: "https://lh3.googleusercontent.com/d/1L918lwizbD3OSMSTcHf0dGDrTHopp52X=w1000"
   },
   {
-    capacity: "5 Meter Cubic Capacity",
-    image: "https://lh3.googleusercontent.com/d/1eSa9J74_A7eoHoTHYbShHskMZWimddqj=w1000",
-    badge: "Medium Fleet"
+    capacity: "5 Cubic Meter Capacity",
+    image: "https://lh3.googleusercontent.com/d/1eSa9J74_A7eoHoTHYbShHskMZWimddqj=w1000"
   },
   {
-    capacity: "20 Meter Cubic Capacity",
-    image: "https://lh3.googleusercontent.com/d/1LyZMfRtRvanbPhbT6FMfIQMxl61oU53h=w1000",
-    badge: "Heavy Fleet"
+    capacity: "20 Cubic Meter Capacity",
+    image: "https://lh3.googleusercontent.com/d/1LyZMfRtRvanbPhbT6FMfIQMxl61oU53h=w1000"
   }
 ];
 
@@ -449,11 +446,8 @@ function renderOurProductsSlider() {
   return `
     <section class="products-hero-slider-section">
       <div class="container" style="margin-bottom: var(--space-8); text-align: center; max-width: 750px;">
-        <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
-          Material Divisions
-        </span>
         <h2 style="font-size: var(--font-size-3xl);">Our Products</h2>
-        <p style="margin: 8px auto 0;">Explore our 11 full material divisions featuring certified building products.</p>
+        <p style="margin: 8px auto 0;">Explore all our material divisions featuring certified building products</p>
       </div>
 
       <div class="swiper full-screen-products-swiper">
@@ -541,15 +535,14 @@ function renderFleetSection() {
             Logistics & Transport Hire
           </span>
           <h2 style="font-size: var(--font-size-3xl);">Our Fleet</h2>
-          <p style="margin: 8px auto 0;">In-house heavy tipper truck fleet available for site material delivery and dump transport rental across Dubai & all UAE Emirates.</p>
+          <p style="margin: 8px auto 0;">In-house heavy tipper truck fleet available for site material delivery and dump transport across Dubai & all UAE Emirates.</p>
         </div>
 
         <div class="fleet-grid">
           ${FLEET_TRUCKS.map((truck, idx) => `
             <div class="fleet-card">
               <div class="fleet-img-wrap">
-                <img src="${truck.image}" alt="${truck.name}" class="fleet-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80'">
-                <span class="fleet-badge">${truck.badge}</span>
+                <img src="${truck.image}" alt="${truck.capacity}" class="fleet-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80'">
               </div>
               <div class="fleet-card-body" style="text-align: center; padding: 18px 20px;">
                 <div style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 800; color: var(--color-primary-dark); margin: 0;">
@@ -609,9 +602,6 @@ function renderWhyChooseUsSection() {
     <section class="why-section">
       <div class="container">
         <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-8);">
-          <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
-            Why Pioneer BMT
-          </span>
           <h2 style="font-size: var(--font-size-3xl);">Why Choose Us</h2>
           <p style="margin: 8px auto 0;">Empowering contractor partners with certified materials, reliable transport, and competitive wholesale terms.</p>
         </div>
@@ -638,7 +628,7 @@ function renderWhyChooseUsSection() {
           <div class="why-card">
             <div class="why-icon-box">${ICONS.headset}</div>
             <h3 class="why-card-title">24/7 Sales Support</h3>
-            <p class="why-card-desc">Dedicated engineering sales team providing instant WhatsApp quotes, BOQ estimates, and technical advice.</p>
+            <p class="why-card-desc">Dedicated sales team providing instant WhatsApp quotes, BOQ estimates, and technical advice.</p>
           </div>
         </div>
       </div>
