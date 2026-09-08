@@ -1433,32 +1433,51 @@ button, input, select, textarea {
 .immersive-nav-pills {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(10, 14, 24, 0.45);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-pill);
-  padding: 6px 8px;
+  gap: 4px;
+  /* No background, no border — pills float bare on the photo */
 }
 
 .immersive-pill {
   display: inline-flex;
   align-items: center;
-  padding: 9px 20px;
-  border-radius: var(--radius-pill);
+  padding: 8px 16px;
   font-size: 13px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.72);
   text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: background 200ms ease, color 200ms ease;
+  letter-spacing: 0.03em;
   white-space: nowrap;
+  position: relative;
+  transition: color 200ms ease;
 }
 
-.immersive-pill:hover,
+/* Underline drawn via ::after pseudo-element */
+.immersive-pill::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 16px;
+  right: 16px;
+  height: 1.5px;
+  background: #ffffff;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease;
+  opacity: 0;
+}
+
+.immersive-pill:hover {
+  color: #ffffff;
+}
+
+.immersive-pill:hover::after,
+.immersive-pill.active::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
 .immersive-pill.active {
-  background: rgba(255, 255, 255, 0.16);
   color: #ffffff;
 }
 
