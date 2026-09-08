@@ -531,9 +531,6 @@ function renderFleetSection() {
     <section class="fleet-section">
       <div class="container">
         <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-8);">
-          <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
-            Logistics & Transport Hire
-          </span>
           <h2 style="font-size: var(--font-size-3xl);">Our Fleet</h2>
           <p style="margin: 8px auto 0;">In-house heavy tipper truck fleet available for site material delivery and dump transport across Dubai & all UAE Emirates.</p>
         </div>
