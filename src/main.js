@@ -469,14 +469,6 @@ function renderHeroSection() {
         <button class="immersive-icon-btn immersive-hamburger" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
       </div>
 
-      <!-- Center: Main headline -->
-      <div class="immersive-headline-wrap">
-        <h1 class="immersive-headline">
-          <span class="immersive-line line-1">Building Materials.</span>
-          <span class="immersive-line line-2">Delivered.</span>
-        </h1>
-        <p class="immersive-subline">Pioneer Building Materials Trading LLC — Supplying UAE since Day 1</p>
-      </div>
 
       <!-- Bottom: Frosted glass nav pills + Get a Quote CTA -->
       <div class="immersive-bottom-bar">
