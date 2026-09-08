@@ -1916,19 +1916,277 @@ button, input, select, textarea {
   padding-bottom: 0 !important;
 }
 
-.category-hero-slide {
+/* ============================================================
+   ARCHILOVERS 4-COLUMN CURTAIN WIPE SLIDER — Our Products
+   ============================================================ */
+
+.arch-slider-section {
+  background: var(--color-bg);
+  padding: var(--space-16) 0 0;
+}
+
+.arch-slider-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto var(--space-10);
+  padding: 0 var(--space-6);
+}
+
+.arch-slider-heading {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text-main);
+  margin-bottom: var(--space-2);
+}
+
+.arch-slider-sub {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-base);
+  max-width: 100%;
+}
+
+/* Main slider container */
+.arch-slider {
   position: relative;
   width: 100%;
-  height: 540px;
+  height: 560px;
+  overflow: hidden;
+  background: #0a0e18;
+}
+
+/* Individual slides — all stacked on top of each other */
+.arch-slide {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.arch-slide.is-active,
+.arch-slide.is-entering {
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Background image for slide (behind curtains, shows as curtains wipe away) */
+.arch-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--slide-img);
   background-size: cover;
   background-position: center;
+  z-index: 0;
+}
+
+/* Dark cinematic overlay */
+.arch-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 14, 24, 0.15) 0%,
+    rgba(10, 14, 24, 0.65) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* 4 curtain columns — cover the slide image, wipe upward to reveal */
+.arch-curtains {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  z-index: 3;
+}
+
+.arch-curtain {
+  flex: 1;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transform: translateY(0%);
+  will-change: transform;
+}
+
+/* Each curtain aligns its bg portion to its column */
+.arch-curtain[data-col="0"] { background-position: 0% center; }
+.arch-curtain[data-col="1"] { background-position: 33.33% center; }
+.arch-curtain[data-col="2"] { background-position: 66.66% center; }
+.arch-curtain[data-col="3"] { background-position: 100% center; }
+
+/* Thin separator lines between columns (Archilovers reference detail) */
+.arch-curtain + .arch-curtain {
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ---- Bottom-left slide info ---- */
+.arch-slide-info {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease 0.4s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+}
+
+.arch-slide.is-active .arch-slide-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.arch-slide-index {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.14em;
+  font-family: var(--font-display);
+}
+
+.arch-slide-title {
+  font-size: clamp(22px, 3.5vw, 40px);
+  font-weight: 800;
+  color: #ffffff;
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.45);
+  max-width: 520px;
+}
+
+/* "View →" button — Archilovers style */
+.arch-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  position: relative;
+  width: fit-content;
+  transition: color 200ms ease;
+}
+
+.arch-view-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.35);
+  transition: background 200ms ease;
+}
+
+.arch-view-btn:hover {
+  color: #80C0C0;
+}
+
+.arch-view-btn:hover::after {
+  background: #80C0C0;
+}
+
+.arch-view-btn svg {
+  transition: transform 200ms ease;
+}
+
+.arch-view-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* ---- Right-side up/down navigation ---- */
+.arch-nav {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.arch-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: var(--space-8) var(--space-6);
-  overflow: hidden;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease, transform 150ms ease;
 }
+
+.arch-nav-btn:hover {
+  background: rgba(128, 192, 192, 0.25);
+  border-color: rgba(128, 192, 192, 0.5);
+  transform: scale(1.08);
+}
+
+/* ---- Bottom progress bar ---- */
+.arch-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  z-index: 20;
+}
+
+.arch-progress-fill {
+  height: 100%;
+  background: #80C0C0;
+  width: 9.09%;
+  transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 768px) {
+  .arch-slider {
+    height: 460px;
+  }
+
+  .arch-slide-info {
+    bottom: 28px;
+    left: 20px;
+    right: 72px;
+  }
+
+  .arch-slide-title {
+    font-size: clamp(20px, 5.5vw, 28px);
+  }
+
+  .arch-nav {
+    right: 14px;
+  }
+
+  .arch-nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .arch-slider {
+    height: 400px;
+  }
+}
+
 
 .category-hero-overlay {
   position: absolute;

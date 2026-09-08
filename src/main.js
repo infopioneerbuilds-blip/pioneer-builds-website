@@ -487,61 +487,169 @@ function renderHeroSection() {
   `;
 }
 
-// 2. OUR PRODUCTS - FULL SCREEN CATEGORY HERO SLIDES WITH 4-PIECE FLIP ANIMATION
+// 2. OUR PRODUCTS — ARCHILOVERS 4-COLUMN VERTICAL CURTAIN WIPE SLIDER
 function renderOurProductsSlider() {
+  const slides = CATEGORIES.map((cat, index) => {
+    const firstProd = PRODUCTS.find(p => p.catId === cat.id);
+    const img = firstProd ? firstProd.image : '/cover.png';
+    return { cat, img, index };
+  });
+
+  const totalStr = String(slides.length).padStart(2, '0');
+
   return `
-    <section class="products-hero-slider-section">
-      <div class="container" style="margin-bottom: var(--space-8); text-align: center; max-width: 750px;">
-        <h2 style="font-size: var(--font-size-3xl);">Our Products</h2>
-        <p style="margin: 8px auto 0;">Explore all our material divisions featuring certified building products</p>
+    <section class="arch-slider-section">
+      <div class="arch-slider-header">
+        <h2 class="arch-slider-heading">Our Products</h2>
+        <p class="arch-slider-sub">Explore all our material divisions featuring certified building products</p>
       </div>
 
-      <div class="swiper full-screen-products-swiper">
-        <div class="swiper-wrapper">
-          ${CATEGORIES.map((cat, index) => {
-            const firstProd = PRODUCTS.find(p => p.catId === cat.id);
-            const thumbImg = firstProd ? firstProd.image : '/cover.png';
-            const numCurrent = String(index + 1).padStart(2, '0');
-            const numTotal = String(CATEGORIES.length).padStart(2, '0');
-            return `
-              <div class="swiper-slide">
-                <div class="category-hero-slide" style="background-image: url('${thumbImg}');">
-                  <div class="slide-shatter-grid">
-                    <div class="tile-piece tile-tl" style="background-image: url('${thumbImg}');"></div>
-                    <div class="tile-piece tile-tr" style="background-image: url('${thumbImg}');"></div>
-                    <div class="tile-piece tile-bl" style="background-image: url('${thumbImg}');"></div>
-                    <div class="tile-piece tile-br" style="background-image: url('${thumbImg}');"></div>
-                  </div>
-                  <div class="category-hero-overlay"></div>
-                  <div class="category-hero-counter">
-                    <span class="slide-num-current">${numCurrent}</span>
-                    <span class="slide-num-slash">/</span>
-                    <span class="slide-num-total">${numTotal}</span>
-                  </div>
-                  <div class="category-hero-content">
-                    <div class="hero-tag-clip">
-                      <span class="category-hero-arch-tag">PIONEER DIVISION ${numCurrent}</span>
-                    </div>
-                    <div class="hero-title-clip">
-                      <h3 class="category-hero-title">${cat.name}</h3>
-                    </div>
-                  </div>
-                  <button onclick="navigateTo('category', '${cat.slug}')" class="btn btn-primary category-explore-btn-br">
-                    <span>Explore Now</span>
-                    ${ICONS.arrowRight}
-                  </button>
-                </div>
-              </div>
-            `;
-          }).join('')}
+      <div class="arch-slider" id="arch-slider" data-current="0" data-total="${slides.length}">
+
+        <!-- Slides (stacked, only active visible) -->
+        ${slides.map(({ cat, img, index }) => `
+          <div class="arch-slide ${index === 0 ? 'is-active' : ''}" data-index="${index}" style="--slide-img: url('${img}')">
+            <!-- 4 vertical column curtains -->
+            <div class="arch-curtains">
+              <div class="arch-curtain" data-col="0" style="background-image: url('${img}')"></div>
+              <div class="arch-curtain" data-col="1" style="background-image: url('${img}')"></div>
+              <div class="arch-curtain" data-col="2" style="background-image: url('${img}')"></div>
+              <div class="arch-curtain" data-col="3" style="background-image: url('${img}')"></div>
+            </div>
+
+            <!-- Dark overlay -->
+            <div class="arch-overlay"></div>
+
+            <!-- Bottom-left: index + category name + View button -->
+            <div class="arch-slide-info">
+              <span class="arch-slide-index">${String(index + 1).padStart(2, '0')} / ${totalStr}</span>
+              <h3 class="arch-slide-title">${cat.name}</h3>
+              <a href="#" onclick="navigateTo('category', '${cat.slug}'); return false;" class="arch-view-btn">
+                View
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        `).join('')}
+
+        <!-- Navigation: right side vertical arrows -->
+        <div class="arch-nav">
+          <button class="arch-nav-btn arch-prev" id="arch-prev" onclick="archSliderNav(-1)" title="Previous">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+          </button>
+          <button class="arch-nav-btn arch-next" id="arch-next" onclick="archSliderNav(1)" title="Next">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
         </div>
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+
+        <!-- Progress bar at bottom -->
+        <div class="arch-progress-bar"><div class="arch-progress-fill" id="arch-progress"></div></div>
       </div>
     </section>
   `;
 }
+
+// Archilovers Slider Logic (vanilla JS, no Swiper)
+window.archSliderNav = function(dir) {
+  const slider = document.getElementById('arch-slider');
+  if (!slider || slider.dataset.animating === 'true') return;
+
+  const total = parseInt(slider.dataset.total);
+  const current = parseInt(slider.dataset.current);
+  const next = (current + dir + total) % total;
+
+  archTransition(slider, current, next);
+};
+
+function archTransition(slider, fromIdx, toIdx) {
+  slider.dataset.animating = 'true';
+
+  const slides = slider.querySelectorAll('.arch-slide');
+  const fromSlide = slides[fromIdx];
+  const toSlide   = slides[toIdx];
+  const curtains  = fromSlide.querySelectorAll('.arch-curtain');
+
+  const STAGGER = 70; // ms between each column
+  const WIPE_DURATION = 520; // ms each curtain takes
+
+  // Phase 1: wipe the FROM slide curtains upward, staggered
+  curtains.forEach((curtain, i) => {
+    curtain.style.transition = 'none';
+    curtain.style.transform = 'translateY(0%)';
+
+    setTimeout(() => {
+      curtain.style.transition = `transform ${WIPE_DURATION}ms cubic-bezier(0.76, 0, 0.24, 1)`;
+      curtain.style.transform = 'translateY(-101%)';
+    }, i * STAGGER);
+  });
+
+  const totalWipeTime = STAGGER * (curtains.length - 1) + WIPE_DURATION;
+
+  // Phase 2: halfway through last column wipe, bring in the next slide
+  const revealDelay = STAGGER * (curtains.length - 1) + WIPE_DURATION * 0.35;
+  setTimeout(() => {
+    fromSlide.classList.remove('is-active');
+    toSlide.classList.add('is-entering');
+
+    // Reset toSlide curtains to bottom (hidden below)
+    const toCurtains = toSlide.querySelectorAll('.arch-curtain');
+    toCurtains.forEach(c => {
+      c.style.transition = 'none';
+      c.style.transform = 'translateY(101%)';
+    });
+
+    // Short frame to let browser register the reset
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        toSlide.classList.add('is-active');
+        toSlide.classList.remove('is-entering');
+
+        // Reveal: slide toSlide curtains up revealing the image, then wipe them away upward
+        toCurtains.forEach((curtain, i) => {
+          setTimeout(() => {
+            curtain.style.transition = 'transform ' + WIPE_DURATION + 'ms cubic-bezier(0.76, 0, 0.24, 1)';
+            curtain.style.transform = 'translateY(-101%)';
+          }, i * STAGGER);
+        });
+      });
+    });
+  }, revealDelay);
+
+  // Phase 3: cleanup after all done
+  setTimeout(() => {
+    // Reset from slide curtains back to default
+    const fromCurtains = fromSlide.querySelectorAll('.arch-curtain');
+    fromCurtains.forEach(c => {
+      c.style.transition = 'none';
+      c.style.transform = 'translateY(0%)';
+    });
+
+    slider.dataset.current = toIdx;
+    slider.dataset.animating = 'false';
+
+    // Update progress bar
+    const progress = document.getElementById('arch-progress');
+    const total = parseInt(slider.dataset.total);
+    if (progress) progress.style.width = ((toIdx + 1) / total * 100) + '%';
+  }, totalWipeTime + 200);
+}
+
+// Autoplay
+(function startArchAutoplay() {
+  let timer = null;
+  function scheduleNext() {
+    timer = setTimeout(() => {
+      const slider = document.getElementById('arch-slider');
+      if (slider && slider.dataset.animating !== 'true') {
+        window.archSliderNav(1);
+      }
+      scheduleNext();
+    }, 5000);
+  }
+  // Start after initial render settles
+  setTimeout(scheduleNext, 1500);
+})();
+
 
 // 3. BRANDS WE OFFER - CONTINUOUS MOVING MARQUEE (PAUSE ON HOVER)
 function renderBrandsSection() {
