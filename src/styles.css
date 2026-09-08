@@ -244,12 +244,19 @@ button, input, select, textarea {
   flex-shrink: 0;
 }
 
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+}
+
 .brand-title {
   font-family: var(--font-display);
   font-size: var(--font-size-base);
   font-weight: 800;
   color: var(--color-text-main);
   line-height: 1;
+  white-space: nowrap;
 }
 
 .brand-subtitle {
@@ -258,6 +265,7 @@ button, input, select, textarea {
   color: var(--color-primary-dark);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .nav-links-menu {
@@ -274,6 +282,7 @@ button, input, select, textarea {
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-pill);
   transition: color 150ms var(--ease-out), background-color 150ms var(--ease-out);
+  white-space: nowrap;
 }
 
 .nav-item-link:hover, .nav-item-link.active {
@@ -298,6 +307,8 @@ button, input, select, textarea {
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-pill);
   background: var(--color-bg-alt);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .icon-btn {
@@ -943,7 +954,7 @@ button, input, select, textarea {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px), (max-height: 550px) and (orientation: landscape) {
   html, body, #app {
     overflow-x: hidden;
     width: 100%;
@@ -989,17 +1000,19 @@ button, input, select, textarea {
     letter-spacing: 0.02em;
     line-height: 1.1;
     margin-top: 1px;
+    white-space: nowrap;
   }
 
   .brand-title {
     font-size: 14px;
     letter-spacing: 0.02em;
+    white-space: nowrap;
   }
 
   .phone-link-btn,
   .nav-links-menu,
   .desktop-rfq-btn {
-    display: none;
+    display: none !important;
   }
 
   .mobile-cart-badge-btn,
