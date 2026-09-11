@@ -95,6 +95,29 @@ body {
   line-height: 1.5;
 }
 
+/* One shared style for every section title, so Our Products / Brands We
+   Offer / Our Fleet / Projects / Why Choose Us are always identical. */
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.section-eyebrow {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-primary-dark);
+  margin-bottom: 6px;
+}
+
 /* Typography Hierarchy */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
@@ -193,10 +216,8 @@ button, input, select, textarea {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-primary);
+  border-bottom: 1px solid rgba(30, 41, 59, 0.12);
   transform: translateY(-100%);
   opacity: 0;
   transition: transform 350ms cubic-bezier(0.215, 0.61, 0.355, 1), opacity 350ms ease;
@@ -231,14 +252,14 @@ button, input, select, textarea {
   width: 32px;
   height: 32px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
+  filter: brightness(0);
 }
 
 .sticky-brand-name {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
-  color: #ffffff;
+  color: #1E293B;
   letter-spacing: 0.06em;
 }
 
@@ -250,16 +271,16 @@ button, input, select, textarea {
 }
 
 .sticky-nav-links a {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(30, 41, 59, 0.78);
   transition: color 150ms ease;
   text-decoration: none;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.06em;
 }
 
 .sticky-nav-links a:hover {
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .sticky-nav-actions {
@@ -272,9 +293,9 @@ button, input, select, textarea {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(30, 41, 59, 0.22);
+  background: rgba(255, 255, 255, 0.35);
+  color: #1E293B;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -284,8 +305,8 @@ button, input, select, textarea {
 }
 
 .sticky-icon-btn:hover {
-  background: rgba(128, 192, 192, 0.25);
-  border-color: rgba(128, 192, 192, 0.5);
+  background: #1E293B;
+  border-color: #1E293B;
   color: #ffffff;
 }
 
@@ -860,6 +881,20 @@ button, input, select, textarea {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Desktop (>992px) has full nav everywhere, so the hamburger and the
+   slide-out sidebar are mobile-only — never reachable on a laptop. */
+@media (min-width: 993px) {
+  .sticky-hamburger,
+  .mobile-menu-toggle-btn,
+  .immersive-hamburger {
+    display: none !important;
+  }
+
+  .mobile-sidebar-overlay {
+    display: none !important;
+  }
+}
+
 /* Mobile Navigation Hamburger Toggle Button */
 .mobile-menu-toggle-btn {
   display: none;
@@ -1156,50 +1191,6 @@ button, input, select, textarea {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Immersive hero: mobile adaptations */
-  .immersive-hero {
-    height: 100svh; /* safe viewport height for mobile browsers with address bar */
-    min-height: 520px;
-  }
-
-  /* On mobile: hide bottom pill nav row, show hamburger button top-right */
-  .immersive-nav-pills {
-    display: none;
-  }
-
-  .immersive-bottom-bar {
-    justify-content: flex-end;
-    padding: 0 20px;
-    bottom: 28px;
-  }
-
-  .immersive-hamburger {
-    display: flex;
-  }
-
-  .immersive-logo {
-    left: 20px;
-    top: 20px;
-  }
-
-  .immersive-logo-img {
-    width: 36px;
-    height: 36px;
-  }
-
-  .immersive-logo-name {
-    font-size: 14px;
-  }
-
-  .immersive-top-right {
-    right: 20px;
-    top: 20px;
-  }
-
-  .immersive-headline-wrap {
-    width: 92%;
-  }
-
   /* Sticky nav: on mobile, hide the text links, keep icons */
   .sticky-nav-links {
     display: none;
@@ -1260,7 +1251,7 @@ button, input, select, textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center 28%;
   display: block;
 }
 
@@ -1294,8 +1285,8 @@ button, input, select, textarea {
 }
 
 .immersive-logo-img {
-  width: 44px;
-  height: 44px;
+  width: 62px;
+  height: 62px;
   object-fit: contain;
   filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.4));
 }
@@ -1307,7 +1298,7 @@ button, input, select, textarea {
 
 .immersive-logo-name {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: 0.1em;
@@ -1316,24 +1307,32 @@ button, input, select, textarea {
 }
 
 .immersive-logo-sub {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.82);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-top: 2px;
+  margin-top: 4px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
-/* -- Top-right: search + cart + hamburger -- */
+/* -- Top-right: nav links, with search + cart beneath them -- */
 .immersive-top-right {
   position: absolute;
   top: 28px;
   right: 32px;
   z-index: 10;
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 22px;
+  animation: heroFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.immersive-top-actions {
+  display: flex;
   align-items: center;
   gap: var(--space-2);
-  animation: heroFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
 
 .immersive-icon-btn {
@@ -1424,8 +1423,8 @@ button, input, select, textarea {
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
+  justify-content: flex-start;
+  padding: 0 32px;
   opacity: 0;
   animation: heroLineUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
 }
@@ -1434,16 +1433,18 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: 4px;
-  /* No background, no border — pills float bare on the photo */
+  /* No background, no border — links float bare on the photo */
 }
 
 .immersive-pill {
   display: inline-flex;
   align-items: center;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.72);
+  padding: 8px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
   text-decoration: none;
   letter-spacing: 0.03em;
   white-space: nowrap;
@@ -1489,9 +1490,10 @@ button, input, select, textarea {
   padding: 8px 16px;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 13px;
-  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+  font-size: 20px;
+  font-weight: 700;
   text-decoration: none;
   letter-spacing: 0.03em;
   white-space: nowrap;
@@ -1511,7 +1513,7 @@ button, input, select, textarea {
 .immersive-cta-btn::after {
   content: '';
   position: absolute;
-  bottom: 2px;
+  bottom: 0;
   left: 16px;
   right: 16px;
   height: 1.5px;
@@ -1535,6 +1537,131 @@ button, input, select, textarea {
 .immersive-cta-btn:hover svg {
   opacity: 1;
   transform: translateX(3px);
+}
+
+/* Immersive hero: mobile adaptations.
+   This block must stay AFTER the hero base rules above — same specificity,
+   so source order decides the winner. */
+@media (max-width: 992px), (max-height: 550px) and (orientation: landscape) {
+  .immersive-hero {
+    height: 100svh; /* safe viewport height for mobile browsers with address bar */
+    min-height: 520px;
+  }
+
+  /* Nav links collapse into the hamburger */
+  .immersive-nav-pills {
+    display: none;
+  }
+
+  .immersive-hamburger {
+    display: flex;
+  }
+
+  .immersive-bottom-bar {
+    padding: 0 20px;
+    bottom: 28px;
+  }
+
+  .immersive-logo {
+    left: 20px;
+    top: 20px;
+  }
+
+  .immersive-logo-img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .immersive-logo-name {
+    font-size: 18px;
+  }
+
+  .immersive-logo-sub {
+    font-size: 10px;
+  }
+
+  /* Hard stop so the wordmark can never run under the icon group:
+     3 icon buttons + their gaps + both gutters + breathing room. */
+  .immersive-logo {
+    max-width: calc(100% - 188px);
+  }
+
+  .immersive-logo-text {
+    min-width: 0;
+  }
+
+  .immersive-logo-sub {
+    white-space: nowrap;
+  }
+
+  .immersive-cta-btn {
+    font-size: 17px;
+    padding: 6px 16px;
+  }
+
+  .immersive-phone-link {
+    font-size: 14px;
+  }
+
+  .immersive-phone-link svg { width: 13px; height: 13px; }
+
+  .immersive-top-right {
+    right: 20px;
+    top: 20px;
+  }
+
+  .immersive-headline-wrap {
+    width: 92%;
+  }
+}
+
+/* Bottom-left stack: Get a Quote with the sales line under it */
+.immersive-cta-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.immersive-phone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 16px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.immersive-phone-link svg { opacity: 0.75; }
+.immersive-phone-link:hover { color: #ffffff; }
+.immersive-phone-link:hover svg { opacity: 1; }
+
+/* Below ~400px the strapline cannot fit on one line beside the icons,
+   so let it wrap instead of overflowing its max-width. */
+@media (max-width: 400px) {
+  .immersive-logo-sub {
+    white-space: normal;
+    line-height: 1.25;
+  }
+}
+
+@media (max-width: 560px) {
+  .immersive-logo-img { width: 40px; height: 40px; }
+  .immersive-logo-name { font-size: 16px; }
+  .immersive-logo-sub {
+    font-size: 8.5px;
+    letter-spacing: 0.02em;
+  }
+  .immersive-logo { max-width: calc(100% - 188px); }
+
+  .immersive-cta-btn { font-size: 16px; }
+  .immersive-phone-link { font-size: 13px; }
 }
 
 @keyframes heroLineUp {
@@ -1671,7 +1798,8 @@ button, input, select, textarea {
 
 .fleet-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* auto-fit so the row stays balanced whatever the truck count is */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--space-8);
   margin-top: var(--space-8);
 }
@@ -1917,274 +2045,507 @@ button, input, select, textarea {
 }
 
 /* ============================================================
-   ARCHILOVERS 4-COLUMN CURTAIN WIPE SLIDER — Our Products
+   WELCOME / INTRO SECTION
+   ============================================================ */
+
+.welcome-section {
+  background: var(--color-bg);
+  padding: var(--space-20) 0 var(--space-16);
+}
+
+.welcome-head {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.welcome-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Sized so the paragraph lands on ~3 lines at desktop width */
+.welcome-body p {
+  max-width: none;
+  font-size: clamp(17px, 1.5vw, 21px);
+  line-height: 1.65;
+  color: var(--color-text-main);
+}
+
+.welcome-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: var(--space-6);
+  padding: 13px 28px;
+  background: #12181f;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: background 240ms ease;
+}
+
+.welcome-more-btn:hover { background: var(--color-primary-dark); }
+
+.welcome-more-btn svg { transition: transform 240ms ease; }
+.welcome-more-btn:hover svg { transform: translateX(4px); }
+
+@media (max-width: 900px) {
+  .welcome-section { padding: var(--space-16) 0 var(--space-12); }
+}
+
+@media (max-width: 480px) {
+  .welcome-body p { font-size: var(--font-size-base); }
+}
+
+/* ============================================================
+   OUR PRODUCTS — DIAGONAL WIPE SLIDER
+   Covers fill the frame. The new image is revealed by a diagonal
+   wipe running from the top-left corner to the bottom-right.
+   ============================================================ */
+
+.prod-slider-section {
+  background: #ffffff;
+  padding: var(--space-20) 0 var(--space-16);
+}
+
+.prod-slider-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto var(--space-6);
+  padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.prod-slider-sub {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-base);
+  margin: var(--space-2) auto 0;
+}
+
+.prod-slider {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 78vh;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.prod-slide {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* hidden: the wedge is collapsed into the top-left corner */
+  clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+}
+
+/* Fills the frame edge to edge. The 3:2 covers lose ~16% vertically, so
+   anchor to the top — every cover puts its headline up there. */
+.prod-slide-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+/* Revealed: the wedge has grown until its diagonal edge (running
+   bottom-left to top-right) has swept past the bottom-right corner. */
+.prod-slide.is-active {
+  z-index: 3;
+  clip-path: polygon(0 0, 210% 0, 0 210%, 0 0);
+  /* Slow, even sweep — a hard ease-out front-loads the motion and reads
+     as a jump rather than a wipe. JS reads this duration, so it is the
+     single source of truth for the timing. */
+  transition: clip-path 1800ms cubic-bezier(0.5, 0.1, 0.5, 0.9);
+}
+
+/* Outgoing slide holds still and fully visible underneath while the
+   incoming one wipes across it, so no gap is ever exposed. */
+.prod-slide.is-leaving {
+  z-index: 2;
+  clip-path: polygon(0 0, 210% 0, 0 210%, 0 0);
+  transition: none;
+}
+
+/* ---- Prev / next, bottom-right over the cover ---- */
+.prod-nav {
+  position: absolute;
+  right: clamp(16px, 3vw, 40px);
+  bottom: clamp(16px, 3vw, 36px);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.prod-nav-btn {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: none;
+  border-radius: 50%;
+  color: #ffffff;
+  cursor: pointer;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.85)) drop-shadow(0 3px 12px rgba(0, 0, 0, 0.6));
+  transition: background 220ms ease, color 220ms ease, transform 180ms ease;
+}
+
+/* The diagonal divider between the two chevrons */
+.prod-nav-slash {
+  width: 1px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.9);
+  transform: rotate(22deg);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.8), 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Neither arrow owns the disc — it follows whichever one you point at */
+.prod-nav-btn:hover,
+.prod-nav-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.94);
+  color: #12181f;
+  filter: none;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+.prod-nav-btn:active { transform: scale(0.93); }
+
+/* ---- View Products, centred beneath the slider ---- */
+.prod-slider-foot {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-8);
+}
+
+.prod-view-btn {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.4vw, 18px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-main);
+  text-decoration: none;
+  padding-bottom: 8px;
+}
+
+/* Underline draws in on hover */
+.prod-view-btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-text-main);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prod-view-btn:hover::after,
+.prod-view-btn:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prod-slide.is-active { transition: none; }
+}
+
+@media (max-width: 900px) {
+  .prod-slider-section { padding: var(--space-16) 0 var(--space-12); }
+
+  .prod-nav-btn { width: 38px; height: 38px; }
+  .prod-nav-slash { height: 28px; }
+  .prod-slider-foot { margin-top: var(--space-6); }
+}
+
+/* ============================================================
+   ARCHILOVERS EDITORIAL SLIDER — Our Products
+   White canvas, image inset right, headline overlapping its left
+   edge, 4 panels revealing right-to-left (4 -> 3 -> 2 -> 1).
    ============================================================ */
 
 .arch-slider-section {
-  background: var(--color-bg);
-  padding: var(--space-16) 0 0;
+  background: #ffffff;
+  padding: var(--space-20) 0 var(--space-12);
 }
 
 .arch-slider-header {
   text-align: center;
   max-width: 680px;
-  margin: 0 auto var(--space-10);
-  padding: 0 var(--space-6);
+  margin: 0 auto var(--space-6);
+  padding: 0 clamp(20px, 5vw, 64px);
 }
 
-.arch-slider-heading {
-  font-size: var(--font-size-3xl);
-  color: var(--color-text-main);
-  margin-bottom: var(--space-2);
-}
 
 .arch-slider-sub {
   color: var(--color-text-subtle);
   font-size: var(--font-size-base);
-  max-width: 100%;
+  margin: var(--space-2) auto 0;
 }
 
-/* Main slider container */
+/* ---- Stage ---- */
 .arch-slider {
   position: relative;
   width: 100%;
-  height: 560px;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  height: 660px;
   overflow: hidden;
-  background: #0a0e18;
+  background: #ffffff;
+  padding: 0 clamp(20px, 5vw, 64px);
+  box-sizing: border-box;
 }
 
-/* Individual slides — all stacked on top of each other */
+/* Vertical gridlines spanning the whole white canvas, aligned to the
+   panel boundaries of the visual so the grid reads as one system. */
+.arch-gridlines {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--arch-visual-left, 28%);
+  right: clamp(20px, 5vw, 64px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.arch-gridlines span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #e6e8ea;
+}
+
+.arch-gridlines span:nth-child(1) { left: 25%; }
+.arch-gridlines span:nth-child(2) { left: 50%; }
+.arch-gridlines span:nth-child(3) { left: 75%; }
+.arch-gridlines span:nth-child(4) { left: 100%; }
+
+/* ---- Image area (inset, right-hand side) ---- */
+.arch-visual {
+  position: absolute;
+  top: 4%;
+  bottom: 82px;
+  left: var(--arch-visual-left, 28%);
+  right: clamp(20px, 5vw, 64px);
+  z-index: 1;
+}
+
 .arch-slide {
   position: absolute;
   inset: 0;
   visibility: hidden;
   pointer-events: none;
-  z-index: 1;
 }
 
 .arch-slide.is-active,
 .arch-slide.is-entering {
   visibility: visible;
   pointer-events: auto;
-  z-index: 2;
 }
 
-/* Background image for slide (behind curtains, shows as curtains wipe away) */
-.arch-slide::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: var(--slide-img);
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-}
-
-/* Dark cinematic overlay */
-.arch-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(10, 14, 24, 0.15) 0%,
-    rgba(10, 14, 24, 0.65) 100%
-  );
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* 4 curtain columns — cover the slide image, wipe upward to reveal */
-.arch-curtains {
+.arch-panels {
   position: absolute;
   inset: 0;
   display: flex;
-  z-index: 3;
 }
 
-.arch-curtain {
+.arch-panel {
   flex: 1;
   height: 100%;
+  position: relative;
+  overflow: hidden;
+  /* hidden state: collapsed against its own right edge */
+  clip-path: inset(0 0 0 100%);
+  will-change: clip-path;
+}
+
+/* Inner layer is as wide as the WHOLE visual, so each panel shows a true
+   slice of one continuous photo rather than re-covering the full image. */
+.arch-panel-img {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 400%;
   background-size: cover;
-  background-position: center;
-  transform: translateY(0%);
+  background-position: center var(--slide-pos-y, center);
   will-change: transform;
 }
 
-/* Each curtain aligns its bg portion to its column */
-.arch-curtain[data-col="0"] { background-position: 0% center; }
-.arch-curtain[data-col="1"] { background-position: 33.33% center; }
-.arch-curtain[data-col="2"] { background-position: 66.66% center; }
-.arch-curtain[data-col="3"] { background-position: 100% center; }
+.arch-panel[data-col="0"] .arch-panel-img { left: 0; }
+.arch-panel[data-col="1"] .arch-panel-img { left: -100%; }
+.arch-panel[data-col="2"] .arch-panel-img { left: -200%; }
+.arch-panel[data-col="3"] .arch-panel-img { left: -300%; }
 
-/* Thin separator lines between columns (Archilovers reference detail) */
-.arch-curtain + .arch-curtain {
-  border-left: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-/* ---- Bottom-left slide info ---- */
-.arch-slide-info {
+/* ---- Copy block (left, overlapping the image) ---- */
+.arch-copy {
   position: absolute;
-  bottom: 40px;
-  left: 40px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.5s ease 0.4s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+  left: clamp(20px, 5vw, 64px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: min(55%, 680px);
+  pointer-events: none;
 }
 
-.arch-slide.is-active .arch-slide-info {
-  opacity: 1;
-  transform: translateY(0);
+.arch-copy > * { pointer-events: auto; }
+
+.arch-slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: #12181f;
+  margin: 0;
+  text-shadow:
+    0 0 40px rgba(255, 255, 255, 0.95),
+    0 0 18px rgba(255, 255, 255, 0.9),
+    0 0 5px rgba(255, 255, 255, 0.85);
+}
+
+.arch-slide-sub {
+  margin: 18px 0 0;
+  font-size: 14px;
+  color: #4a5560;
+  letter-spacing: 0.01em;
+  max-width: 46ch;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.95), 0 0 6px rgba(255, 255, 255, 0.9);
+}
+
+.arch-slide-sub::before {
+  content: '';
+  display: block;
+  width: 54px;
+  height: 1px;
+  background: #12181f;
+  margin-bottom: 14px;
+}
+
+.arch-actions {
+  display: flex;
+  align-items: stretch;
+  margin-top: 34px;
 }
 
 .arch-slide-index {
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.4);
-  letter-spacing: 0.14em;
-  font-family: var(--font-display);
-}
-
-.arch-slide-title {
-  font-size: clamp(22px, 3.5vw, 40px);
-  font-weight: 800;
-  color: #ffffff;
-  font-family: var(--font-display);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.45);
-  max-width: 520px;
-}
-
-/* "View →" button — Archilovers style */
-.arch-view-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 0;
-  font-size: 13px;
+  padding: 15px 26px;
+  font-family: var(--font-display);
+  font-size: 12px;
   font-weight: 700;
-  color: rgba(255,255,255,0.8);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  position: relative;
-  width: fit-content;
-  transition: color 200ms ease;
+  letter-spacing: 0.16em;
+  color: #12181f;
+  background: #ffffff;
+  border: 1px solid #e6e8ea;
 }
 
-.arch-view-btn::after {
-  content: '';
-  position: absolute;
-  bottom: 4px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: rgba(255,255,255,0.35);
-  transition: background 200ms ease;
+/* ---- Entry / exit animation of the copy — arrives from the left ---- */
+.arch-slide-title,
+.arch-slide-sub,
+.arch-actions {
+  opacity: 0;
+  transform: translateX(-90px);
+  transition: opacity 500ms ease, transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.arch-view-btn:hover {
-  color: #80C0C0;
+.arch-slider[data-copy="in"] .arch-slide-title,
+.arch-slider[data-copy="in"] .arch-slide-sub,
+.arch-slider[data-copy="in"] .arch-actions {
+  opacity: 1;
+  transform: translateX(0);
 }
 
-.arch-view-btn:hover::after {
-  background: #80C0C0;
-}
+/* light stagger on the way in; leave together on the way out */
+.arch-slider[data-copy="in"] .arch-slide-title  { transition-delay: 60ms; }
+.arch-slider[data-copy="in"] .arch-slide-sub    { transition-delay: 150ms; }
+.arch-slider[data-copy="in"] .arch-actions      { transition-delay: 240ms; }
 
-.arch-view-btn svg {
-  transition: transform 200ms ease;
-}
-
-.arch-view-btn:hover svg {
-  transform: translateX(4px);
-}
-
-/* ---- Right-side up/down navigation ---- */
+/* ---- Navigation ---- */
 .arch-nav {
   position: absolute;
-  right: 32px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 20;
+  right: clamp(20px, 5vw, 64px);
+  bottom: 0;
   display: flex;
-  flex-direction: column;
   gap: 8px;
+  z-index: 10;
 }
 
 .arch-nav-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  border: 1px solid #e6e8ea;
+  color: #12181f;
   cursor: pointer;
-  transition: background 200ms ease, border-color 200ms ease, transform 150ms ease;
+  transition: background 220ms ease, color 220ms ease;
 }
 
-.arch-nav-btn:hover {
-  background: rgba(128, 192, 192, 0.25);
-  border-color: rgba(128, 192, 192, 0.5);
-  transform: scale(1.08);
-}
+.arch-nav-btn:hover { background: #12181f; color: #ffffff; }
 
-/* ---- Bottom progress bar ---- */
 .arch-progress-bar {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  z-index: 20;
+  left: clamp(20px, 5vw, 64px);
+  right: clamp(20px, 5vw, 64px);
+  bottom: 62px;
+  height: 1px;
+  background: #e6e8ea;
+  z-index: 4;
 }
 
 .arch-progress-fill {
   height: 100%;
-  background: #80C0C0;
+  background: #12181f;
   width: 9.09%;
-  transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 520ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ---- Mobile ---- */
-@media (max-width: 768px) {
+/* ---- Tablet / mobile: stack copy above image ---- */
+@media (max-width: 900px) {
   .arch-slider {
-    height: 460px;
+    height: auto;
+    padding-bottom: 78px;
   }
 
-  .arch-slide-info {
-    bottom: 28px;
-    left: 20px;
-    right: 72px;
+  .arch-visual {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    height: 400px;
+    margin-top: 26px;
   }
 
-  .arch-slide-title {
-    font-size: clamp(20px, 5.5vw, 28px);
+  .arch-gridlines { display: none; }
+
+  .arch-copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
   }
 
-  .arch-nav {
-    right: 14px;
-  }
-
-  .arch-nav-btn {
-    width: 36px;
-    height: 36px;
-  }
+  .arch-slide-title { font-size: clamp(26px, 6.6vw, 38px); }
+  .arch-nav { bottom: 14px; }
+  .arch-progress-bar { bottom: 74px; }
 }
 
 @media (max-width: 480px) {
-  .arch-slider {
-    height: 400px;
-  }
+  .arch-visual { height: 300px; }
+  .arch-actions { flex-wrap: wrap; }
 }
 
 

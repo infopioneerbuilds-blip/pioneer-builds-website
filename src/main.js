@@ -47,6 +47,10 @@ const FLEET_TRUCKS = [
   {
     capacity: "20 Cubic Meter Capacity",
     image: "https://lh3.googleusercontent.com/d/1LyZMfRtRvanbPhbT6FMfIQMxl61oU53h=w1000"
+  },
+  {
+    capacity: "40 Cubic Meter Capacity",
+    image: "https://lh3.googleusercontent.com/d/1l5EBYE9fuJNhpp3dvN9g2WpZOPZKADGR=w1000"
   }
 ];
 
@@ -381,10 +385,10 @@ function renderHeader() {
             <span class="sticky-brand-name">PIONEER</span>
           </a>
           <ul class="sticky-nav-links">
-            <li><a href="#" onclick="navigateTo('home'); return false;">Home</a></li>
-            <li><a href="#" onclick="navigateTo('categories'); return false;">Products</a></li>
-            <li><a href="#" onclick="navigateTo('about'); return false;">About</a></li>
-            <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
+            <li><a href="#" onclick="navigateTo('home'); return false;">HOME</a></li>
+            <li><a href="#" onclick="navigateTo('categories'); return false;">PRODUCTS</a></li>
+            <li><a href="#" onclick="navigateTo('about'); return false;">ABOUT US</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;">CONTACT US</a></li>
           </ul>
           <div class="sticky-nav-actions">
             <button class="sticky-icon-btn" onclick="openSearchModal()" title="Search Products">${ICONS.search}</button>
@@ -392,7 +396,7 @@ function renderHeader() {
               ${ICONS.cart}
               ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
             </button>
-            <button class="sticky-icon-btn" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
+            <button class="sticky-icon-btn sticky-hamburger" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
           </div>
         </div>
       </header>
@@ -459,196 +463,194 @@ function renderHeroSection() {
         </a>
       </div>
 
-      <!-- Top-right: Cart + Search (floating) -->
+      <!-- Top-right: nav links, with search + cart sitting beneath them -->
       <div class="immersive-top-right">
-        <button class="immersive-icon-btn" onclick="openSearchModal()" title="Search Products">${ICONS.search}</button>
-        <button class="immersive-icon-btn immersive-cart-btn" onclick="navigateTo('cart')" title="Cart">
-          ${ICONS.cart}
-          ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
-        </button>
-        <button class="immersive-icon-btn immersive-hamburger" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
+        <nav class="immersive-nav-pills">
+          <a href="#" onclick="navigateTo('home'); return false;" class="immersive-pill ${state.currentView === 'home' ? 'active' : ''}">HOME</a>
+          <a href="#" onclick="navigateTo('categories'); return false;" class="immersive-pill">PRODUCTS</a>
+          <a href="#" onclick="navigateTo('about'); return false;" class="immersive-pill">ABOUT US</a>
+          <a href="#" onclick="navigateTo('contact'); return false;" class="immersive-pill">CONTACT US</a>
+        </nav>
+        <div class="immersive-top-actions">
+          <button class="immersive-icon-btn" onclick="openSearchModal()" title="Search Products">${ICONS.search}</button>
+          <button class="immersive-icon-btn immersive-cart-btn" onclick="navigateTo('cart')" title="Cart">
+            ${ICONS.cart}
+            ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
+          </button>
+          <button class="immersive-icon-btn immersive-hamburger" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
+        </div>
       </div>
 
-
-      <!-- Bottom: Frosted glass nav pills + Get a Quote CTA -->
+      <!-- Bottom-left: Get a Quote CTA + click-to-call -->
       <div class="immersive-bottom-bar">
-        <nav class="immersive-nav-pills">
-          <a href="#" onclick="navigateTo('home'); return false;" class="immersive-pill ${state.currentView === 'home' ? 'active' : ''}">Home</a>
-          <a href="#" onclick="navigateTo('categories'); return false;" class="immersive-pill">Products</a>
-          <a href="#" onclick="navigateTo('about'); return false;" class="immersive-pill">About</a>
-          <a href="#" onclick="navigateTo('contact'); return false;" class="immersive-pill">Contact</a>
-        </nav>
-        <a href="https://wa.me/${COMPANY_INFO.whatsapp}" target="_blank" rel="noopener" class="immersive-cta-btn">
-          Get a Quote
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
+        <div class="immersive-cta-stack">
+          <a href="https://wa.me/${COMPANY_INFO.whatsapp}" target="_blank" rel="noopener" class="immersive-cta-btn">
+            Get a Quote
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="immersive-phone-link">
+            ${COMPANY_INFO.phones[0]}
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </a>
+        </div>
       </div>
     </section>
   `;
 }
 
-// 2. OUR PRODUCTS — ARCHILOVERS 4-COLUMN VERTICAL CURTAIN WIPE SLIDER
-function renderOurProductsSlider() {
-  const slides = CATEGORIES.map((cat, index) => {
-    const firstProd = PRODUCTS.find(p => p.catId === cat.id);
-    const img = firstProd ? firstProd.image : '/cover.png';
-    return { cat, img, index };
-  });
-
-  const totalStr = String(slides.length).padStart(2, '0');
-
+// 1b. WELCOME / INTRO SECTION
+function renderWelcomeSection() {
   return `
-    <section class="arch-slider-section">
-      <div class="arch-slider-header">
-        <h2 class="arch-slider-heading">Our Products</h2>
-        <p class="arch-slider-sub">Explore all our material divisions featuring certified building products</p>
+    <section class="welcome-section">
+      <div class="container">
+        <div class="welcome-head">
+          <h2 class="section-title">Welcome to ${COMPANY_INFO.name}</h2>
+        </div>
+
+        <div class="welcome-body">
+          <p>
+            Pioneer Building Materials Trading LLC is a leading distributor and stockist of
+            architectural building materials, timber, steel and safety equipment in Dubai, UAE.
+            From foundation to finish, we hold the full range on the shelf so your site never waits.
+          </p>
+          <a href="#" onclick="navigateTo('about'); return false;" class="welcome-more-btn">
+            Read more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// 2. OUR PRODUCTS — DIAGONAL WIPE SLIDER
+// Covers fill the frame. The new one is revealed by a diagonal edge
+// sweeping from the top-left corner to the bottom-right. No copy — just
+// the View Products button sitting in the middle.
+const PRODUCT_COVERS = [
+  "/products/BUILDING MATERIALS/Building materials cover page.png",
+  "/products/Concrete products/concrete products cover page.png",
+  "/products/Electrical, plumbing and sanitary/electrical, plumbing and sanitary.png",
+  "/products/Fasteners/Fasteners cover page.png",
+  "/products/Hand Tools/hand tools cover page.png",
+  "/products/Power Tools/power tools cover page.png",
+  "/products/SAND, AGGREGATE AND CEMENT/sand aggregate cement cover page.png",
+  "/products/Timber & Plywood/Timber and Plywood cover page.png",
+  "/products/packaging, painting, abrasives and adhesives/packaging, painting, abrasives and adhesives cover page.png",
+  "/products/safety items/safety items cover page.png",
+  "/products/water tanks, coolers and filters/water tanks , coolers and filters cover page.png"
+];
+
+function renderOurProductsSlider() {
+  return `
+    <section class="prod-slider-section">
+      <div class="prod-slider-header">
+        <h2 class="section-title">Our Products</h2>
+        <p class="prod-slider-sub">Explore all our material divisions featuring certified building products</p>
       </div>
 
-      <div class="arch-slider" id="arch-slider" data-current="0" data-total="${slides.length}">
-
-        <!-- Slides (stacked, only active visible) -->
-        ${slides.map(({ cat, img, index }) => `
-          <div class="arch-slide ${index === 0 ? 'is-active' : ''}" data-index="${index}" style="--slide-img: url('${img}')">
-            <!-- 4 vertical column curtains -->
-            <div class="arch-curtains">
-              <div class="arch-curtain" data-col="0" style="background-image: url('${img}')"></div>
-              <div class="arch-curtain" data-col="1" style="background-image: url('${img}')"></div>
-              <div class="arch-curtain" data-col="2" style="background-image: url('${img}')"></div>
-              <div class="arch-curtain" data-col="3" style="background-image: url('${img}')"></div>
-            </div>
-
-            <!-- Dark overlay -->
-            <div class="arch-overlay"></div>
-
-            <!-- Bottom-left: index + category name + View button -->
-            <div class="arch-slide-info">
-              <span class="arch-slide-index">${String(index + 1).padStart(2, '0')} / ${totalStr}</span>
-              <h3 class="arch-slide-title">${cat.name}</h3>
-              <a href="#" onclick="navigateTo('category', '${cat.slug}'); return false;" class="arch-view-btn">
-                View
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
+      <div class="prod-slider" id="prod-slider" data-current="0" data-total="${PRODUCT_COVERS.length}">
+        ${PRODUCT_COVERS.map((src, i) => `
+          <div class="prod-slide ${i === 0 ? 'is-active' : ''}" data-index="${i}">
+            <div class="prod-slide-img" style="background-image: url('${encodeURI(src)}')"></div>
           </div>
         `).join('')}
 
-        <!-- Navigation: right side vertical arrows -->
-        <div class="arch-nav">
-          <button class="arch-nav-btn arch-prev" id="arch-prev" onclick="archSliderNav(-1)" title="Previous">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+        <div class="prod-nav">
+          <button class="prod-nav-btn prod-nav-prev" onclick="prodSliderNav(-1)" aria-label="Previous category">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <button class="arch-nav-btn arch-next" id="arch-next" onclick="archSliderNav(1)" title="Next">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          <span class="prod-nav-slash" aria-hidden="true"></span>
+          <button class="prod-nav-btn prod-nav-next" onclick="prodSliderNav(1)" aria-label="Next category">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
+      </div>
 
-        <!-- Progress bar at bottom -->
-        <div class="arch-progress-bar"><div class="arch-progress-fill" id="arch-progress"></div></div>
+      <div class="prod-slider-foot">
+        <a href="#" onclick="navigateTo('categories'); return false;" class="prod-view-btn">View Products</a>
       </div>
     </section>
   `;
 }
 
-// Archilovers Slider Logic (vanilla JS, no Swiper)
-window.archSliderNav = function(dir) {
-  const slider = document.getElementById('arch-slider');
+// Wipe in the next cover. The outgoing slide stays put underneath until
+// the incoming one has swept fully across it.
+const PROD_INTERVAL = 3500;
+let prodTimer = null;
+
+function prodGo(dir) {
+  const slider = document.getElementById('prod-slider');
   if (!slider || slider.dataset.animating === 'true') return;
 
-  const total = parseInt(slider.dataset.total);
-  const current = parseInt(slider.dataset.current);
-  const next = (current + dir + total) % total;
+  const slides = slider.querySelectorAll('.prod-slide');
+  if (slides.length < 2) return;
 
-  archTransition(slider, current, next);
-};
+  const total = slides.length;
+  const from  = parseInt(slider.dataset.current, 10);
+  const to    = (from + dir + total) % total;
 
-function archTransition(slider, fromIdx, toIdx) {
   slider.dataset.animating = 'true';
 
-  const slides = slider.querySelectorAll('.arch-slide');
-  const fromSlide = slides[fromIdx];
-  const toSlide   = slides[toIdx];
-  const curtains  = fromSlide.querySelectorAll('.arch-curtain');
+  slides[from].classList.remove('is-active');
+  slides[from].classList.add('is-leaving');
 
-  const STAGGER = 70; // ms between each column
-  const WIPE_DURATION = 520; // ms each curtain takes
+  const next = slides[to];
+  next.classList.remove('is-leaving');
+  void next.offsetWidth;
+  next.classList.add('is-active');
 
-  // Phase 1: wipe the FROM slide curtains upward, staggered
-  curtains.forEach((curtain, i) => {
-    curtain.style.transition = 'none';
-    curtain.style.transform = 'translateY(0%)';
+  // The outgoing slide must stay put until the sweep has fully cleared it,
+  // so take the wipe length from the stylesheet rather than duplicating it.
+  const wipeMs = (parseFloat(getComputedStyle(next).transitionDuration) || 1.8) * 1000;
 
-    setTimeout(() => {
-      curtain.style.transition = `transform ${WIPE_DURATION}ms cubic-bezier(0.76, 0, 0.24, 1)`;
-      curtain.style.transform = 'translateY(-101%)';
-    }, i * STAGGER);
-  });
-
-  const totalWipeTime = STAGGER * (curtains.length - 1) + WIPE_DURATION;
-
-  // Phase 2: halfway through last column wipe, bring in the next slide
-  const revealDelay = STAGGER * (curtains.length - 1) + WIPE_DURATION * 0.35;
-  setTimeout(() => {
-    fromSlide.classList.remove('is-active');
-    toSlide.classList.add('is-entering');
-
-    // Reset toSlide curtains to bottom (hidden below)
-    const toCurtains = toSlide.querySelectorAll('.arch-curtain');
-    toCurtains.forEach(c => {
-      c.style.transition = 'none';
-      c.style.transform = 'translateY(101%)';
-    });
-
-    // Short frame to let browser register the reset
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        toSlide.classList.add('is-active');
-        toSlide.classList.remove('is-entering');
-
-        // Reveal: slide toSlide curtains up revealing the image, then wipe them away upward
-        toCurtains.forEach((curtain, i) => {
-          setTimeout(() => {
-            curtain.style.transition = 'transform ' + WIPE_DURATION + 'ms cubic-bezier(0.76, 0, 0.24, 1)';
-            curtain.style.transform = 'translateY(-101%)';
-          }, i * STAGGER);
-        });
-      });
-    });
-  }, revealDelay);
-
-  // Phase 3: cleanup after all done
-  setTimeout(() => {
-    // Reset from slide curtains back to default
-    const fromCurtains = fromSlide.querySelectorAll('.arch-curtain');
-    fromCurtains.forEach(c => {
-      c.style.transition = 'none';
-      c.style.transform = 'translateY(0%)';
-    });
-
-    slider.dataset.current = toIdx;
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    clearTimeout(fallback);
+    next.removeEventListener('transitionend', finish);
+    slides[from].classList.remove('is-leaving');
     slider.dataset.animating = 'false';
+  };
+  // Whichever lands first wins: the real transition, or the safety net for
+  // when it never fires (background tab, re-render, reduced motion).
+  const fallback = setTimeout(finish, wipeMs + 400);
+  next.addEventListener('transitionend', finish);
 
-    // Update progress bar
-    const progress = document.getElementById('arch-progress');
-    const total = parseInt(slider.dataset.total);
-    if (progress) progress.style.width = ((toIdx + 1) / total * 100) + '%';
-  }, totalWipeTime + 200);
+  slider.dataset.current = to;
 }
 
-// Autoplay
-(function startArchAutoplay() {
-  let timer = null;
-  function scheduleNext() {
-    timer = setTimeout(() => {
-      const slider = document.getElementById('arch-slider');
-      if (slider && slider.dataset.animating !== 'true') {
-        window.archSliderNav(1);
-      }
-      scheduleNext();
-    }, 5000);
-  }
-  // Start after initial render settles
-  setTimeout(scheduleNext, 1500);
-})();
+// Arrow clicks advance immediately and push the autoplay back to a full
+// interval, so a manual move is never cut short by the timer.
+window.prodSliderNav = function(dir) {
+  prodGo(dir);
+  prodSchedule();
+};
+
+// Pause only while the pointer is on the arrows themselves. The slider is
+// full-bleed, so pausing on any hover over it stalls indefinitely whenever
+// the cursor happens to rest on the image.
+function prodPaused() {
+  const nav = document.querySelector('.prod-nav');
+  return !!nav && nav.matches(':hover');
+}
+
+function prodSchedule(delay) {
+  clearTimeout(prodTimer);
+  prodTimer = setTimeout(() => {
+    const slider = document.getElementById('prod-slider');
+    if (!slider) { prodSchedule(); return; }
+    if (prodPaused() || slider.dataset.animating === 'true') {
+      prodSchedule(800);   // re-check soon rather than skipping a whole turn
+      return;
+    }
+    prodGo(1);
+    prodSchedule();
+  }, delay || PROD_INTERVAL);
+}
+
+prodSchedule();
 
 
 // 3. BRANDS WE OFFER - CONTINUOUS MOVING MARQUEE (PAUSE ON HOVER)
@@ -656,10 +658,8 @@ function renderBrandsSection() {
   return `
     <section class="brands-section">
       <div class="container" style="margin-bottom: var(--space-8); text-align: center;">
-        <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
-          Global Partnerships
-        </span>
-        <h2 style="font-size: var(--font-size-3xl);">Brands We Offer</h2>
+        <span class="section-eyebrow">Global Partnerships</span>
+        <h2 class="section-title">Brands We Offer</h2>
       </div>
 
       <div class="brands-marquee-wrap">
@@ -679,13 +679,13 @@ function renderBrandsSection() {
   `;
 }
 
-// 4. OUR FLEET SECTION (3 TIPPERS)
+// 4. OUR FLEET SECTION
 function renderFleetSection() {
   return `
     <section class="fleet-section">
       <div class="container">
         <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-8);">
-          <h2 style="font-size: var(--font-size-3xl);">Our Fleet</h2>
+          <h2 class="section-title">Our Fleet</h2>
           <p style="margin: 8px auto 0;">In-house heavy tipper truck fleet available for site material delivery and dump transport across Dubai & all UAE Emirates.</p>
         </div>
 
@@ -693,7 +693,8 @@ function renderFleetSection() {
           ${FLEET_TRUCKS.map((truck, idx) => `
             <div class="fleet-card">
               <div class="fleet-img-wrap">
-                <img src="${truck.image}" alt="${truck.capacity}" class="fleet-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80'">
+                <img src="${truck.image}" alt="${truck.capacity}" class="fleet-img" loading="lazy" referrerpolicy="no-referrer"
+                     onerror="if(!this.dataset.retry){this.dataset.retry=1;this.src='https://drive.google.com/thumbnail?id=${(truck.image.match(/\/d\/([^=/?]+)/) || [])[1] || ''}&sz=w1000';}else{this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop&q=80';}">
               </div>
               <div class="fleet-card-body" style="text-align: center; padding: 18px 20px;">
                 <div style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 800; color: var(--color-primary-dark); margin: 0;">
@@ -709,43 +710,213 @@ function renderFleetSection() {
   `;
 }
 
-// 5. PROJECTS WE HELP BUILD SECTION (SWIPER ANIMATED SLIDES)
+// 5. PROJECTS — ARCHILOVERS EDITORIAL SLIDER
+// White canvas, image inset right, project name overlapping its left edge.
+// Transition: panels clear to white, then the new image reveals from the
+// right (panel 4 -> 3 -> 2 -> 1) while the copy slides in from the left.
 function renderProjectsSection() {
+  const totalStr = String(PROJECTS_BUILD.length).padStart(2, '0');
+  const first = PROJECTS_BUILD[0];
+
   return `
-    <section class="projects-section">
-      <div class="container">
-        <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-10);">
-          <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px;">
-            Proven Track Record
-          </span>
-          <h2 style="font-size: var(--font-size-3xl);">Projects We Help Build</h2>
-          <p style="margin: 8px auto 0;">Key landmarks, commercial complexes, and infrastructure sites supplied with Pioneer building materials.</p>
+    <section class="arch-slider-section">
+      <div class="arch-slider-header">
+        <span class="section-eyebrow">Proven Track Record</span>
+        <h2 class="section-title">Projects We Help Build</h2>
+        <p class="arch-slider-sub">Key landmarks, commercial complexes, and infrastructure sites supplied with Pioneer building materials.</p>
+      </div>
+
+      <div class="arch-slider" id="arch-slider" data-current="0" data-total="${PROJECTS_BUILD.length}" data-copy="in">
+
+        <div class="arch-gridlines"><span></span><span></span><span></span><span></span></div>
+
+        <div class="arch-visual">
+          ${PROJECTS_BUILD.map((proj, index) => `
+            <div class="arch-slide ${index === 0 ? 'is-active' : ''}" data-index="${index}">
+              <div class="arch-panels">
+                ${[0, 1, 2, 3].map(col => `
+                  <div class="arch-panel" data-col="${col}">
+                    <div class="arch-panel-img" style="background-image: url('${proj.image}')"></div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
         </div>
 
-        <div class="swiper projects-swiper" style="padding-bottom: 50px;">
-          <div class="swiper-wrapper">
-            ${PROJECTS_BUILD.map(proj => `
-              <div class="swiper-slide">
-                <div class="project-card">
-                  <div class="project-img-wrap">
-                    <img src="${proj.image}" alt="${proj.title}" class="project-img" loading="lazy">
-                  </div>
-                  <div class="project-card-body">
-                    <span class="project-location">${proj.location}</span>
-                    <h3 class="project-title">${proj.title}</h3>
-                  </div>
-                </div>
-              </div>
-            `).join('')}
+        <div class="arch-copy" id="arch-copy">
+          <h3 class="arch-slide-title" id="arch-title">${first.title}</h3>
+          <p class="arch-slide-sub" id="arch-sub">${first.location} — ${first.supplied}</p>
+          <div class="arch-actions">
+            <span class="arch-slide-index" id="arch-index">01 / ${totalStr}</span>
           </div>
-          <div class="swiper-pagination"></div>
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
         </div>
+
+        <div class="arch-nav">
+          <button class="arch-nav-btn" onclick="archSliderNav(-1)" title="Previous">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="arch-nav-btn" onclick="archSliderNav(1)" title="Next">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+        <div class="arch-progress-bar"><div class="arch-progress-fill" id="arch-progress"></div></div>
       </div>
     </section>
   `;
 }
+
+// ---- Slider logic (vanilla JS, no library) ----
+const ARCH_STAGGER = 90;    // ms between panels
+const ARCH_CLEAR   = 420;   // ms for a panel to clear away
+const ARCH_REVEAL  = 620;   // ms for a panel to reveal in
+const ARCH_EASE    = 'cubic-bezier(0.76, 0, 0.24, 1)';
+
+const ARCH_HIDDEN  = 'inset(0 0 0 100%)'; // collapsed against the right edge
+
+window.archSliderNav = function(dir) {
+  const slider = document.getElementById('arch-slider');
+  if (!slider || slider.dataset.animating === 'true') return;
+
+  const total   = parseInt(slider.dataset.total, 10);
+  const current = parseInt(slider.dataset.current, 10);
+  archTransition(slider, current, (current + dir + total) % total);
+};
+
+function archTransition(slider, fromIdx, toIdx) {
+  slider.dataset.animating = 'true';
+
+  const slides    = slider.querySelectorAll('.arch-slide');
+  const fromSlide = slides[fromIdx];
+  const toSlide   = slides[toIdx];
+  const outPanels = Array.from(fromSlide.querySelectorAll('.arch-panel'));
+  const inPanels  = Array.from(toSlide.querySelectorAll('.arch-panel'));
+
+  // Phase 1 — clear the current image to white, left column first.
+  slider.dataset.copy = 'out';
+  outPanels.forEach((panel, i) => {
+    setTimeout(() => {
+      panel.style.transition = `clip-path ${ARCH_CLEAR}ms ${ARCH_EASE}`;
+      panel.style.clipPath = ARCH_HIDDEN;
+    }, i * ARCH_STAGGER);
+  });
+
+  const clearTime = ARCH_STAGGER * (outPanels.length - 1) + ARCH_CLEAR;
+
+  // Phase 2 — reveal the new image from the right (panel 4 -> 3 -> 2 -> 1),
+  // and bring the copy in from the right at the same moment.
+  setTimeout(() => {
+    fromSlide.classList.remove('is-active');
+    archSetCopy(slider, toIdx);
+
+    inPanels.forEach(panel => {
+      panel.style.transition = 'none';
+      panel.style.clipPath = ARCH_HIDDEN;
+      panel.querySelector('.arch-panel-img').style.transform = 'translateX(9%)';
+    });
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      toSlide.classList.add('is-active');
+      slider.dataset.copy = 'in';
+
+      // reverse order: rightmost panel first
+      inPanels.slice().reverse().forEach((panel, i) => {
+        setTimeout(() => {
+          panel.style.transition = `clip-path ${ARCH_REVEAL}ms ${ARCH_EASE}`;
+          const img = panel.querySelector('.arch-panel-img');
+          img.style.transition = `transform ${ARCH_REVEAL + 160}ms ${ARCH_EASE}`;
+          panel.style.clipPath = 'inset(0 0 0 0)';
+          img.style.transform = 'translateX(0)';
+        }, i * ARCH_STAGGER);
+      });
+    }));
+  }, clearTime);
+
+  // Phase 3 — reset the outgoing slide and commit state.
+  setTimeout(() => {
+    outPanels.forEach(panel => {
+      panel.style.transition = 'none';
+      panel.style.clipPath = 'inset(0 0 0 0)';
+      panel.querySelector('.arch-panel-img').style.transform = 'translateX(0)';
+    });
+
+    slider.dataset.current = toIdx;
+    slider.dataset.animating = 'false';
+  }, clearTime + ARCH_STAGGER * (inPanels.length - 1) + ARCH_REVEAL + 220);
+}
+
+function archSetCopy(slider, idx) {
+  const proj = PROJECTS_BUILD[idx];
+  if (!proj) return;
+
+  const total = String(PROJECTS_BUILD.length).padStart(2, '0');
+  const title = document.getElementById('arch-title');
+  const sub   = document.getElementById('arch-sub');
+  const index = document.getElementById('arch-index');
+  const prog  = document.getElementById('arch-progress');
+
+  if (title) title.textContent = proj.title;
+  if (sub)   sub.textContent   = `${proj.location} — ${proj.supplied}`;
+  if (index) index.textContent = `${String(idx + 1).padStart(2, '0')} / ${total}`;
+  if (prog)  prog.style.width  = ((idx + 1) / PROJECTS_BUILD.length * 100) + '%';
+}
+
+// Reveal the first slide on load so it animates in like the rest.
+function archInitFirstSlide() {
+  const slider = document.getElementById('arch-slider');
+  if (!slider || slider.dataset.inited === 'true') return;
+  slider.dataset.inited = 'true';
+
+  const panels = Array.from(slider.querySelectorAll('.arch-slide.is-active .arch-panel'));
+  panels.slice().reverse().forEach((panel, i) => {
+    setTimeout(() => {
+      panel.style.transition = `clip-path ${ARCH_REVEAL}ms ${ARCH_EASE}`;
+      panel.style.clipPath = 'inset(0 0 0 0)';
+    }, 120 + i * ARCH_STAGGER);
+  });
+}
+
+// Reveal-on-mount watcher + autoplay
+(function startArchSlider() {
+  // The slider is re-rendered whenever the view changes, so keep watching
+  // for a fresh, un-revealed instance rather than initialising once.
+  setInterval(archInitFirstSlide, 300);
+
+  // Pause only over the arrows, not the whole slide, and re-check shortly
+  // after a skipped turn instead of waiting out another full interval.
+  let archTimer = null;
+  function archSchedule(delay) {
+    clearTimeout(archTimer);
+    archTimer = setTimeout(() => {
+      const slider = document.getElementById('arch-slider');
+      const nav = document.querySelector('.arch-nav');
+      const paused = !!nav && nav.matches(':hover');
+
+      if (!slider || slider.dataset.inited !== 'true' ||
+          slider.dataset.animating === 'true' || paused) {
+        archSchedule(800);
+        return;
+      }
+      window.archSliderNav(1);
+      archSchedule();
+    }, delay || 5600);
+  }
+  archSchedule();
+
+  // Timers are throttled hard in hidden tabs, so a slider can sit idle long
+  // after the user comes back. Restart both clocks when the page is shown.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    const arch = document.getElementById('arch-slider');
+    if (arch) arch.dataset.animating = 'false';
+    const prod = document.getElementById('prod-slider');
+    if (prod) prod.dataset.animating = 'false';
+    archSchedule(1200);
+    prodSchedule(1200);
+  });
+})();
+
 
 // 6. WHY CHOOSE US SECTION (VECTOR ICONS, NO EMOJIS)
 function renderWhyChooseUsSection() {
@@ -753,7 +924,7 @@ function renderWhyChooseUsSection() {
     <section class="why-section">
       <div class="container">
         <div style="text-align: center; max-width: 700px; margin: 0 auto var(--space-8);">
-          <h2 style="font-size: var(--font-size-3xl);">Why Choose Us</h2>
+          <h2 class="section-title">Why Choose Us</h2>
           <p style="margin: 8px auto 0;">Empowering contractor partners with certified materials, reliable transport, and competitive wholesale terms.</p>
         </div>
 
@@ -791,6 +962,7 @@ function renderWhyChooseUsSection() {
 function renderHomeView() {
   return `
     ${renderHeroSection()}
+    ${renderWelcomeSection()}
     ${renderOurProductsSlider()}
     ${renderBrandsSection()}
     ${renderFleetSection()}
