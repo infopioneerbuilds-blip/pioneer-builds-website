@@ -3,35 +3,38 @@ import { COMPANY_INFO, CATEGORIES, PRODUCTS } from './data/products.js';
 // Target email from environment variable (VITE_TARGET_EMAIL)
 const TARGET_EMAIL = import.meta.env.VITE_TARGET_EMAIL || 'info.pioneerbuilds@gmail.com';
 
-// 27 Google Drive Brand Image IDs from user folder
-const BRAND_IMAGE_IDS = [
-  '1Gk7WePrF9kfbVT5GzCw0th6jgjdXpcOB',
-  '1zAm_nQGsl5jrzV_yKfwGZyZXFpDFgTo2',
-  '1giLGFs1duXvwO7XE4t7b_7ATYEoeaO-H',
-  '17gfGSf8-2SWhon2hU36b0d1XBc8c1ZGh',
-  '1qlnMGDJ6ARc1anunONkDVFSQFnUYGDGd',
-  '1QlIYIG--spoyIJNrRfTe5MUHIg0KppZw',
-  '1FU6KsRqaZ7hBGayjV3j3AsU3SP-sLdda',
-  '1q6Q6-gJ-vKoZ2nOpQ9vP8RQL74KNWzIC',
-  '1xkJU109zsRdLWMa8c_j7ZmtRGgMztoWc',
-  '11r0HvNLVgELCI83P-e0a1lPY_R4xzHxz',
-  '1cc64FwoSbLkV9xWykAPDmjFta1rBenGl',
-  '1FWkU9WZUYZU7Hx4Wz04NFSLnx3ehA5Bg',
-  '1ZWkRsbt_duloavcwraU0VOJ05fy-5cO7',
-  '1uN0vYbsGeEUqU5J7eq9VJpk6g2a4CYJK',
-  '1bWS160R6fj10z63UULVks9vve9ThmeD5',
-  '10mbnT9I_xN0BG85ItcqiflTayieCM6qi',
-  '1qbCOXO3d71sDZAKTO70a3um2d9ehod80',
-  '1gm_6yb2Kxp4O6wPQSQz5aN1xOZKRn3Or',
-  '1lNM0oO1afDB2iSQfItb1lyVo341XNh09',
-  '1H715MwKjachfFZyENDRx8NE7UqMf4iv-',
-  '1S37UG2PeKlu9RY_B95eM_2gReQ5vfPqq',
-  '1RmCjQYSCdMO3oOnaB8MSffdRq6i7B7m3',
-  '1hECM7ZJiz90JbpHK7qeNpRdIfglYq__j',
-  '1_SUxt4NtuuBIBdg60HYEFYfh1nvSkO5p',
-  '1uWecWN0n4fYh7CXZ1IIXfJz7CtmsyRcB',
-  '16QuOaL9Wln5ErijmD6FF1UDHLsw98ZMD',
-  '1nGfvMnwKRRv_GYDh8hQ5rQ0rsVGjOIo9'
+// Local Brand Images from /public/BRANDS WE OFFER
+const BRAND_IMAGES = [
+  '/BRANDS%20WE%20OFFER/ASMACO%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/COSMOPLAST%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/DeWalt_Logo.webp',
+  '/BRANDS%20WE%20OFFER/FEVICOL%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/FOSROC%20LOGO.jpg',
+  '/BRANDS%20WE%20OFFER/Gemini_Generated_Image_62az9962az9962az.jpeg',
+  '/BRANDS%20WE%20OFFER/Gemini_Generated_Image_yd14mmyd14mmyd14.jpeg',
+  '/BRANDS%20WE%20OFFER/HILTI%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/Honeywell%20Logo.png',
+  '/BRANDS%20WE%20OFFER/JOTUN%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/KAJ%20LOGG.webp',
+  '/BRANDS%20WE%20OFFER/KNIPEX%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/NATIONAL%20CEMENT%20LOGO.jpg',
+  '/BRANDS%20WE%20OFFER/POLYCOM%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/RBA%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/RR%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/SIKA%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/STEICO%20LOGO.jpg',
+  '/BRANDS%20WE%20OFFER/Stanley-Logo.png',
+  '/BRANDS%20WE%20OFFER/TERRACO%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/TOTAL%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/ULTRATECH%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/VAULTEX%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/bison-logo.png',
+  '/BRANDS%20WE%20OFFER/gypsoman-logo.png',
+  '/BRANDS%20WE%20OFFER/henkel-logo.png',
+  '/BRANDS%20WE%20OFFER/makita-logo.png',
+  '/BRANDS%20WE%20OFFER/polybit-logo-png.webp',
+  '/BRANDS%20WE%20OFFER/polycab%20logo.png',
+  '/BRANDS%20WE%20OFFER/uken_logo.png'
 ];
 
 // Fleet Trucks Google Drive Direct IDs
@@ -49,7 +52,7 @@ const FLEET_TRUCKS = [
     image: "https://lh3.googleusercontent.com/d/1LyZMfRtRvanbPhbT6FMfIQMxl61oU53h=w1000"
   },
   {
-    capacity: "40 Cubic Meter Capacity",
+    capacity: "35 - 40 Cubic Meter Capacity",
     image: "https://lh3.googleusercontent.com/d/1l5EBYE9fuJNhpp3dvN9g2WpZOPZKADGR=w1000"
   }
 ];
@@ -370,72 +373,34 @@ function syncRouteFromPath() {
   renderApp();
 }
 
-// HEADER NAVBAR
+// HEADER NAVBAR (Unified sticky nav bar across all pages)
 function renderHeader() {
   const cartTotal = state.cart.reduce((sum, item) => sum + item.qty, 0);
-  // On home view, render the sticky scroll-activated nav only
-  // On other views, render the standard always-visible nav
-  if (state.currentView === 'home') {
-    return `
-      <!-- Scroll-activated sticky nav: hidden on load, fades in after hero -->
-      <header class="sticky-nav-bar" id="sticky-nav-bar">
-        <div class="sticky-nav-inner">
-          <a href="#" onclick="navigateTo('home'); return false;" class="sticky-brand">
-            <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="sticky-brand-img">
-            <span class="sticky-brand-name">PIONEER</span>
-          </a>
-          <ul class="sticky-nav-links">
-            <li><a href="#" onclick="navigateTo('home'); return false;">HOME</a></li>
-            <li><a href="#" onclick="navigateTo('categories'); return false;">PRODUCTS</a></li>
-            <li><a href="#" onclick="navigateTo('about'); return false;">ABOUT US</a></li>
-            <li><a href="#" onclick="navigateTo('contact'); return false;">CONTACT US</a></li>
-          </ul>
-          <div class="sticky-nav-actions">
-            <button class="sticky-icon-btn" onclick="openSearchModal()" title="Search Products">${ICONS.search}</button>
-            <button class="sticky-icon-btn sticky-cart-btn" onclick="navigateTo('cart')" title="Cart">
-              ${ICONS.cart}
-              ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
-            </button>
-            <button class="sticky-icon-btn sticky-hamburger" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
-          </div>
-        </div>
-      </header>
-    `;
-  }
+  const isHome = state.currentView === 'home';
+  const isProdActive = state.currentView === 'categories' || state.currentView === 'category';
 
-  // Standard navbar for non-home pages
   return `
-    <header class="tamba-header-wrap">
-      <div class="container">
-        <nav class="tamba-navbar">
-          <a href="#" onclick="navigateTo('home'); return false;" class="brand-logo">
-            <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="brand-icon-img">
-            <div class="brand-text">
-              <span class="brand-title">PIONEER</span>
-              <span class="brand-subtitle">Building Materials Trading LLC</span>
-            </div>
-          </a>
-          <ul class="nav-links-menu">
-            <li><a href="#" onclick="navigateTo('home'); return false;" class="nav-item-link">Home</a></li>
-            <li><a href="#" onclick="navigateTo('categories'); return false;" class="nav-item-link ${state.currentView === 'categories' || state.currentView === 'category' ? 'active' : ''}">Categories</a></li>
-            <li><a href="#" onclick="navigateTo('about'); return false;" class="nav-item-link ${state.currentView === 'about' ? 'active' : ''}">About Us</a></li>
-            <li><a href="#" onclick="navigateTo('contact'); return false;" class="nav-item-link ${state.currentView === 'contact' ? 'active' : ''}">Contact</a></li>
-          </ul>
-          <div class="nav-actions-group">
-            <button class="icon-btn" onclick="openSearchModal()" title="Search">${ICONS.search}</button>
-            <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="phone-link-btn">
-              ${ICONS.phone}<span>${COMPANY_INFO.phones[0]}</span>
-            </a>
-            <button class="btn btn-primary desktop-rfq-btn" onclick="navigateTo('cart')">
-              ${ICONS.cart}<span>Cart (${cartTotal})</span>
-            </button>
-            <button class="mobile-cart-badge-btn" onclick="navigateTo('cart')" title="Cart">
-              ${ICONS.cart}
-              ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
-            </button>
-            <button class="mobile-menu-toggle-btn" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
-          </div>
-        </nav>
+    <!-- Header nav bar: fades in on scroll for home, immediately visible on inner pages -->
+    <header class="sticky-nav-bar ${isHome ? '' : 'visible'}" id="sticky-nav-bar">
+      <div class="sticky-nav-inner">
+        <a href="#" onclick="navigateTo('home'); return false;" class="sticky-brand">
+          <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="sticky-brand-img">
+          <span class="sticky-brand-name">PIONEER</span>
+        </a>
+        <ul class="sticky-nav-links">
+          <li><a href="#" onclick="navigateTo('home'); return false;" class="${isHome ? 'active' : ''}">HOME</a></li>
+          <li><a href="#" onclick="navigateTo('categories'); return false;" class="${isProdActive ? 'active' : ''}">PRODUCTS</a></li>
+          <li><a href="#" onclick="navigateTo('about'); return false;" class="${state.currentView === 'about' ? 'active' : ''}">ABOUT US</a></li>
+          <li><a href="#" onclick="navigateTo('contact'); return false;" class="${state.currentView === 'contact' ? 'active' : ''}">CONTACT US</a></li>
+        </ul>
+        <div class="sticky-nav-actions">
+          <button class="sticky-icon-btn" onclick="openSearchModal()" title="Search Products">${ICONS.search}</button>
+          <button class="sticky-icon-btn sticky-cart-btn" onclick="navigateTo('cart')" title="Cart">
+            ${ICONS.cart}
+            ${cartTotal > 0 ? `<span class="cart-badge">${cartTotal}</span>` : ''}
+          </button>
+          <button class="sticky-icon-btn sticky-hamburger" onclick="toggleMobileMenu()" title="Menu">${ICONS.menu}</button>
+        </div>
       </div>
     </header>
   `;
@@ -501,22 +466,44 @@ function renderHeroSection() {
 // 1b. WELCOME / INTRO SECTION
 function renderWelcomeSection() {
   return `
-    <section class="welcome-section">
+    <section class="welcome-section" id="welcome-section">
       <div class="container">
         <div class="welcome-head">
-          <h2 class="section-title">Welcome to ${COMPANY_INFO.name}</h2>
+          <h2 class="welcome-main-title">Welcome to ${COMPANY_INFO.name}</h2>
         </div>
 
-        <div class="welcome-body">
-          <p>
-            Pioneer Building Materials Trading LLC is a leading distributor and stockist of
-            architectural building materials, timber, steel and safety equipment in Dubai, UAE.
-            From foundation to finish, we hold the full range on the shelf so your site never waits.
-          </p>
-          <a href="#" onclick="navigateTo('about'); return false;" class="welcome-more-btn">
-            Read more
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+        <div class="welcome-stats-track" id="welcome-stats">
+          <!-- Circle 1: 100% client satisfaction -->
+          <div class="welcome-stat-circle" data-target="100" data-suffix="%" data-decimals="0">
+            <div class="welcome-stat-num">
+              <span class="stat-count">0</span><span class="stat-suffix">%</span>
+            </div>
+            <div class="welcome-stat-label">Client Satisfaction</div>
+          </div>
+
+          <!-- Circle 2: 16+ years of experience -->
+          <div class="welcome-stat-circle" data-target="16" data-suffix="+" data-decimals="0">
+            <div class="welcome-stat-num">
+              <span class="stat-count">0</span><span class="stat-suffix">+</span>
+            </div>
+            <div class="welcome-stat-label">Years of experience</div>
+          </div>
+
+          <!-- Circle 3: 1000+ projects completed -->
+          <div class="welcome-stat-circle" data-target="1000" data-suffix="+" data-decimals="0">
+            <div class="welcome-stat-num">
+              <span class="stat-count">0</span><span class="stat-suffix">+</span>
+            </div>
+            <div class="welcome-stat-label">Projects Completed</div>
+          </div>
+
+          <!-- Circle 4: 5000+ products available -->
+          <div class="welcome-stat-circle" data-target="5000" data-suffix="+" data-decimals="0">
+            <div class="welcome-stat-num">
+              <span class="stat-count">0</span><span class="stat-suffix">+</span>
+            </div>
+            <div class="welcome-stat-label">Products Available</div>
+          </div>
         </div>
       </div>
     </section>
@@ -528,17 +515,17 @@ function renderWelcomeSection() {
 // sweeping from the top-left corner to the bottom-right. No copy — just
 // the View Products button sitting in the middle.
 const PRODUCT_COVERS = [
-  "/products/BUILDING MATERIALS/Building materials cover page.png",
-  "/products/Concrete products/concrete products cover page.png",
-  "/products/Electrical, plumbing and sanitary/electrical, plumbing and sanitary.png",
-  "/products/Fasteners/Fasteners cover page.png",
-  "/products/Hand Tools/hand tools cover page.png",
-  "/products/Power Tools/power tools cover page.png",
-  "/products/SAND, AGGREGATE AND CEMENT/sand aggregate cement cover page.png",
-  "/products/Timber & Plywood/Timber and Plywood cover page.png",
-  "/products/packaging, painting, abrasives and adhesives/packaging, painting, abrasives and adhesives cover page.png",
-  "/products/safety items/safety items cover page.png",
-  "/products/water tanks, coolers and filters/water tanks , coolers and filters cover page.png"
+  "/category_cover/sand-aggregate-cement.png",
+  "/category_cover/building-materials.png",
+  "/category_cover/safety-items.png",
+  "/category_cover/fasteners.png",
+  "/category_cover/hand-tools.png",
+  "/category_cover/power-tools.png",
+  "/category_cover/timber-plywood.png",
+  "/category_cover/electrical-plumbing-sanitary.png",
+  "/category_cover/water-tanks-coolers-filters.png",
+  "/category_cover/concrete-products.png",
+  "/category_cover/packaging-painting-abrasives-adhesives.png"
 ];
 
 function renderOurProductsSlider() {
@@ -568,15 +555,27 @@ function renderOurProductsSlider() {
       </div>
 
       <div class="prod-slider-foot">
-        <a href="#" onclick="navigateTo('categories'); return false;" class="prod-view-btn">View Products</a>
+        <a href="#" onclick="handleSliderViewProducts(event); return false;" class="prod-view-btn">View Products</a>
       </div>
     </section>
   `;
 }
 
+window.handleSliderViewProducts = function(e) {
+  if (e) e.preventDefault();
+  const slider = document.getElementById('prod-slider');
+  const currIdx = slider ? parseInt(slider.dataset.current || '0', 10) : 0;
+  const targetCat = CATEGORIES[currIdx];
+  if (targetCat) {
+    navigateTo('category', targetCat.slug);
+  } else {
+    navigateTo('categories');
+  }
+};
+
 // Wipe in the next cover. The outgoing slide stays put underneath until
 // the incoming one has swept fully across it.
-const PROD_INTERVAL = 3500;
+const PROD_INTERVAL = 4000;
 let prodTimer = null;
 
 function prodGo(dir) {
@@ -664,15 +663,16 @@ function renderBrandsSection() {
 
       <div class="brands-marquee-wrap">
         <div class="brands-marquee-track">
-          ${BRAND_IMAGE_IDS.concat(BRAND_IMAGE_IDS).map((id, index) => `
-            <div class="brand-card-logo" title="Authorised Brand Partner">
-              <img src="https://lh3.googleusercontent.com/d/${id}=w600" 
-                   alt="Brand Logo ${(index % BRAND_IMAGE_IDS.length) + 1}" 
-                   loading="lazy" 
-                   referrerpolicy="no-referrer"
-                   onerror="if(!this.dataset.retry){this.dataset.retry=1;this.src='https://drive.google.com/thumbnail?id=${id}&sz=w600';}">
-            </div>
-          `).join('')}
+          ${BRAND_IMAGES.concat(BRAND_IMAGES).map((src) => {
+            const fileName = decodeURIComponent(src.split('/').pop());
+            const brandName = fileName.replace(/(_logo|-logo| logo|\.[^.]+)$/gi, '').replace(/[-_]/g, ' ');
+            const isLarge = /makita|polybit|Gemini/i.test(fileName);
+            return `
+              <div class="brand-card-logo ${isLarge ? 'is-large-logo' : ''}" title="Authorised Brand Partner: ${brandName}">
+                <img src="${src}" alt="${brandName} Logo" loading="lazy">
+              </div>
+            `;
+          }).join('')}
         </div>
       </div>
     </section>
@@ -973,19 +973,16 @@ function renderHomeView() {
 
 // PRODUCT CARD UTILITY
 function renderProductCard(p) {
-  const cat = CATEGORIES.find(c => c.id === p.catId);
   return `
     <div class="product-card">
       <div class="product-thumb-wrap">
         <img src="${p.image}" alt="${p.name}" class="product-thumb-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&auto=format&fit=crop&q=80'">
       </div>
       <div class="product-card-body">
-        <span class="product-cat-label">${cat ? cat.name : 'Building Material'}</span>
         <h4 class="product-card-title">${p.name}</h4>
-        <p class="product-card-spec">${p.spec}</p>
+        <p class="product-card-spec">${p.spec || '&nbsp;'}</p>
         <div class="product-card-footer">
-          <span style="font-size: 11px; font-weight: 600; color: var(--color-text-subtle);">${p.unit || 'Standard Unit'}</span>
-          <button onclick="addToCartById('${p.id}')" class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; font-weight: 700;">
+          <button onclick="addToCartById('${p.id}')" class="product-add-btn">
             + Add to Cart
           </button>
         </div>
@@ -1001,14 +998,42 @@ function renderCategoryView() {
   const catProducts = PRODUCTS.filter(p => p.catId === cat.id);
 
   return `
-    <div class="container" style="padding: var(--space-16) 0;">
-      <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-8); margin-bottom: var(--space-8);">
-        <h1 style="color: var(--color-primary-dark); margin-bottom: var(--space-2);">${cat.name}</h1>
-        <p style="font-size: var(--font-size-lg);">${cat.description}</p>
-      </div>
+    <div class="category-detail-wrapper">
+      <div class="container" style="padding: var(--space-8) var(--space-4) var(--space-16);">
+        <!-- Breadcrumbs / Back Navigation -->
+        <div class="category-nav-breadcrumb">
+          <a href="#" onclick="navigateTo('categories'); return false;" class="cat-back-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            <span>All Categories</span>
+          </a>
+        </div>
 
-      <div class="product-grid">
-        ${catProducts.map(p => renderProductCard(p)).join('')}
+        <!-- Category Hero Section (Clean non-block layout) -->
+        <div class="category-hero-section">
+          <div class="category-hero-media">
+            <img src="${cat.coverImage}" alt="${cat.name}" class="category-hero-img">
+          </div>
+          <div class="category-hero-header">
+            <h1 class="category-hero-title">${cat.name}</h1>
+            ${cat.tagline ? `<h2 class="category-hero-tagline">${cat.tagline}</h2>` : ''}
+            <p class="category-hero-desc">${cat.description}</p>
+          </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="category-products-section">
+          <div class="category-products-header" style="margin-bottom: var(--space-6);">
+            <h2 class="section-title" style="font-size: 26px;">Available Products</h2>
+          </div>
+          <div class="product-grid">
+            ${catProducts.length > 0 ? catProducts.map(p => renderProductCard(p)).join('') : `
+              <div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: var(--color-surface); border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                <p style="color: var(--color-text-muted); margin-bottom: 16px;">No products currently listed in this category.</p>
+                <button onclick="navigateTo('categories')" class="btn btn-primary">Browse All Categories</button>
+              </div>
+            `}
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -1017,42 +1042,33 @@ function renderCategoryView() {
 // CATEGORIES PAGE VIEW (/categories)
 function renderCategoriesView() {
   return `
-    <div class="container" style="padding: var(--space-16) 0;">
-      <div style="margin-bottom: var(--space-8); text-align: center; max-width: 760px; margin-left: auto; margin-right: auto;">
-        <span style="font-size: 12px; font-weight: 700; color: var(--color-primary-dark); text-transform: uppercase; letter-spacing: 0.08em; display: inline-block; margin-bottom: var(--space-2);">
-          Building Material Divisions
-        </span>
-        <h1 style="font-size: var(--font-size-4xl); margin-bottom: var(--space-3); color: var(--color-text-main);">
-          Product Categories
-        </h1>
-        <p style="font-size: var(--font-size-lg); color: var(--color-text-muted);">
-          Browse our 121+ certified building materials, timber, steel, and safety gear organized by industry division.
-        </p>
-      </div>
+    <div class="categories-page-wrapper">
+      <div class="container" style="padding: var(--space-12) 0 var(--space-16);">
+        <div class="categories-hero-heading" style="text-align: center; max-width: 800px; margin: 0 auto var(--space-12);">
+          <h1 class="section-title" style="font-size: clamp(32px, 4vw, 48px); margin-bottom: var(--space-3);">Product Categories</h1>
+          <p style="font-size: var(--font-size-lg); color: var(--color-text-muted); line-height: 1.6;">
+            Explore our comprehensive inventory across 11 material divisions for structural, industrial, and site construction.
+          </p>
+        </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-6);">
-        ${CATEGORIES.map(cat => {
-          const catProds = PRODUCTS.filter(p => p.catId === cat.id);
-          const firstProd = catProds[0];
-          const thumbImg = firstProd ? firstProd.image : '/cover.png';
-          return `
-            <div class="category-card-box" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 200ms ease, box-shadow 200ms ease;">
-              <div style="width: 100%; height: 200px; position: relative; overflow: hidden; background: var(--color-bg-alt);">
-                <img src="${thumbImg}" alt="${cat.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+        <div class="categories-showcase-grid">
+          ${CATEGORIES.map(cat => `
+            <div class="category-showcase-card">
+              <div class="category-cover-wrap" onclick="navigateTo('category', '${cat.slug}')" role="button" tabindex="0" title="View ${cat.name}">
+                <img src="${cat.coverImage}" alt="${cat.name}" class="category-cover-img" loading="lazy">
               </div>
-              <div style="padding: var(--space-6); display: flex; flex-direction: column; flex-grow: 1;">
-                <h3 style="font-size: var(--font-size-xl); margin-bottom: var(--space-2); color: var(--color-text-main);">${cat.name}</h3>
-                <p style="font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: var(--space-6); flex-grow: 1; line-height: 1.5;">
-                  ${cat.description}
-                </p>
-                <button onclick="navigateTo('category', '${cat.slug}')" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                  <span>Explore ${cat.name}</span>
-                  ${ICONS.arrowRight}
-                </button>
+              <div class="category-showcase-info">
+                <div class="category-showcase-meta">
+                  <h3 class="category-showcase-title">${cat.name}</h3>
+                  <p class="category-showcase-desc">${cat.tagline || cat.description}</p>
+                </div>
+                <div class="category-showcase-action">
+                  <a href="#" onclick="navigateTo('category', '${cat.slug}'); return false;" class="prod-view-btn">View Products</a>
+                </div>
               </div>
             </div>
-          `;
-        }).join('')}
+          `).join('')}
+        </div>
       </div>
     </div>
   `;
@@ -1449,6 +1465,7 @@ function renderApp() {
   // Scroll-activated sticky nav: only on home view
   if (state.currentView === 'home') {
     initStickyNav();
+    initHomeStatsCounter();
   }
 }
 
@@ -1472,6 +1489,68 @@ function initStickyNav() {
   };
 
   window.addEventListener('scroll', window._stickyNavHandler, { passive: true });
+}
+
+// HOME STATS ANIMATED NUMBER COUNTER (Smooth count-up effect)
+function initHomeStatsCounter() {
+  const container = document.getElementById('welcome-stats');
+  if (!container) return;
+
+  const circles = container.querySelectorAll('.welcome-stat-circle');
+  if (!circles.length) return;
+
+  function runCounter(el) {
+    const target = parseFloat(el.dataset.target);
+    const decimals = parseInt(el.dataset.decimals || '0', 10);
+    const formatComma = el.dataset.format === 'comma';
+    const countEl = el.querySelector('.stat-count');
+    if (!countEl) return;
+
+    const duration = 1800; // ms
+    const startTime = performance.now();
+
+    function update(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out expo curve for smooth, premium deceleration
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      const currentVal = ease * target;
+
+      let display = decimals > 0 ? currentVal.toFixed(decimals) : Math.round(currentVal).toString();
+      if (formatComma) {
+        display = Math.round(currentVal).toLocaleString();
+      }
+
+      countEl.textContent = display;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        countEl.textContent = formatComma ? target.toLocaleString() : (decimals > 0 ? target.toFixed(decimals) : target);
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  // Use IntersectionObserver to trigger animation when scrolled into view or immediately on load
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          circles.forEach((c, idx) => {
+            setTimeout(() => runCounter(c), idx * 100);
+          });
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+
+    observer.observe(container);
+  } else {
+    // Fallback: run immediately
+    circles.forEach(c => runCounter(c));
+  }
 }
 
 function initSwipers() {
