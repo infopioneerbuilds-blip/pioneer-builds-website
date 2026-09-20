@@ -129,13 +129,13 @@ window.addToCartById = function(productId, quantity = 1) {
   if (!product) return;
   const existing = state.cart.find(item => item.id === product.id);
   if (existing) {
-    existing.qty += quantity;
+    showToast(`"${product.name}" is already in your Cart!`);
   } else {
-    state.cart.push({ ...product, qty: quantity });
+    state.cart.push({ ...product, qty: 1, note: '' });
+    saveCart();
+    showToast(`Added "${product.name}" to your Cart!`);
+    renderApp();
   }
-  saveCart();
-  showToast(`Added "${product.name}" to your Cart!`);
-  renderApp();
 };
 
 window.removeFromCart = function(productId) {
@@ -145,12 +145,11 @@ window.removeFromCart = function(productId) {
   renderApp();
 };
 
-window.updateCartQty = function(productId, qty) {
+window.updateCartItemNote = function(productId, note) {
   const item = state.cart.find(i => i.id === productId);
   if (item) {
-    item.qty = Math.max(1, parseInt(qty) || 1);
+    item.note = note;
     saveCart();
-    renderApp();
   }
 };
 
@@ -196,7 +195,9 @@ function generateEmailCartUrl(clientName = '', clientPhone = '', customNotes = '
   } else {
     body += `CART ITEMS ORDERED:\n`;
     state.cart.forEach((item, index) => {
-      body += `${index + 1}. ${item.name}\n   Qty: ${item.qty} ${item.unit || ''} | Spec: ${item.spec}\n\n`;
+      body += `${index + 1}. ${item.name}${item.spec ? ` (${item.spec})` : ''}\n`;
+      if (item.note) body += `   Note / Requirements: ${item.note}\n`;
+      body += `\n`;
     });
   }
 
@@ -216,7 +217,8 @@ function generateWhatsAppCartUrl(customNotes = '') {
   } else {
     text += `*SELECTED CART ITEMS:*\n`;
     state.cart.forEach((item, index) => {
-      text += `${index + 1}. *${item.name}*\n   Qty: ${item.qty} ${item.unit || ''} | Spec: ${item.spec}\n`;
+      text += `${index + 1}. *${item.name}*${item.spec ? ` (${item.spec})` : ''}\n`;
+      if (item.note) text += `   _Note:_ ${item.note}\n`;
     });
   }
 
@@ -252,7 +254,7 @@ window.handleSendCartOrderEmail = async function(e) {
     itemsSummary = "General building materials catalog & site inquiry.";
   } else {
     itemsSummary = state.cart.map((item, idx) => 
-      `${idx + 1}. ${item.name}\n   • Quantity: ${item.qty} ${item.unit || ''}\n   • Spec: ${item.spec}`
+      `${idx + 1}. ${item.name}${item.spec ? ` (${item.spec})` : ''}${item.note ? `\n   • Note: ${item.note}` : ''}`
     ).join('\n\n');
   }
 
@@ -375,7 +377,7 @@ function syncRouteFromPath() {
 
 // HEADER NAVBAR (Unified sticky nav bar across all pages)
 function renderHeader() {
-  const cartTotal = state.cart.reduce((sum, item) => sum + item.qty, 0);
+  const cartTotal = state.cart.length;
   const isHome = state.currentView === 'home';
   const isProdActive = state.currentView === 'categories' || state.currentView === 'category';
 
@@ -408,7 +410,7 @@ function renderHeader() {
 
 // 1. FULL-BLEED IMMERSIVE HERO — Logo top-left, headline centre, bottom nav pills + CTA
 function renderHeroSection() {
-  const cartTotal = state.cart.reduce((sum, item) => sum + item.qty, 0);
+  const cartTotal = state.cart.length;
   return `
     <section class="immersive-hero" id="immersive-hero">
       <!-- Background image -->
@@ -1102,26 +1104,31 @@ function renderCartView() {
               <table style="width:100%; border-collapse:collapse; margin-top: var(--space-4);">
                 <thead>
                   <tr style="border-bottom:1px solid var(--color-border); text-align:left;">
-                    <th style="padding:8px;">Item</th>
-                    <th style="padding:8px; width:130px;">Quantity</th>
-                    <th style="padding:8px; text-align:right;">Action</th>
+                    <th style="padding:10px 8px; width:35%;">Item</th>
+                    <th style="padding:10px 8px;">Note / Requirements</th>
+                    <th style="padding:10px 8px; width:70px; text-align:right;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   ${state.cart.map(item => `
                     <tr style="border-bottom:1px solid var(--color-border-subtle);">
-                      <td style="padding:12px 8px;">
-                        <strong style="color:var(--color-text-main); font-size:14px;">${item.name}</strong>
-                        <div style="font-size:12px; color:var(--color-text-muted);">${item.spec}</div>
+                      <td style="padding:14px 8px; vertical-align:middle;">
+                        <strong style="color:var(--color-text-main); font-size:14px; display:block;">${item.name}</strong>
+                        ${item.spec ? `<div style="font-size:12px; color:var(--color-text-muted); margin-top:2px;">${item.spec}</div>` : ''}
                       </td>
-                      <td style="padding:12px 8px;">
-                        <div style="display:flex; align-items:center; gap:6px;">
-                          <input type="number" min="1" value="${item.qty}" onchange="updateCartQty('${item.id}', this.value)" style="width:65px; padding:4px 8px; border:1px solid var(--color-border); border-radius:4px; font-weight:700;">
-                          <span style="font-size:11px; color:var(--color-text-subtle);">${item.unit || ''}</span>
-                        </div>
+                      <td style="padding:14px 8px; vertical-align:middle;">
+                        <input 
+                          type="text" 
+                          value="${item.note || ''}" 
+                          placeholder="Add size, quantity, specs..." 
+                          oninput="updateCartItemNote('${item.id}', this.value)" 
+                          style="width:100%; padding:8px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:13px; background:var(--color-bg); color:var(--color-text-main); transition:border-color 150ms ease, background 150ms ease;"
+                          onfocus="this.style.borderColor='var(--color-primary-dark)'; this.style.background='#ffffff';"
+                          onblur="this.style.borderColor='var(--color-border)'; if(!this.value) this.style.background='var(--color-bg)';"
+                        >
                       </td>
-                      <td style="padding:12px 8px; text-align:right;">
-                        <button onclick="removeFromCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600; font-size:13px;">Remove</button>
+                      <td style="padding:14px 8px; text-align:right; vertical-align:middle;">
+                        <button onclick="removeFromCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600; font-size:13px; padding:4px 0; transition:opacity 150ms ease;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">Remove</button>
                       </td>
                     </tr>
                   `).join('')}
