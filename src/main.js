@@ -5,36 +5,37 @@ const TARGET_EMAIL = import.meta.env.VITE_TARGET_EMAIL || 'info.pioneerbuilds@gm
 
 // Local Brand Images from /public/BRANDS WE OFFER
 const BRAND_IMAGES = [
-  '/BRANDS%20WE%20OFFER/ASMACO%20LOGO.png',
-  '/BRANDS%20WE%20OFFER/COSMOPLAST%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/ASMACO%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/COSMOPLAST%20LOGO.webp',
   '/BRANDS%20WE%20OFFER/DeWalt_Logo.webp',
-  '/BRANDS%20WE%20OFFER/FEVICOL%20LOGO.png',
-  '/BRANDS%20WE%20OFFER/FOSROC%20LOGO.jpg',
-  '/BRANDS%20WE%20OFFER/Gemini_Generated_Image_62az9962az9962az.jpeg',
-  '/BRANDS%20WE%20OFFER/Gemini_Generated_Image_yd14mmyd14mmyd14.jpeg',
-  '/BRANDS%20WE%20OFFER/HILTI%20LOGO.png',
-  '/BRANDS%20WE%20OFFER/Honeywell%20Logo.png',
-  '/BRANDS%20WE%20OFFER/JOTUN%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/FEVICOL%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/FOSROC%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/Gemini_Generated_Image_62az9962az9962az.webp',
+  '/BRANDS%20WE%20OFFER/Gemini_Generated_Image_yd14mmyd14mmyd14.webp',
+  '/BRANDS%20WE%20OFFER/HILTI%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/Honeywell%20Logo.webp',
+  '/BRANDS%20WE%20OFFER/JOTUN%20LOGO.webp',
   '/BRANDS%20WE%20OFFER/KAJ%20LOGG.webp',
-  '/BRANDS%20WE%20OFFER/KNIPEX%20LOGO.png',
-  '/BRANDS%20WE%20OFFER/NATIONAL%20CEMENT%20LOGO.jpg',
+  '/BRANDS%20WE%20OFFER/KNAUF%20Logo.webp',
+  '/BRANDS%20WE%20OFFER/KNIPEX%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/NATIONAL%20CEMENT%20LOGO.webp',
   '/BRANDS%20WE%20OFFER/POLYCOM%20LOGO.webp',
-  '/BRANDS%20WE%20OFFER/RBA%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/RBA%20LOGO.webp',
   '/BRANDS%20WE%20OFFER/RR%20LOGO.webp',
-  '/BRANDS%20WE%20OFFER/SIKA%20LOGO.png',
-  '/BRANDS%20WE%20OFFER/STEICO%20LOGO.jpg',
-  '/BRANDS%20WE%20OFFER/Stanley-Logo.png',
+  '/BRANDS%20WE%20OFFER/SIKA%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/STEICO%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/Stanley-Logo.webp',
   '/BRANDS%20WE%20OFFER/TERRACO%20LOGO.webp',
-  '/BRANDS%20WE%20OFFER/TOTAL%20LOGO.png',
+  '/BRANDS%20WE%20OFFER/TOTAL%20LOGO.webp',
   '/BRANDS%20WE%20OFFER/ULTRATECH%20LOGO.webp',
-  '/BRANDS%20WE%20OFFER/VAULTEX%20LOGO.png',
-  '/BRANDS%20WE%20OFFER/bison-logo.png',
-  '/BRANDS%20WE%20OFFER/gypsoman-logo.png',
-  '/BRANDS%20WE%20OFFER/henkel-logo.png',
-  '/BRANDS%20WE%20OFFER/makita-logo.png',
+  '/BRANDS%20WE%20OFFER/VAULTEX%20LOGO.webp',
+  '/BRANDS%20WE%20OFFER/bison-logo.webp',
+  '/BRANDS%20WE%20OFFER/gypsoman-logo.webp',
+  '/BRANDS%20WE%20OFFER/henkel-logo.webp',
+  '/BRANDS%20WE%20OFFER/makita-logo.webp',
   '/BRANDS%20WE%20OFFER/polybit-logo-png.webp',
-  '/BRANDS%20WE%20OFFER/polycab%20logo.png',
-  '/BRANDS%20WE%20OFFER/uken_logo.png'
+  '/BRANDS%20WE%20OFFER/polycab%20logo.webp',
+  '/BRANDS%20WE%20OFFER/uken_logo.webp'
 ];
 
 // Fleet Trucks Google Drive Direct IDs
@@ -60,34 +61,64 @@ const FLEET_TRUCKS = [
 // Projects Showcase
 const PROJECTS_BUILD = [
   {
-    title: "Burj Crown Residential Tower",
-    location: "Downtown Dubai",
-    image: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?w=800&auto=format&fit=crop&q=80",
-    supplied: "Supplied: Portland Cement, Marine Plywood & BRC Welded Mesh"
+    title: "Al Ferdous Shopping Mall",
+    location: "Jumeirah",
+    image: "/projects/al-ferdous-shopping-mall-jumeirah.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
   },
   {
-    title: "Dubai South Logistics Park",
-    location: "Jebel Ali Freezone",
-    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&auto=format&fit=crop&q=80",
-    supplied: "Supplied: Bulk Crushed Aggregates, Sand & 20m³ Tipper Fleet Rental"
+    title: "Hotel",
+    location: "Al Garhoud",
+    image: "/projects/hotel-al-garhoud.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
   },
   {
-    title: "Ras Al Khor Commercial Complex",
-    location: "Dubai Industrial Zone",
-    image: "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=800&auto=format&fit=crop&q=80",
-    supplied: "Supplied: Structural Steel Beams, C-Channels & Heavy Anchor Bolts"
+    title: "Mosque",
+    location: "Al Warqa",
+    image: "/projects/mosque-al-warqa.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
   },
   {
-    title: "Dubai Marina Waterfront Towers",
-    location: "Dubai Marina",
-    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80",
-    supplied: "Supplied: Waterproofing Bitumen Membrane, DPC & Floor Protection"
+    title: "Mosque",
+    location: "Deira",
+    image: "/projects/mosque-deira.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
   },
   {
-    title: "Jumeirah Village Circle Heights",
-    location: "JVC Dubai",
-    image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&auto=format&fit=crop&q=80",
-    supplied: "Supplied: Site Safety Gear PPE, Scaffolding Couplers & Whitewood Timber"
+    title: "Residential and Commercial (2B+G+6+R)",
+    location: "Al Warsan",
+    image: "/projects/residential-commercial-al-warsan-2bg6r.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
+  },
+  {
+    title: "Residential Building (B+G+3P+14)",
+    location: "JVC",
+    image: "/projects/residential-building-jvc-bg3p14.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
+  },
+  {
+    title: "Residential Building (G+1P+5+R)",
+    location: "JVT",
+    image: "/projects/residential-building-jvt-g1p5r.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
+  },
+  {
+    title: "Villa",
+    location: "Dubai Hills",
+    image: "/projects/villa-dubai-hills.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
+  },
+  {
+    title: "Villa",
+    location: "Rashidiya",
+    image: "/projects/villa-rashidiya.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
+  },
+  {
+    title: "Villas",
+    location: "Dubai Land",
+    image: "/projects/villas-dubai-land.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
   }
 ];
 
@@ -195,7 +226,8 @@ function generateEmailCartUrl(clientName = '', clientPhone = '', customNotes = '
   } else {
     body += `CART ITEMS ORDERED:\n`;
     state.cart.forEach((item, index) => {
-      body += `${index + 1}. ${item.name}${item.spec ? ` (${item.spec})` : ''}\n`;
+      const specText = item.spec ? ` (${item.spec.replace(/\n/g, ', ')})` : '';
+      body += `${index + 1}. ${item.name}${specText}\n`;
       if (item.note) body += `   Note / Requirements: ${item.note}\n`;
       body += `\n`;
     });
@@ -217,7 +249,8 @@ function generateWhatsAppCartUrl(customNotes = '') {
   } else {
     text += `*SELECTED CART ITEMS:*\n`;
     state.cart.forEach((item, index) => {
-      text += `${index + 1}. *${item.name}*${item.spec ? ` (${item.spec})` : ''}\n`;
+      const specText = item.spec ? ` (${item.spec.replace(/\n/g, ', ')})` : '';
+      text += `${index + 1}. *${item.name}*${specText}\n`;
       if (item.note) text += `   _Note:_ ${item.note}\n`;
     });
   }
@@ -253,9 +286,10 @@ window.handleSendCartOrderEmail = async function(e) {
   if (state.cart.length === 0) {
     itemsSummary = "General building materials catalog & site inquiry.";
   } else {
-    itemsSummary = state.cart.map((item, idx) => 
-      `${idx + 1}. ${item.name}${item.spec ? ` (${item.spec})` : ''}${item.note ? `\n   • Note: ${item.note}` : ''}`
-    ).join('\n\n');
+    itemsSummary = state.cart.map((item, idx) => {
+      const specText = item.spec ? ` (${item.spec.replace(/\n/g, ', ')})` : '';
+      return `${idx + 1}. ${item.name}${specText}${item.note ? `\n   • Note: ${item.note}` : ''}`;
+    }).join('\n\n');
   }
 
   const payload = {
@@ -357,9 +391,16 @@ function syncRouteFromPath() {
     state.currentView = 'home';
     state.selectedCategory = null;
   } else if (pathname.startsWith('/category/')) {
-    const catSlug = pathname.replace('/category/', '');
+    const rawCatSlug = pathname.replace('/category/', '');
+    const decodedSlug = decodeURIComponent(rawCatSlug).toLowerCase();
     state.currentView = 'category';
-    state.selectedCategory = CATEGORIES.find(c => c.slug === catSlug) || null;
+    state.selectedCategory = CATEGORIES.find(c => 
+      c.slug === rawCatSlug || 
+      c.oldSlug === rawCatSlug || 
+      c.slug === decodedSlug || 
+      c.name.toLowerCase() === decodedSlug ||
+      c.slug.replace(/[^a-z0-9]/g, '') === decodedSlug.replace(/[^a-z0-9]/g, '')
+    ) || null;
   } else {
     const viewName = pathname.replace('/', '');
     // If user hits /products, redirect to /categories
@@ -386,7 +427,7 @@ function renderHeader() {
     <header class="sticky-nav-bar ${isHome ? '' : 'visible'}" id="sticky-nav-bar">
       <div class="sticky-nav-inner">
         <a href="#" onclick="navigateTo('home'); return false;" class="sticky-brand">
-          <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="sticky-brand-img">
+          <img src="/logo-removebg-preview.webp" alt="Pioneer Logo" class="sticky-brand-img">
           <span class="sticky-brand-name">PIONEER</span>
         </a>
         <ul class="sticky-nav-links">
@@ -415,14 +456,14 @@ function renderHeroSection() {
     <section class="immersive-hero" id="immersive-hero">
       <!-- Background image -->
       <div class="immersive-hero-bg">
-        <img src="/cover.png" alt="Pioneer Building Materials" class="immersive-hero-img" fetchpriority="high">
+        <img src="/cover.webp" alt="Pioneer Building Materials" class="immersive-hero-img" fetchpriority="high">
         <div class="immersive-hero-overlay"></div>
       </div>
 
       <!-- Top-left: Logo (floating on photo) -->
       <div class="immersive-logo">
         <a href="#" onclick="navigateTo('home'); return false;" class="immersive-logo-link">
-          <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="immersive-logo-img">
+          <img src="/logo-removebg-preview.webp" alt="Pioneer Logo" class="immersive-logo-img">
           <div class="immersive-logo-text">
             <span class="immersive-logo-name">PIONEER</span>
             <span class="immersive-logo-sub">Building Materials Trading LLC</span>
@@ -517,17 +558,17 @@ function renderWelcomeSection() {
 // sweeping from the top-left corner to the bottom-right. No copy — just
 // the View Products button sitting in the middle.
 const PRODUCT_COVERS = [
-  "/category_cover/sand-aggregate-cement.png",
-  "/category_cover/building-materials.png",
-  "/category_cover/safety-items.png",
-  "/category_cover/fasteners.png",
-  "/category_cover/hand-tools.png",
-  "/category_cover/power-tools.png",
-  "/category_cover/timber-plywood.png",
-  "/category_cover/electrical-plumbing-sanitary.png",
-  "/category_cover/water-tanks-coolers-filters.png",
-  "/category_cover/concrete-products.png",
-  "/category_cover/packaging-painting-abrasives-adhesives.png"
+  "/category_cover/sand-aggregate-cement.webp",
+  "/category_cover/building-materials.webp",
+  "/category_cover/safety-items.webp",
+  "/category_cover/fasteners.webp",
+  "/category_cover/hand-tools.webp",
+  "/category_cover/power-tools.webp",
+  "/category_cover/timber-plywood.webp",
+  "/category_cover/electrical-plumbing-sanitary.webp",
+  "/category_cover/water-tanks-coolers-filters.webp",
+  "/category_cover/concrete-products.webp",
+  "/category_cover/packaging-painting-abrasives-adhesives.webp"
 ];
 
 function renderOurProductsSlider() {
@@ -1114,7 +1155,7 @@ function renderCartView() {
                     <tr style="border-bottom:1px solid var(--color-border-subtle);">
                       <td style="padding:14px 8px; vertical-align:middle;">
                         <strong style="color:var(--color-text-main); font-size:14px; display:block;">${item.name}</strong>
-                        ${item.spec ? `<div style="font-size:12px; color:var(--color-text-muted); margin-top:2px;">${item.spec}</div>` : ''}
+                        ${item.spec ? `<div style="font-size:12px; color:var(--color-text-muted); margin-top:2px; white-space:pre-line;">${item.spec}</div>` : ''}
                       </td>
                       <td style="padding:14px 8px; vertical-align:middle;">
                         <input 
@@ -1262,7 +1303,7 @@ function renderFooter() {
         <div class="footer-grid">
           <div>
             <div class="brand-logo" style="margin-bottom: var(--space-4);">
-              <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="brand-icon-img">
+              <img src="/logo-removebg-preview.webp" alt="Pioneer Logo" class="brand-icon-img">
               <div class="brand-text">
                 <span class="brand-title" style="color:#1E293B;">PIONEER</span>
                 <span class="brand-subtitle" style="color:#1E293B;">Building Materials Trading LLC</span>
@@ -1397,7 +1438,7 @@ function renderMobileSidebar() {
       <aside class="mobile-sidebar-drawer" onclick="event.stopPropagation()">
         <div class="mobile-sidebar-header">
           <div class="brand-logo">
-            <img src="/logo-removebg-preview.png" alt="Pioneer Logo" class="brand-icon-img">
+            <img src="/logo-removebg-preview.webp" alt="Pioneer Logo" class="brand-icon-img">
             <div class="brand-text">
               <span class="brand-title">PIONEER</span>
               <span class="brand-subtitle">Building Materials Trading LLC</span>

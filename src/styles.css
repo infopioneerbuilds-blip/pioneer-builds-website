@@ -2,7 +2,7 @@
 /* Structured to match Tamba Hardware (tambahardware.com) layout & UX */
 /* Built in accordance with .gemini/rules.md, Impeccable, Taste Skill & Motion Animation Rules */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Italiana&family=Outfit:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 
 :root {
   /* Brand Color System (60-30-10 Rule) */
@@ -26,18 +26,18 @@
   --color-border-subtle: rgba(30, 41, 59, 0.06);
 
   /* Typography Scale */
-  --font-italiana: 'Italiana', serif;
-  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-italiana: 'Gloock', serif; /* Primary: headings, titles & buttons */
+  --font-display: 'Lora', Georgia, serif; /* Secondary: descriptions & body */
+  --font-body: 'Lora', Georgia, serif; /* Secondary: descriptions & body */
 
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-base: 16px;
-  --font-size-lg: 20px;
-  --font-size-xl: 24px;
-  --font-size-2xl: 32px;
-  --font-size-3xl: 40px;
-  --font-size-4xl: 56px;
+  --font-size-xs: 13px;
+  --font-size-sm: 15px;
+  --font-size-base: 17px;
+  --font-size-lg: 22px;
+  --font-size-xl: 26px;
+  --font-size-2xl: 35px;
+  --font-size-3xl: 44px;
+  --font-size-4xl: 60px;
 
   /* Spacing Grid (8px Law) */
   --space-1: 4px;
@@ -82,7 +82,7 @@
 
 html {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 17px;
   background-color: var(--color-bg);
   color: var(--color-text-main);
   scroll-behavior: smooth;
@@ -100,7 +100,7 @@ body {
    Offer / Our Fleet / Projects / Why Choose Us are always identical. */
 .section-title {
   font-family: var(--font-italiana);
-  font-size: clamp(28px, 3.2vw, 42px);
+  font-size: clamp(30px, 3.5vw, 45px);
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: 0.01em;
@@ -111,7 +111,7 @@ body {
 .section-eyebrow {
   display: block;
   font-family: var(--font-display);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -121,7 +121,7 @@ body {
 
 /* Typography Hierarchy */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
+  font-family: var(--font-italiana);
   color: var(--color-text-main);
   line-height: 1.15;
   letter-spacing: -0.025em;
@@ -137,6 +137,7 @@ p {
   color: var(--color-text-muted);
   max-width: 65ch;
   line-height: 1.6;
+  font-weight: 500;
 }
 
 a {
@@ -165,7 +166,7 @@ button, input, select, textarea {
   padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-pill);
   font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   border: 1px solid transparent;
   transition: transform 150ms var(--ease-out), opacity 150ms var(--ease-out), background-color 150ms var(--ease-out);
@@ -257,8 +258,8 @@ button, input, select, textarea {
 }
 
 .sticky-brand-name {
-  font-family: var(--font-display);
-  font-size: 16px;
+  font-family: var(--font-italiana);
+  font-size: 17px;
   font-weight: 800;
   color: #1E293B;
   letter-spacing: 0.06em;
@@ -272,7 +273,7 @@ button, input, select, textarea {
 }
 
 .sticky-nav-links a {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: rgba(30, 41, 59, 0.78);
   transition: color 150ms ease;
@@ -395,7 +396,7 @@ button, input, select, textarea {
 }
 
 .brand-title {
-  font-family: var(--font-display);
+  font-family: var(--font-italiana);
   font-size: var(--font-size-base);
   font-weight: 800;
   color: var(--color-text-main);
@@ -404,7 +405,7 @@ button, input, select, textarea {
 }
 
 .brand-subtitle {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--color-primary-dark);
   text-transform: uppercase;
@@ -421,7 +422,7 @@ button, input, select, textarea {
 
 .nav-item-link {
   font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-muted);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-pill);
@@ -446,7 +447,7 @@ button, input, select, textarea {
   align-items: center;
   gap: var(--space-2);
   font-size: var(--font-size-xs);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-main);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-pill);
@@ -516,14 +517,14 @@ button, input, select, textarea {
 }
 
 .carousel-headline {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-4xl); font-weight: 500;
   color: #ffffff;
   margin-bottom: var(--space-4);
   line-height: 1.1;
 }
 
 .carousel-subtext {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-lg); font-weight: 500;
   color: #e2e8f0;
   margin: 0 auto var(--space-6);
 }
@@ -612,7 +613,7 @@ button, input, select, textarea {
   background: linear-gradient(135deg, #1E293B 0%, #3F8F8F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-3xl); font-weight: 500;
   margin-bottom: var(--space-3);
 }
 
@@ -631,7 +632,7 @@ button, input, select, textarea {
 
 .section-centered-title {
   text-align: center;
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-3xl); font-weight: 500;
   color: var(--color-text-main);
   margin-bottom: var(--space-10);
   position: relative;
@@ -741,9 +742,9 @@ button, input, select, textarea {
 .product-thumb-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   background-color: #ffffff;
-  padding: 0;
+  padding: 10px;
   transition: transform 300ms ease;
 }
 
@@ -759,8 +760,8 @@ button, input, select, textarea {
 }
 
 .product-cat-label {
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
   color: var(--color-primary);
   text-transform: uppercase;
   margin-bottom: var(--space-1);
@@ -776,11 +777,12 @@ button, input, select, textarea {
 }
 
 .product-card-spec {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-xs); font-weight: 500;
   color: var(--color-text-muted);
   margin-bottom: var(--space-4);
   line-height: 1.4;
   min-height: 18px;
+  white-space: pre-line;
 }
 
 .product-card-footer {
@@ -797,7 +799,7 @@ button, input, select, textarea {
   border: none;
   padding: 4px 0;
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-text-main);
@@ -913,7 +915,7 @@ button, input, select, textarea {
 .footer-link {
   color: #1E293B;
   font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-weight: 700;
   transition: color 150ms var(--ease-out), transform 150ms var(--ease-out);
 }
 
@@ -930,7 +932,7 @@ button, input, select, textarea {
   align-items: center;
   font-size: var(--font-size-xs);
   color: #334155;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* Layout Grids */
@@ -1047,8 +1049,8 @@ button, input, select, textarea {
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   color: var(--color-text-muted);
   text-decoration: none;
   transition: color 150ms ease, background-color 150ms ease;
@@ -1129,7 +1131,7 @@ button, input, select, textarea {
   right: 1px;
   background-color: var(--color-primary);
   color: #1E293B;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   min-width: 17px;
   height: 17px;
@@ -1201,12 +1203,12 @@ button, input, select, textarea {
   .brand-icon {
     width: 32px;
     height: 32px;
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .brand-subtitle {
     display: block;
-    font-size: 8.5px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--color-primary-dark);
     letter-spacing: 0.02em;
@@ -1216,7 +1218,7 @@ button, input, select, textarea {
   }
 
   .brand-title {
-    font-size: 14px;
+    font-size: 15px;
     letter-spacing: 0.02em;
     white-space: nowrap;
   }
@@ -1294,7 +1296,7 @@ button, input, select, textarea {
     padding: var(--space-4);
   }
   .carousel-headline {
-    font-size: 22px;
+    font-size: 25px; font-weight: 500;
   }
 }
 
@@ -1362,8 +1364,8 @@ button, input, select, textarea {
 }
 
 .immersive-logo-name {
-  font-family: var(--font-display);
-  font-size: 24px;
+  font-family: var(--font-italiana);
+  font-size: 26px;
   font-weight: 800;
   color: #12181f;
   letter-spacing: 0.1em;
@@ -1371,8 +1373,8 @@ button, input, select, textarea {
 }
 
 .immersive-logo-sub {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   color: #4a5560;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1448,7 +1450,7 @@ button, input, select, textarea {
 
 .immersive-line {
   font-family: var(--font-italiana);
-  font-size: clamp(44px, 8vw, 104px);
+  font-size: clamp(48px, 9vw, 112px);
   font-weight: 400;
   color: #ffffff;
   line-height: 1.05;
@@ -1464,13 +1466,13 @@ button, input, select, textarea {
 .immersive-line.line-2 {
   animation-delay: 0.42s;
   color: #80C0C0;
-  font-size: clamp(42px, 7.5vw, 96px);
+  font-size: clamp(45px, 8vw, 104px);
 }
 
 .immersive-subline {
-  font-size: clamp(13px, 1.5vw, 17px);
+  font-size: clamp(15px, 1.5vw, 20px);
   color: rgba(255, 255, 255, 0.65);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.03em;
   opacity: 0;
   animation: heroLineUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
@@ -1503,7 +1505,7 @@ button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   padding: 8px 14px;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: #12181f;
@@ -1555,7 +1557,7 @@ button, input, select, textarea {
   border: none;
   color: #ffffff;
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   text-decoration: none;
   letter-spacing: 0.03em;
@@ -1642,11 +1644,11 @@ button, input, select, textarea {
   }
 
   .immersive-logo-name {
-    font-size: 18px;
+    font-size: 19px;
   }
 
   .immersive-logo-sub {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   /* Hard stop so the wordmark can never run under the icon group:
@@ -1664,12 +1666,12 @@ button, input, select, textarea {
   }
 
   .immersive-cta-btn {
-    font-size: 17px;
+    font-size: 18px; font-weight: 700;
     padding: 6px 16px;
   }
 
   .immersive-phone-link {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .immersive-phone-link svg { width: 13px; height: 13px; }
@@ -1698,8 +1700,8 @@ button, input, select, textarea {
   gap: 8px;
   padding: 2px 16px;
   font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.86);
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
@@ -1722,15 +1724,15 @@ button, input, select, textarea {
 
 @media (max-width: 560px) {
   .immersive-logo-img { width: 40px; height: 40px; }
-  .immersive-logo-name { font-size: 16px; }
+  .immersive-logo-name { font-size: 17px; }
   .immersive-logo-sub {
-    font-size: 8.5px;
+    font-size: 10px;
     letter-spacing: 0.02em;
   }
   .immersive-logo { max-width: calc(100% - 188px); }
 
-  .immersive-cta-btn { font-size: 16px; }
-  .immersive-phone-link { font-size: 13px; }
+  .immersive-cta-btn { font-size: 17px; font-weight: 700; }
+  .immersive-phone-link { font-size: 15px; }
 }
 
 @keyframes heroLineUp {
@@ -1751,8 +1753,8 @@ button, input, select, textarea {
 
 /* Animated Hero Entrance */
 .hero-animated-title {
-  font-size: clamp(32px, 5vw, 56px);
-  font-family: var(--font-display);
+  font-size: clamp(35px, 5vw, 60px);
+  font-family: var(--font-italiana);
   font-weight: 800;
   color: #ffffff;
   margin-bottom: var(--space-4);
@@ -1925,7 +1927,7 @@ button, input, select, textarea {
   right: 14px;
   background: var(--color-primary);
   color: #1E293B;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   padding: 4px 12px;
   border-radius: var(--radius-pill);
@@ -1940,13 +1942,13 @@ button, input, select, textarea {
 }
 
 .fleet-card-title {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-xl); font-weight: 500;
   color: var(--color-text-main);
   margin-bottom: var(--space-2);
 }
 
 .fleet-card-desc {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-sm); font-weight: 500;
   color: var(--color-text-muted);
   margin-bottom: var(--space-6);
   flex-grow: 1;
@@ -2079,13 +2081,13 @@ button, input, select, textarea {
 }
 
 .why-card-title {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-lg); font-weight: 500;
   color: var(--color-text-main);
   margin-bottom: var(--space-2);
 }
 
 .why-card-desc {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-sm); font-weight: 500;
   color: var(--color-text-muted);
   line-height: 1.5;
 }
@@ -2141,7 +2143,7 @@ button, input, select, textarea {
 
 .welcome-main-title {
   font-family: var(--font-italiana);
-  font-size: clamp(32px, 4.2vw, 54px);
+  font-size: clamp(35px, 4.5vw, 58px);
   font-weight: 400;
   letter-spacing: 0.01em;
   color: #121827;
@@ -2191,9 +2193,9 @@ button, input, select, textarea {
 
 .welcome-stat-num {
   font-family: var(--font-display);
-  font-size: clamp(40px, 3.6vw, 48px);
+  font-size: clamp(46px, 4vw, 55px);
   font-weight: 800;
-  color: #111827;
+  color: var(--color-primary-dark);
   letter-spacing: -0.02em;
   line-height: 1;
   margin-bottom: 12px;
@@ -2210,9 +2212,9 @@ button, input, select, textarea {
 
 .welcome-stat-label {
   font-family: var(--font-body);
-  font-size: 15px;
-  font-weight: 400;
-  color: #64748B;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-primary-dark);
   line-height: 1.35;
   max-width: 180px;
 }
@@ -2225,11 +2227,11 @@ button, input, select, textarea {
     padding: 18px;
   }
   .welcome-stat-num {
-    font-size: 34px;
+    font-size: 39px;
     margin-bottom: 8px;
   }
   .welcome-stat-label {
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 
@@ -2253,10 +2255,10 @@ button, input, select, textarea {
     padding: 16px;
   }
   .welcome-stat-num {
-    font-size: 30px;
+    font-size: 34px;
   }
   .welcome-stat-label {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
@@ -2280,7 +2282,7 @@ button, input, select, textarea {
 
 .prod-slider-sub {
   color: var(--color-text-subtle);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-base); font-weight: 500;
   margin: var(--space-2) auto 0;
 }
 
@@ -2387,7 +2389,7 @@ button, input, select, textarea {
   position: relative;
   display: inline-block;
   font-family: var(--font-display);
-  font-size: clamp(15px, 1.4vw, 18px);
+  font-size: clamp(16px, 1.5vw, 19px);
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--color-text-main);
@@ -2447,7 +2449,7 @@ button, input, select, textarea {
 
 .arch-slider-sub {
   color: var(--color-text-subtle);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-base); font-weight: 500;
   margin: var(--space-2) auto 0;
 }
 
@@ -2559,8 +2561,8 @@ button, input, select, textarea {
 .arch-copy > * { pointer-events: auto; }
 
 .arch-slide-title {
-  font-family: var(--font-display);
-  font-size: clamp(32px, 5vw, 64px);
+  font-family: var(--font-italiana);
+  font-size: clamp(35px, 5vw, 69px);
   font-weight: 300;
   line-height: 0.98;
   letter-spacing: -0.03em;
@@ -2574,7 +2576,7 @@ button, input, select, textarea {
 
 .arch-slide-sub {
   margin: 18px 0 0;
-  font-size: 14px;
+  font-size: 16px; font-weight: 500;
   color: #4a5560;
   letter-spacing: 0.01em;
   max-width: 46ch;
@@ -2601,7 +2603,7 @@ button, input, select, textarea {
   align-items: center;
   padding: 15px 26px;
   font-family: var(--font-display);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.16em;
   color: #12181f;
@@ -2698,7 +2700,7 @@ button, input, select, textarea {
     width: 100%;
   }
 
-  .arch-slide-title { font-size: clamp(26px, 6.6vw, 38px); }
+  .arch-slide-title { font-size: clamp(28px, 7vw, 41px); }
   .arch-nav { bottom: 14px; }
   .arch-progress-bar { bottom: 74px; }
 }
@@ -2726,7 +2728,7 @@ button, input, select, textarea {
   align-items: center;
   gap: 6px;
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 800;
   color: #ffffff;
   background: rgba(15, 23, 42, 0.65);
@@ -2752,12 +2754,12 @@ button, input, select, textarea {
 
 .slide-num-current {
   color: var(--color-primary);
-  font-size: 15px;
+  font-size: 17px; font-weight: 500;
 }
 
 .slide-num-slash {
   opacity: 0.5;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .slide-num-total {
@@ -2782,7 +2784,7 @@ button, input, select, textarea {
 
 .category-hero-arch-tag {
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.16em;
   color: var(--color-primary);
@@ -2802,9 +2804,9 @@ button, input, select, textarea {
 }
 
 .category-hero-title {
-  font-size: clamp(28px, 4.2vw, 48px);
+  font-size: clamp(30px, 4.5vw, 52px);
   color: #ffffff;
-  font-family: var(--font-display);
+  font-family: var(--font-italiana);
   font-weight: 800;
   margin: 0;
   line-height: 1.15;
@@ -2828,7 +2830,7 @@ button, input, select, textarea {
   right: 28px;
   z-index: 20;
   padding: 12px 28px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   box-shadow: 0 8px 24px rgba(128, 192, 192, 0.45);
   transition: transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
@@ -2843,18 +2845,18 @@ button, input, select, textarea {
   .category-hero-counter {
     top: 16px;
     left: 16px;
-    font-size: 11px;
+    font-size: 13px;
     padding: 4px 12px;
   }
   .slide-num-current {
-    font-size: 13px;
+    font-size: 15px; font-weight: 500;
   }
 
   .category-explore-btn-br {
     bottom: 16px;
     right: 16px;
     padding: 8px 14px;
-    font-size: 12px;
+    font-size: 13px;
     z-index: 25;
   }
 
@@ -2938,10 +2940,10 @@ button, input, select, textarea {
     padding: var(--space-6) var(--space-4);
   }
   .category-hero-title {
-    font-size: 24px;
+    font-size: 26px;
   }
   .category-hero-desc {
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
@@ -3084,16 +3086,16 @@ button, input, select, textarea {
 }
 
 .category-showcase-title {
-  font-family: var(--font-display);
-  font-size: 21px;
+  font-family: var(--font-italiana);
+  font-size: 23px;
   font-weight: 600;
   color: var(--color-text-main);
   margin-bottom: 8px;
 }
 
 .category-showcase-desc {
-  font-size: 14.5px;
-  font-weight: 400;
+  font-size: 16.5px;
+  font-weight: 600;
   line-height: 1.55;
   color: var(--color-text-muted);
 }
@@ -3119,7 +3121,7 @@ button, input, select, textarea {
   align-items: center;
   gap: 8px;
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--color-text-muted);
   text-decoration: none;
@@ -3168,8 +3170,8 @@ button, input, select, textarea {
 }
 
 .category-hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.5vw, 42px);
+  font-family: var(--font-italiana);
+  font-size: clamp(30px, 4vw, 45px);
   font-weight: 800;
   color: var(--color-text-main);
   margin-bottom: 12px;
@@ -3180,7 +3182,7 @@ button, input, select, textarea {
 
 .category-hero-tagline {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 23px;
   font-weight: 700;
   color: var(--color-text-main);
   margin: 0 auto 10px;
@@ -3191,8 +3193,8 @@ button, input, select, textarea {
 }
 
 .category-hero-desc {
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 18px;
+  font-weight: 600;
   line-height: 1.65;
   color: var(--color-text-muted);
   margin: 0 auto;
@@ -3211,12 +3213,25 @@ button, input, select, textarea {
     padding: 0 var(--space-2);
   }
   .category-hero-title {
-    font-size: 26px;
+    font-size: 28px;
   }
   .category-hero-tagline {
-    font-size: 18px;
+    font-size: 21px;
   }
   .category-hero-desc {
-    font-size: 15px;
+    font-size: 17px;
   }
+}
+
+
+/* ---------------------------------------------------------
+   Font override: all buttons & CTAs use the primary heading
+   font (Italiana). Placed last so it wins the cascade over
+   earlier component rules that reference --font-display.
+   --------------------------------------------------------- */
+button,
+.btn,
+[class*="-btn"],
+[class*="btn-"] {
+  font-family: var(--font-italiana);
 }
