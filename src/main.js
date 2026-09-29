@@ -789,7 +789,7 @@ function renderProjectsSection() {
 
         <div class="arch-copy" id="arch-copy">
           <h3 class="arch-slide-title" id="arch-title">${first.title}</h3>
-          <p class="arch-slide-sub" id="arch-sub">${first.location} — ${first.supplied}</p>
+          <p class="arch-slide-sub" id="arch-sub">${first.location}<span class="arch-supplied">${first.supplied}</span></p>
           <div class="arch-actions">
             <span class="arch-slide-index" id="arch-index">01 / ${totalStr}</span>
           </div>
@@ -900,7 +900,7 @@ function archSetCopy(slider, idx) {
   const prog  = document.getElementById('arch-progress');
 
   if (title) title.textContent = proj.title;
-  if (sub)   sub.textContent   = `${proj.location} — ${proj.supplied}`;
+  if (sub)   sub.innerHTML     = `${proj.location}<span class="arch-supplied">${proj.supplied}</span>`;
   if (index) index.textContent = `${String(idx + 1).padStart(2, '0')} / ${total}`;
   if (prog)  prog.style.width  = ((idx + 1) / PROJECTS_BUILD.length * 100) + '%';
 }

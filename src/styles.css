@@ -2464,6 +2464,7 @@ button, input, select, textarea {
   background: #ffffff;
   padding: 0 clamp(20px, 5vw, 64px);
   box-sizing: border-box;
+  container-type: inline-size;
 }
 
 /* Vertical gridlines spanning the whole white canvas, aligned to the
@@ -2579,8 +2580,21 @@ button, input, select, textarea {
   font-size: 16px; font-weight: 500;
   color: #4a5560;
   letter-spacing: 0.01em;
-  max-width: 46ch;
+  max-width: 54ch;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.95), 0 0 6px rgba(255, 255, 255, 0.9);
+}
+
+.arch-supplied {
+  display: block;
+  margin-top: 4px;
+}
+
+/* Desktop: keep the subtitle inside the white gutter left of the image
+   (the big title may overlap the photo, the subtitle must not). */
+@media (min-width: 901px) {
+  .arch-slide-sub {
+    max-width: calc(28cqw - clamp(20px, 5vw, 64px) - 24px);
+  }
 }
 
 .arch-slide-sub::before {
