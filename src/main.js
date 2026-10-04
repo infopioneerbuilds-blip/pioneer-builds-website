@@ -119,6 +119,24 @@ const PROJECTS_BUILD = [
     location: "Dubai Land",
     image: "/projects/villas-dubai-land.webp",
     supplied: "Supplied: Premium Building Materials & Site Support"
+  },
+  {
+    title: "Emirates Hospital",
+    location: "Motor City",
+    image: "/projects/emirates-hospital-motor-city.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
+  },
+  {
+    title: "Mansion",
+    location: "Al Jumeirah",
+    image: "/projects/mansion-al-jumeirah.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
+  },
+  {
+    title: "Residential Building (G+5+R)",
+    location: "Al Wasl",
+    image: "/projects/residential-building-al-wasl-g5r.webp",
+    supplied: "Supplied: Premium Building Materials & Site Support"
   }
 ];
 
@@ -757,6 +775,14 @@ function renderFleetSection() {
 // White canvas, image inset right, project name overlapping its left edge.
 // Transition: panels clear to white, then the new image reveals from the
 // right (panel 4 -> 3 -> 2 -> 1) while the copy slides in from the left.
+// Splits a trailing "(...)" off a project title so it sits on its own line
+// instead of running across the photo, e.g. "Residential Building<br>(G+1P+5+R)".
+function archTitleHTML(title) {
+  const m = String(title).match(/^(.*?)\s*(\([^)]*\))\s*$/);
+  if (!m) return title;
+  return `${m[1]}<span class="arch-title-sub">${m[2]}</span>`;
+}
+
 function renderProjectsSection() {
   const totalStr = String(PROJECTS_BUILD.length).padStart(2, '0');
   const first = PROJECTS_BUILD[0];
@@ -788,7 +814,7 @@ function renderProjectsSection() {
         </div>
 
         <div class="arch-copy" id="arch-copy">
-          <h3 class="arch-slide-title" id="arch-title">${first.title}</h3>
+          <h3 class="arch-slide-title" id="arch-title">${archTitleHTML(first.title)}</h3>
           <p class="arch-slide-sub" id="arch-sub">${first.location}<span class="arch-supplied">${first.supplied}</span></p>
           <div class="arch-actions">
             <span class="arch-slide-index" id="arch-index">01 / ${totalStr}</span>
@@ -899,7 +925,7 @@ function archSetCopy(slider, idx) {
   const index = document.getElementById('arch-index');
   const prog  = document.getElementById('arch-progress');
 
-  if (title) title.textContent = proj.title;
+  if (title) title.innerHTML   = archTitleHTML(proj.title);
   if (sub)   sub.innerHTML     = `${proj.location}<span class="arch-supplied">${proj.supplied}</span>`;
   if (index) index.textContent = `${String(idx + 1).padStart(2, '0')} / ${total}`;
   if (prog)  prog.style.width  = ((idx + 1) / PROJECTS_BUILD.length * 100) + '%';

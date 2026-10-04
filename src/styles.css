@@ -2575,6 +2575,13 @@ button, input, select, textarea {
     0 0 5px rgba(255, 255, 255, 0.85);
 }
 
+.arch-title-sub {
+  display: block;
+  margin-top: 0.12em;
+  font-size: 0.62em;
+  letter-spacing: -0.01em;
+}
+
 .arch-slide-sub {
   margin: 18px 0 0;
   font-size: 16px; font-weight: 500;
