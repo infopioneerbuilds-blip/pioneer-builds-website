@@ -697,6 +697,14 @@ function inView(el) {
   return r.top < window.innerHeight * 0.75 && r.bottom > window.innerHeight * 0.25;
 }
 
+// True once `el` has been continuously on screen for `ms`, so a slider that
+// has just scrolled into view is held still long enough to be seen.
+function dwelled(el, ms) {
+  if (!inView(el)) { delete el.dataset.seen; return false; }
+  if (!el.dataset.seen) el.dataset.seen = String(Date.now());
+  return Date.now() - Number(el.dataset.seen) >= ms;
+}
+
 function prodPaused() {
   const nav = document.querySelector('.prod-nav');
   return !!nav && nav.matches(':hover');
@@ -707,7 +715,7 @@ function prodSchedule(delay) {
   prodTimer = setTimeout(() => {
     const slider = document.getElementById('prod-slider');
     if (!slider) { prodSchedule(); return; }
-    if (!inView(slider) || prodPaused() || slider.dataset.animating === 'true') {
+    if (!dwelled(slider, 4500) || prodPaused() || slider.dataset.animating === 'true') {
       prodSchedule(800);   // re-check soon rather than skipping a whole turn
       return;
     }
@@ -785,8 +793,16 @@ function renderFleetSection() {
 // instead of running across the photo, e.g. "Residential Building<br>(G+1P+5+R)".
 function archTitleHTML(title) {
   const m = String(title).match(/^(.*?)\s*(\([^)]*\))\s*$/);
-  if (!m) return title;
-  return `${m[1]}<span class="arch-title-sub">${m[2]}</span>`;
+  const main = m ? m[1] : String(title);
+  // Break the name onto two balanced lines so it never runs across the photo.
+  const words = main.split(/\s+/);
+  let best = main, bestMax = Infinity;
+  for (let k = 1; k < words.length; k++) {
+    const a = words.slice(0, k).join(' '), b = words.slice(k).join(' ');
+    const mx = Math.max(a.length, b.length);
+    if (mx < bestMax) { bestMax = mx; best = `${a}<br>${b}`; }
+  }
+  return m ? `${best}<span class="arch-title-sub">${m[2]}</span>` : best;
 }
 
 function renderProjectsSection() {
@@ -968,7 +984,7 @@ function archInitFirstSlide() {
       const nav = document.querySelector('.arch-nav');
       const paused = !!nav && nav.matches(':hover');
 
-      if (!slider || slider.dataset.inited !== 'true' || !inView(slider) ||
+      if (!slider || slider.dataset.inited !== 'true' || !dwelled(slider, 8000) ||
           slider.dataset.animating === 'true' || paused) {
         archSchedule(800);
         return;
@@ -1122,7 +1138,7 @@ function renderCategoriesView() {
         <div class="categories-hero-heading" style="text-align: center; max-width: 800px; margin: 0 auto var(--space-12);">
           <h1 class="section-title" style="font-size: clamp(32px, 4vw, 48px); margin-bottom: var(--space-3);">Product Categories</h1>
           <p style="font-size: var(--font-size-lg); color: var(--color-text-muted); line-height: 1.6;">
-            Explore our comprehensive inventory across 11 material divisions for structural, industrial, and site construction.
+            Explore our comprehensive inventory across multiple materials for structural, industrial, and site construction.
           </p>
         </div>
 
@@ -1350,7 +1366,7 @@ function renderFooter() {
             <h4 class="footer-col-title">Quick Links</h4>
             <ul class="footer-links">
               <li><a href="#" onclick="navigateTo('home'); return false;" class="footer-link">Home</a></li>
-              <li><a href="#" onclick="navigateTo('categories'); return false;" class="footer-link">Categories</a></li>
+              <li><a href="#" onclick="navigateTo('categories'); return false;" class="footer-link">Products</a></li>
               <li><a href="#" onclick="navigateTo('cart'); return false;" class="footer-link">Shopping Cart</a></li>
               <li><a href="#" onclick="navigateTo('about'); return false;" class="footer-link">About Us</a></li>
               <li><a href="#" onclick="navigateTo('contact'); return false;" class="footer-link">Contact us</a></li>

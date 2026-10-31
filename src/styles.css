@@ -1373,9 +1373,9 @@ button, input, select, textarea {
 }
 
 .immersive-logo-sub {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
-  color: #4a5560;
+  color: #12181f;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-top: 4px;
@@ -1555,8 +1555,8 @@ button, input, select, textarea {
   padding: 8px 16px;
   background: none;
   border: none;
-  color: #ffffff;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+  color: #12181f;
+  text-shadow: none;
   font-size: 22px;
   font-weight: 700;
   text-decoration: none;
@@ -1582,7 +1582,7 @@ button, input, select, textarea {
   left: 16px;
   right: 16px;
   height: 1.5px;
-  background: #ffffff;
+  background: #12181f;
   border-radius: 2px;
   transform: scaleX(0);
   transform-origin: center;
@@ -1591,7 +1591,7 @@ button, input, select, textarea {
 }
 
 .immersive-cta-btn:hover {
-  color: #ffffff;
+  color: #12181f;
 }
 
 .immersive-cta-btn:hover::after {
@@ -1648,7 +1648,7 @@ button, input, select, textarea {
   }
 
   .immersive-logo-sub {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   /* Hard stop so the wordmark can never run under the icon group:
@@ -1703,14 +1703,14 @@ button, input, select, textarea {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.86);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+  color: #12181f;
+  text-shadow: none;
   text-decoration: none;
   transition: color 200ms ease;
 }
 
-.immersive-phone-link svg { opacity: 0.75; }
-.immersive-phone-link:hover { color: #ffffff; }
+.immersive-phone-link svg { opacity: 1; }
+.immersive-phone-link:hover { color: #12181f; }
 .immersive-phone-link:hover svg { opacity: 1; }
 
 /* Below ~400px the strapline cannot fit on one line beside the icons,
@@ -1726,7 +1726,7 @@ button, input, select, textarea {
   .immersive-logo-img { width: 40px; height: 40px; }
   .immersive-logo-name { font-size: 17px; }
   .immersive-logo-sub {
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.02em;
   }
   .immersive-logo { max-width: calc(100% - 188px); }
