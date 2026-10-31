@@ -691,6 +691,12 @@ window.prodSliderNav = function(dir) {
 // Pause only while the pointer is on the arrows themselves. The slider is
 // full-bleed, so pausing on any hover over it stalls indefinitely whenever
 // the cursor happens to rest on the image.
+function inView(el) {
+  if (!el) return false;
+  const r = el.getBoundingClientRect();
+  return r.top < window.innerHeight * 0.75 && r.bottom > window.innerHeight * 0.25;
+}
+
 function prodPaused() {
   const nav = document.querySelector('.prod-nav');
   return !!nav && nav.matches(':hover');
@@ -701,7 +707,7 @@ function prodSchedule(delay) {
   prodTimer = setTimeout(() => {
     const slider = document.getElementById('prod-slider');
     if (!slider) { prodSchedule(); return; }
-    if (prodPaused() || slider.dataset.animating === 'true') {
+    if (!inView(slider) || prodPaused() || slider.dataset.animating === 'true') {
       prodSchedule(800);   // re-check soon rather than skipping a whole turn
       return;
     }
@@ -934,7 +940,7 @@ function archSetCopy(slider, idx) {
 // Reveal the first slide on load so it animates in like the rest.
 function archInitFirstSlide() {
   const slider = document.getElementById('arch-slider');
-  if (!slider || slider.dataset.inited === 'true') return;
+  if (!slider || slider.dataset.inited === 'true' || !inView(slider)) return;
   slider.dataset.inited = 'true';
 
   const panels = Array.from(slider.querySelectorAll('.arch-slide.is-active .arch-panel'));
@@ -962,7 +968,7 @@ function archInitFirstSlide() {
       const nav = document.querySelector('.arch-nav');
       const paused = !!nav && nav.matches(':hover');
 
-      if (!slider || slider.dataset.inited !== 'true' ||
+      if (!slider || slider.dataset.inited !== 'true' || !inView(slider) ||
           slider.dataset.animating === 'true' || paused) {
         archSchedule(800);
         return;
