@@ -1525,7 +1525,7 @@ button, input, select, textarea {
   left: 16px;
   right: 16px;
   height: 1.5px;
-  background: #12181f;
+  background: #ffffff;
   border-radius: 2px;
   transform: scaleX(0);
   transform-origin: center;
@@ -1555,8 +1555,8 @@ button, input, select, textarea {
   padding: 8px 16px;
   background: none;
   border: none;
-  color: #12181f;
-  text-shadow: none;
+  color: #ffffff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
   font-size: 22px;
   font-weight: 700;
   text-decoration: none;
@@ -1591,7 +1591,7 @@ button, input, select, textarea {
 }
 
 .immersive-cta-btn:hover {
-  color: #12181f;
+  color: #ffffff;
 }
 
 .immersive-cta-btn:hover::after {
@@ -1616,7 +1616,7 @@ button, input, select, textarea {
   /* Shift the background photo right so the warehouse/building is visible
      behind the company name on narrow screens */
   .immersive-hero-img {
-    object-position: 80% center;
+    object-position: 88% center;
   }
 
   /* Nav links collapse into the hamburger */
@@ -1703,14 +1703,14 @@ button, input, select, textarea {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: #12181f;
-  text-shadow: none;
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
   text-decoration: none;
   transition: color 200ms ease;
 }
 
-.immersive-phone-link svg { opacity: 1; }
-.immersive-phone-link:hover { color: #12181f; }
+.immersive-phone-link svg { opacity: 0.75; }
+.immersive-phone-link:hover { color: #ffffff; }
 .immersive-phone-link:hover svg { opacity: 1; }
 
 /* Below ~400px the strapline cannot fit on one line beside the icons,
@@ -2719,6 +2719,7 @@ button, input, select, textarea {
     left: auto;
     transform: none;
     width: 100%;
+    padding-top: 24px;
   }
 
   .arch-slide-title { font-size: clamp(28px, 7vw, 41px); }
