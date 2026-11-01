@@ -1265,27 +1265,164 @@ function renderCartView() {
 }
 
 // ABOUT VIEW (/about)
-function renderAboutView() {
-  return `
-    <div class="container" style="padding: var(--space-16) 0;">
-      <div style="max-width: var(--container-narrow); margin: 0 auto;">
-        <h1 style="margin-bottom: var(--space-4);">About Pioneer Building Materials</h1>
-        <p style="font-size: var(--font-size-lg); margin-bottom: var(--space-8);">
-          Pioneer Building Materials Trading LLC is a leading distributor and stockist of architectural building materials, timber, steel, and safety equipment in Dubai, UAE.
-        </p>
+// Each section is a designed 1600x900 artboard: the background image carries the
+// artwork and the copy is live text positioned in artboard units (--x/--y/--w),
+// so it scales with the width. Elements slide in from the left when scrolled to.
+function abAt(x, y, w, cls, html, d = 0, extra = '') {
+  return `<div class="ab-abs ab-reveal ${cls}" style="--x:${x};--y:${y};${w ? `--w:${w};` : ''}--d:${d}ms;${extra}">${html}</div>`;
+}
 
-        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6); margin-bottom: var(--space-6);">
-          <h3>Official Registration Details</h3>
-          <ul style="list-style:none; margin-top:var(--space-4); display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); font-size:14px;">
-            <li><strong>Legal Name:</strong> Pioneer Building Materials Trading LLC</li>
-            <li><strong>Headquarters:</strong> Dubai, United Arab Emirates</li>
-            <li><strong>Phone Desks:</strong> <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.phones[0]}</a> / <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.phones[1]}</a></li>
-            <li><strong>Email:</strong> <a href="mailto:${COMPANY_INFO.emails[0]}" style="color:var(--color-primary-dark); font-weight:600;">${COMPANY_INFO.emails[0]}</a></li>
-          </ul>
+function renderAboutView() {
+  const SUPPLY = [
+    ['Sand, Aggregate & Cement', 'The foundation for every build.'],
+    ['Building Materials', 'Strong materials. Lasting results.'],
+    ['Safety Items', 'Work safer. Build smarter.'],
+    ['Fasteners', 'Small parts. Big strength.'],
+    ['Hand Tools', 'Reliable tools for every task.'],
+    ['Power Tools', 'More power. Greater productivity.'],
+    ['Timber & Plywood', 'Build with confidence.'],
+    ['Electrical, Plumbing & Sanitary', 'Better systems. Stronger spaces.'],
+    ['Water Tanks, Coolers & Filters', 'Clean water. A healthier tomorrow.'],
+    ['Concrete Products', 'Built for strength and durability.'],
+    ['Packing, Painting, Abrasives & Adhesives', 'The finishing touch for every project.']
+  ];
+  const SUPPLY_X = [205, 594, 980, 1355];
+  const SUPPLY_Y = [284, 472, 659];
+
+  const WHY = [
+    ['A Wide Product Range', 'Access thousands of products across multiple building materials categories in one place.'],
+    ['16+ Years of Experience', 'Industry experience that helps us understand customer needs and construction requirements.'],
+    ['Customer-Focused Service', 'We aim to build lasting relationships through clear communication and attentive service.'],
+    ['Supply Support', 'Helping customers source the materials they need to keep projects moving.'],
+    ['Quality-Conscious Sourcing', 'We recognise the importance of dependable materials and work to meet our customers’ requirements.'],
+    ['Built Around Your Needs', 'Serving a variety of customers, from individual buyers to contractors and businesses.']
+  ];
+  const WHY_X = [193, 580, 984];
+  const WHY_W = [205, 228, 215];
+  const WHY_Y = [292, 510];
+
+  const SERVE = [
+    ['Contractors & Construction Companies', 'Dependable materials to keep projects supplied and moving on schedule.'],
+    ['Builders & Developers', 'A broad product range to support projects from planning through completion.'],
+    ['Trade Professionals', 'Practical tools, fittings and supplies for the work you do every day.'],
+    ['Business & Individual Buyers', 'Reliable access to essential building materials for businesses and personal projects.']
+  ];
+
+  return `
+    <div class="about-page">
+
+      <!-- 1. ABOUT US (hero) -->
+      <section class="ab-section ab-hero" data-ab>
+        <div class="ab-stage" style="background-image: linear-gradient(90deg, rgba(7,26,46,0.9) 0%, rgba(7,26,46,0.7) 42%, rgba(7,26,46,0.05) 72%), url('/cover.webp');">
+          ${abAt(73, 52, 0, 'ab-eyebrow ab-light', '<span>About Us</span><i></i>', 0)}
+          ${abAt(73, 96, 800, 'ab-h1 ab-light', 'Building Strong Foundations.<br><em>Delivering with Confidence.</em>', 120)}
+          ${abAt(73, 232, 640, 'ab-body ab-light', '<p>At Pioneer Building Materials Trading LLC, we believe every successful project begins with the right materials and a reliable supply partner.</p><p>With over 16 years of experience in the building materials industry, we have built our business around quality products, dependable service and long-term customer relationships. From essential construction materials such as sand, cement and aggregates to tools, hardware, plumbing, electrical supplies and more, we bring a wide range of products together to support projects of every scale.</p><p>Our goal is simple: to make sourcing building materials easier, more efficient and more reliable for contractors, builders, businesses and individuals.</p>', 260)}
+          ${abAt(73, 482, 0, 'ab-dash', '', 420)}
+        </div>
+      </section>
+
+      <!-- 2. WHO WE ARE -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage" style="background-image:url('/about/who-we-are.webp')">
+          <div class="ab-watermark" style="--x:-8;--y:735">PIONEER</div>
+          ${abAt(78, 66, 0, 'ab-eyebrow', '<span>Who We Are</span><i></i>', 0)}
+          ${abAt(78, 96, 640, 'ab-h1', 'Supporting Every<br>Step of Your Build.', 120)}
+          ${abAt(78, 268, 640, 'ab-body', '<p>Pioneer Building Materials Trading LLC is a building materials supplier dedicated to supporting the people and businesses that build, develop and improve our surroundings.</p><p>Over the years, we’ve developed a broad understanding of the demands of the construction industry. We understand that every project comes with its own requirements, timelines and budgets, and that having access to the right materials at the right time can make a significant difference.</p><p>That is why we focus on offering a diverse selection of construction materials and related products through one reliable source. Whether a customer is sourcing bulk raw materials for a construction site or looking for specific tools, fittings or hardware, we aim to simplify the purchasing process and provide a dependable experience from enquiry to delivery.</p><p>We see ourselves as more than a supplier. We aim to be a long-term partner our customers can rely on as their projects and businesses grow.</p>', 260)}
+        </div>
+      </section>
+
+      <!-- 3. WHAT WE SUPPLY -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage" style="background-image:url('/about/what-we-supply.webp')">
+          <div class="ab-watermark" style="--x:10;--y:790">PIONEER</div>
+          ${abAt(73, 44, 0, 'ab-eyebrow ab-noline', '<span>What We Supply</span>', 0)}
+          ${abAt(73, 78, 700, 'ab-h1 ab-h1-sm ab-h1-xs', 'Everything You Need.<br>Under One Roof.', 120)}
+          ${abAt(73, 188, 760, 'ab-lead ab-lead-sm', 'From raw materials to essential tools and building supplies, we provide a wide range of products to support your construction and maintenance needs.', 240)}
+          ${abAt(1295, 84, 280, 'ab-tagline', 'Quality Products.<br>Reliable Supply.<br>For Every Project.', 300)}
+          ${SUPPLY.map((it, i) => abAt(
+            SUPPLY_X[i % 4], SUPPLY_Y[Math.floor(i / 4)], 195, 'ab-supply',
+            `<b>${String(i + 1).padStart(2, '0')}</b><h4>${it[0]}</h4><u></u><p>${it[1]}</p>`,
+            360 + i * 90)).join('')}
+        </div>
+      </section>
+
+      <!-- 4. WHY CHOOSE PIONEER -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage" style="background-image:url('/about/why-choose-us.webp')">
+          ${abAt(75, 46, 0, 'ab-eyebrow ab-noline', '<span>Why Choose Pioneer</span>', 0)}
+          ${abAt(75, 70, 900, 'ab-h1 ab-h1-sm', 'More Than a Supplier.<br>A Partner You Can Rely On.', 120)}
+          ${abAt(75, 190, 640, 'ab-lead', 'We’re committed to providing quality products, dependable service and long-term support to help you build with confidence.', 240)}
+          ${WHY.map((it, i) => abAt(
+            WHY_X[i % 3], WHY_Y[Math.floor(i / 3)], WHY_W[i % 3], 'ab-why',
+            `<h4>${it[0]}</h4><p>${it[1]}</p>`, 360 + i * 110, '--h:110;')).join('')}
+          ${abAt(117, 762, 0, 'ab-band-name', 'Pioneer Building Materials Trading LLC', 700)}
+          ${abAt(117, 790, 0, 'ab-band-sub', 'Quality Materials &nbsp;/&nbsp; Reliable Supply &nbsp;/&nbsp; Lasting Partnerships', 780)}
+          ${abAt(1290, 760, 0, 'ab-script', 'Building<br>Better Together.', 860)}
+        </div>
+      </section>
+
+      <!-- 5. OUR COMMITMENT -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage" style="background-image:url('/about/our-commitment.webp')">
+          ${abAt(76, 56, 0, 'ab-eyebrow ab-noline', '<span>Our Commitment</span>', 0)}
+          ${abAt(222, 122, 0, 'ab-titleblock', '<small>Our</small><strong>Commitment</strong>', 120)}
+          ${abAt(76, 252, 650, 'ab-body ab-body-md', '<p>At Pioneer, we understand that construction projects depend on more than just materials. They depend on planning, coordination, reliable communication and suppliers who understand the importance of getting things right.</p><p>We strive to make every interaction straightforward, from understanding product requirements and responding to enquiries to helping customers identify suitable products for their needs.</p><p>We value the trust our customers place in us and believe that lasting business relationships are built through consistency, transparency and a genuine commitment to service.</p><p>As the construction industry continues to evolve, we remain focused on expanding our range, improving the customer experience and finding better ways to serve the people who depend on us.</p>', 260)}
+        </div>
+      </section>
+
+      <!-- 6. OUR MISSION & VISION -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage" style="background-image:url('/about/mission-vision.webp')">
+          ${abAt(68, 44, 0, 'ab-eyebrow ab-noline', '<span>Our Mission &amp; Vision</span>', 0)}
+          ${abAt(195, 144, 0, 'ab-titleblock', '<small>Our</small><strong>Mission</strong>', 120)}
+          ${abAt(70, 312, 700, 'ab-body ab-body-md ab-body-sm', '<p>Our mission is to provide high-quality building materials and related products that meet the evolving needs of our customers. We are committed to delivering reliable service, maintaining consistent supply, and making the purchasing process simple and efficient. By focusing on quality, accessibility and customer satisfaction, we aim to support the people and businesses that build a better tomorrow.</p>', 260)}
+          ${abAt(195, 482, 0, 'ab-titleblock', '<small>Our</small><strong>Vision</strong>', 380)}
+          ${abAt(70, 650, 680, 'ab-body ab-body-md ab-body-sm', '<p>Our vision is to be a leading building materials supplier in the region, known for our reliability, product range and commitment to long-term partnerships. We aim to grow alongside our customers, expand our offerings, and contribute to stronger, safer and more sustainable communities through the materials and solutions we provide.</p>', 520)}
+        </div>
+      </section>
+
+      <!-- 7. WHO WE SERVE -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage" style="background-image:url('/about/who-we-serve.webp')">
+          ${abAt(0, 26, 1600, 'ab-eyebrow ab-center ab-noline', '<span>Pioneer Building Materials Trading LLC</span>', 0)}
+          ${abAt(0, 72, 1600, 'ab-h1 ab-center ab-serve-title', 'WHO WE <em>SERVE</em>', 120)}
+          ${SERVE.map((it, i) => abAt(
+            67 + (i % 2) * 762, 408 + Math.floor(i / 2) * 347, 690, 'ab-serve',
+            `<h4>${it[0]}</h4><p>${it[1]}</p>`, 300 + i * 140)).join('')}
+        </div>
+      </section>
+
+      <div class="ab-contact-strip ab-reveal" style="--d:0ms" data-ab-self>
+        <div>
+          <strong>${COMPANY_INFO.name}</strong>
+          <span>${COMPANY_INFO.address}</span>
+        </div>
+        <div class="ab-contact-links">
+          <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}">${COMPANY_INFO.phones[0]}</a>
+          <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}">${COMPANY_INFO.phones[1]}</a>
+          <a href="mailto:${COMPANY_INFO.emails[0]}">${COMPANY_INFO.emails[0]}</a>
         </div>
       </div>
     </div>
   `;
+}
+
+// Slide each section's copy in from the left once it is scrolled into view.
+function initAboutReveal() {
+  const targets = document.querySelectorAll('.about-page [data-ab], .about-page [data-ab-self]');
+  if (!targets.length) return;
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(t => t.classList.add('is-in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.3 });
+  targets.forEach(t => io.observe(t));
 }
 
 // CONTACT VIEW (/contact)
@@ -1557,6 +1694,8 @@ function renderApp() {
 
   // Initialize Swipers after DOM update
   initSwipers();
+
+  if (state.currentView === 'about') initAboutReveal();
 
   // Scroll-activated sticky nav: only on home view
   if (state.currentView === 'home') {
