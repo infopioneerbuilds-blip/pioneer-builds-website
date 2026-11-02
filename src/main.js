@@ -354,6 +354,12 @@ window.handleSendCartOrderEmail = async function(e) {
   }
 };
 
+window.clearCart = function() {
+  state.cart = [];
+  saveCart();
+  renderApp();
+};
+
 window.handleSendCartOrderWhatsApp = function(e) {
   if (e) e.preventDefault();
   const nameEl = document.getElementById('cart-client-name');
@@ -396,11 +402,54 @@ window.navigateTo = function(view, catSlug = null) {
     targetPath = `/${view}`;
   }
 
-  if (window.location.pathname !== targetPath) {
-    window.history.pushState({ view, catSlug }, '', targetPath);
+  if (window.location.pathname === targetPath) {
+    syncRouteFromPath();
+    return;
   }
-  syncRouteFromPath();
+
+  // White loader with the logo, held until the next page's images have loaded.
+  const started = Date.now();
+  showPageLoader().then(() => {
+    window.history.pushState({ view, catSlug }, '', targetPath);
+    syncRouteFromPath();
+    return waitForPageImages();
+  }).then(() => {
+    const wait = Math.max(0, 900 - (Date.now() - started));
+    setTimeout(hidePageLoader, wait);
+  });
 };
+
+function ensurePageLoader() {
+  let el = document.getElementById('page-loader');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'page-loader';
+    el.innerHTML = '<div class="pl-wrap"><div class="pl-ring"></div><div class="pl-ring2"></div><img class="pl-logo" src="/logo-removebg-preview.webp" alt="Pioneer"></div>';
+    document.body.appendChild(el);
+  }
+  return el;
+}
+
+function showPageLoader() {
+  const el = ensurePageLoader();
+  el.classList.add('show');
+  return new Promise(res => setTimeout(res, 260));
+}
+
+function hidePageLoader() {
+  const el = document.getElementById('page-loader');
+  if (el) el.classList.remove('show');
+  // Let anything waiting on the loader (e.g. the About page reveal) start now.
+  setTimeout(() => window.dispatchEvent(new Event('scroll')), 300);
+}
+
+// Resolve once the images near the top of the new page are ready (or after 2.5s).
+function waitForPageImages() {
+  const imgs = Array.from(document.querySelectorAll('#app img'))
+    .filter(i => i.getBoundingClientRect().top < window.innerHeight * 1.2 && !i.complete);
+  const loads = imgs.map(i => new Promise(res => { i.addEventListener('load', res, { once: true }); i.addEventListener('error', res, { once: true }); }));
+  return Promise.race([Promise.all(loads), new Promise(res => setTimeout(res, 2500))]);
+}
 
 function syncRouteFromPath() {
   const pathname = window.location.pathname.replace(/\/$/, '') || '/';
@@ -430,7 +479,7 @@ function syncRouteFromPath() {
     state.selectedCategory = null;
   }
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo(0, 0);
   renderApp();
 }
 
@@ -1180,7 +1229,7 @@ function renderCartView() {
         <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-4);">
             <h3 style="margin:0;">Cart Items (${state.cart.length})</h3>
-            ${!isCartEmpty ? `<button onclick="state.cart=[]; saveCart(); renderApp();" style="font-size:12px; color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600;">Clear Cart</button>` : ''}
+            ${!isCartEmpty ? `<button onclick="clearCart()" style="font-size:12px; color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600;">Clear Cart</button>` : ''}
           </div>
 
           ${isCartEmpty ? `
@@ -1249,13 +1298,13 @@ function renderCartView() {
               <textarea id="cart-notes" rows="3" placeholder="Enter UAE site address, delivery date, specs..." style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;"></textarea>
             </div>
 
-            <button type="submit" id="send-cart-order-btn" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3); font-weight:700;">
-              <span>Submit Cart Order</span>
-            </button>
-
-            <button type="button" onclick="handleSendCartOrderWhatsApp(event)" class="btn btn-whatsapp" style="width:100%; justify-content:center;">
+            <button type="button" onclick="handleSendCartOrderWhatsApp(event)" class="btn btn-whatsapp" style="width:100%; justify-content:center; margin-bottom: var(--space-3);">
               ${ICONS.whatsapp}
               <span>Send Cart via WhatsApp</span>
+            </button>
+
+            <button type="submit" id="send-cart-order-btn" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3); font-weight:700;">
+              <span>Submit Cart Order</span>
             </button>
           </form>
         </div>
@@ -1269,7 +1318,7 @@ function renderCartView() {
 // artwork and the copy is live text positioned in artboard units (--x/--y/--w),
 // so it scales with the width. Elements slide in from the left when scrolled to.
 function abAt(x, y, w, cls, html, d = 0, extra = '') {
-  return `<div class="ab-abs ab-reveal ${cls}" style="--x:${x};--y:${y};${w ? `--w:${w};` : ''}--d:${d}ms;${extra}">${html}</div>`;
+  return `<div class="ab-abs ${cls}" style="--x:${x};--y:${y};${w ? `--w:${w};` : ''}--d:${d}ms;${extra}">${html}</div>`;
 }
 
 function renderAboutView() {
@@ -1392,7 +1441,7 @@ function renderAboutView() {
         </div>
       </section>
 
-      <div class="ab-contact-strip ab-reveal" style="--d:0ms" data-ab-self>
+      <div class="ab-contact-strip" data-ab-self>
         <div>
           <strong>${COMPANY_INFO.name}</strong>
           <span>${COMPANY_INFO.address}</span>
@@ -1407,22 +1456,94 @@ function renderAboutView() {
   `;
 }
 
-// Slide each section's copy in from the left once it is scrolled into view.
-function initAboutReveal() {
-  const targets = document.querySelectorAll('.about-page [data-ab], .about-page [data-ab-self]');
-  if (!targets.length) return;
-  if (!('IntersectionObserver' in window)) {
-    targets.forEach(t => t.classList.add('is-in'));
-    return;
-  }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add('is-in');
-      io.unobserve(e.target);
+// About page: split every text block into its visual lines, then slide each
+// line in from the left, one after another, as it scrolls into view.
+const AB_TEXT = 'h1,.ab-h1,.ab-body p,.ab-lead,.ab-tagline,.ab-titleblock small,.ab-titleblock strong,' +
+  '.ab-supply b,.ab-supply h4,.ab-supply p,.ab-why h4,.ab-why p,.ab-serve h4,.ab-serve p,' +
+  '.ab-band-name,.ab-band-sub,.ab-script,.ab-contact-strip > div:first-child > strong,.ab-contact-strip > div:first-child > span';
+
+function abSplitBlock(el) {
+  if (el.dataset.abSrc === undefined) el.dataset.abSrc = el.innerHTML;
+  else el.innerHTML = el.dataset.abSrc;
+
+  const toks = [];
+  const walk = (node, em) => {
+    node.childNodes.forEach(n => {
+      if (n.nodeType === 3) {
+        n.textContent.split(/\s+/).filter(Boolean).forEach(w => toks.push({ w, em }));
+      } else if (n.nodeName === 'BR') {
+        toks.push({ br: true });
+      } else {
+        walk(n, em || n.nodeName === 'EM');
+      }
     });
-  }, { threshold: 0.3 });
-  targets.forEach(t => io.observe(t));
+  };
+  walk(el, false);
+
+  el.innerHTML = toks.map(t => t.br ? '<br>' :
+    `<span class="aw${t.em ? ' em' : ''}">${t.w}</span>`).join(' ');
+
+  const lines = [];
+  let lastTop = null;
+  el.querySelectorAll('.aw').forEach(sp => {
+    const top = sp.offsetTop;
+    if (lastTop === null || Math.abs(top - lastTop) > 4) { lines.push([]); lastTop = top; }
+    lines[lines.length - 1].push(sp);
+  });
+
+  el.innerHTML = lines.map(l =>
+    `<span class="ab-line"><span class="ab-line-text">${l.map(sp =>
+      sp.classList.contains('em') ? `<span class="em">${sp.textContent}</span>` : sp.textContent).join(' ')}</span></span>`
+  ).join('');
+}
+
+function initAboutReveal() {
+  const page = document.querySelector('.about-page');
+  if (!page) return;
+
+  const build = () => {
+    const seen = new Set(
+      Array.from(page.querySelectorAll('.ab-line.is-in')).map(l => l.closest('.ab-abs, .ab-contact-strip'))
+    );
+    page.querySelectorAll(AB_TEXT).forEach(abSplitBlock);
+
+    // Pieces with no text to split (eyebrows, dashes) slide as a single line.
+    page.querySelectorAll('.ab-abs').forEach(abs => {
+      if (!abs.querySelector('.ab-line') && !abs.classList.contains('ab-line')) abs.classList.add('ab-line');
+    });
+    // Anything already revealed before a re-split stays revealed.
+    page.querySelectorAll('.ab-abs, .ab-contact-strip').forEach(box => {
+      if (!seen.has(box)) return;
+      box.classList.contains('ab-line') && box.classList.add('is-in');
+      box.querySelectorAll('.ab-line').forEach(l => { l.style.transitionDelay = '0ms'; l.classList.add('is-in'); });
+    });
+    page.classList.add('ab-js');
+    check();
+  };
+
+  let ticking = false;
+  function check() {
+    ticking = false;
+    // Hold the reveal while the page-transition loader still covers the page.
+    const loader = document.getElementById('page-loader');
+    if (loader && loader.classList.contains('show')) return;
+    const limit = window.innerHeight * 0.9;
+    const pending = Array.from(page.querySelectorAll('.ab-line:not(.is-in)'))
+      .filter(l => l.getBoundingClientRect().top < limit);
+    pending.forEach((l, i) => {
+      l.style.setProperty('--ld', Math.min(i * 90, 900) + 'ms');
+      l.classList.add('is-in');
+    });
+  }
+  const queue = () => { if (!ticking) { ticking = true; requestAnimationFrame(check); } };
+
+  if (window._abHandlers) window._abHandlers.forEach(([ev, fn]) => window.removeEventListener(ev, fn));
+  const onResize = (() => { let t; return () => { clearTimeout(t); t = setTimeout(build, 200); }; })();
+  window._abHandlers = [['scroll', queue], ['wheel', queue], ['touchmove', queue], ['mousemove', queue], ['resize', onResize]];
+  window._abHandlers.forEach(([ev, fn]) => window.addEventListener(ev, fn, { passive: true }));
+
+  const ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  ready.then(() => { if (document.querySelector('.about-page') === page) build(); });
 }
 
 // CONTACT VIEW (/contact)
