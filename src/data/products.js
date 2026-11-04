@@ -8,7 +8,7 @@ export const COMPANY_INFO = {
   whatsapp: "971585466599",
   emails: ["info.pioneerbuilds@gmail.com"],
   website: "www.pioneerbuildingmaterial.com",
-  workingHours: "Mon - Sat: 7:30 AM - 7:00 PM | Sunday: Closed",
+  workingHours: "Mon - Sat: 9:30 AM - 7:30 PM | Sunday: Closed",
   quotationRef: "QUO-PBM-2026-001"
 };
 

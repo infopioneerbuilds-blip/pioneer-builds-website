@@ -1372,98 +1372,76 @@ function renderCategoriesView() {
 
 // SHOPPING CART VIEW (/cart)
 function renderCartView() {
-  const isCartEmpty = state.cart.length === 0;
+  const count = state.cart.length;
+  const field = (label, id, type, ph, required) => `
+    <div class="ct-field">
+      <label for="${id}">${label}${required ? ' <i>*</i>' : ''}</label>
+      <input type="${type}" id="${id}" ${required ? 'required' : ''} placeholder="${ph}">
+    </div>`;
 
   return `
-    <div class="container" style="padding: var(--space-16) 0;">
-      <div style="margin-bottom: var(--space-8);">
+    <div class="cart-page">
+      <header class="ct-head">
+        <span class="ct-eyebrow">Order Inquiry</span>
         <h1>Shopping Cart</h1>
-        <p>Review items in your cart and submit your order inquiry directly to <strong>info.pioneerbuilds@gmail.com</strong>.</p>
-      </div>
+        <p>Review your items, add sizes or quantities, and send your inquiry to our sales team. We will reply with pricing and delivery details.</p>
+      </header>
 
       <div class="rfq-layout-grid">
-        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-4);">
-            <h3 style="margin:0;">Cart Items (${state.cart.length})</h3>
-            ${!isCartEmpty ? `<button onclick="clearCart()" style="font-size:12px; color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600;">Clear Cart</button>` : ''}
+        <section class="ct-card">
+          <div class="ct-card-head">
+            <h2>Cart Items <span class="ct-count">${count}</span></h2>
+            ${count ? `<button type="button" class="ct-clear" onclick="clearCart()">Clear all</button>` : ''}
           </div>
 
-          ${isCartEmpty ? `
-            <div style="padding: var(--space-12) 0; text-align: center;">
-              <p style="margin-bottom: var(--space-4);">Your cart is currently empty.</p>
-              <button onclick="navigateTo('categories')" class="btn btn-primary">Browse Categories</button>
+          ${count === 0 ? `
+            <div class="ct-empty">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l3 12h11l2-8H6"/></svg>
+              <h3>Your cart is empty</h3>
+              <p>Browse our product categories and add the materials you need.</p>
+              <button type="button" onclick="navigateTo('categories')" class="ct-primary ct-inline">Browse Products</button>
             </div>
           ` : `
-            <div class="rfq-table-wrapper">
-              <table style="width:100%; border-collapse:collapse; margin-top: var(--space-4);">
-                <thead>
-                  <tr style="border-bottom:1px solid var(--color-border); text-align:left;">
-                    <th style="padding:10px 8px; width:35%;">Item</th>
-                    <th style="padding:10px 8px;">Note / Requirements</th>
-                    <th style="padding:10px 8px; width:70px; text-align:right;">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${state.cart.map(item => `
-                    <tr style="border-bottom:1px solid var(--color-border-subtle);">
-                      <td style="padding:14px 8px; vertical-align:middle;">
-                        <strong style="color:var(--color-text-main); font-size:14px; display:block;">${item.name}</strong>
-                        ${item.spec ? `<div style="font-size:12px; color:var(--color-text-muted); margin-top:2px; white-space:pre-line;">${item.spec}</div>` : ''}
-                      </td>
-                      <td style="padding:14px 8px; vertical-align:middle;">
-                        <input 
-                          type="text" 
-                          value="${item.note || ''}" 
-                          placeholder="Add size, quantity, specs..." 
-                          oninput="updateCartItemNote('${item.id}', this.value)" 
-                          style="width:100%; padding:8px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:13px; background:var(--color-bg); color:var(--color-text-main); transition:border-color 150ms ease, background 150ms ease;"
-                          onfocus="this.style.borderColor='var(--color-primary-dark)'; this.style.background='#ffffff';"
-                          onblur="this.style.borderColor='var(--color-border)'; if(!this.value) this.style.background='var(--color-bg)';"
-                        >
-                      </td>
-                      <td style="padding:14px 8px; text-align:right; vertical-align:middle;">
-                        <button onclick="removeFromCart('${item.id}')" style="color:#dc2626; border:none; background:none; cursor:pointer; font-weight:600; font-size:13px; padding:4px 0; transition:opacity 150ms ease;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">Remove</button>
-                      </td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
+            <ul class="ct-items">
+              ${state.cart.map(item => `
+                <li class="ct-item">
+                  <div class="ct-item-top">
+                    <div>
+                      <strong>${item.name}</strong>
+                      ${item.spec ? `<span class="ct-spec">${item.spec.replace(/\n/g, ', ')}</span>` : ''}
+                    </div>
+                    <button type="button" class="ct-remove" onclick="removeFromCart('${item.id}')" aria-label="Remove ${item.name}">Remove</button>
+                  </div>
+                  <input type="text" class="ct-note" value="${item.note || ''}" placeholder="Add size, quantity or specifications"
+                    oninput="updateCartItemNote('${item.id}', this.value)">
+                </li>
+              `).join('')}
+            </ul>
           `}
-        </div>
+        </section>
 
-        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6); height: fit-content;">
-          <h3>Submit Cart Order</h3>
-          <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-bottom: var(--space-4);">
-            Direct Sales Desk Email: <strong style="color: var(--color-text-main);">${TARGET_EMAIL}</strong>
-          </p>
+        <section class="ct-card ct-submit-card">
+          <h2>Send Your Order</h2>
+          <p class="ct-sub">Your cart is sent to <strong>${TARGET_EMAIL}</strong></p>
 
           <form onsubmit="handleSendCartOrderEmail(event)">
-            <div style="margin-bottom: var(--space-3);">
-              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Your Name / Company:</label>
-              <input type="text" id="cart-client-name" required placeholder="e.g. Al Habtoor Contracting" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
+            ${field('Name / Company', 'cart-client-name', 'text', 'e.g. Al Habtoor Contracting', true)}
+            ${field('Mobile / WhatsApp', 'cart-client-phone', 'tel', '+971 50 123 4567', true)}
+            <div class="ct-field">
+              <label for="cart-notes">Delivery Location / Project Notes</label>
+              <textarea id="cart-notes" rows="3" placeholder="Site address, delivery date, specifications"></textarea>
             </div>
 
-            <div style="margin-bottom: var(--space-3);">
-              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Mobile / WhatsApp Number:</label>
-              <input type="tel" id="cart-client-phone" required placeholder="+971 50 123 4567" style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;">
-            </div>
-
-            <div style="margin-bottom: var(--space-4);">
-              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Delivery Location / Project Notes:</label>
-              <textarea id="cart-notes" rows="3" placeholder="Enter UAE site address, delivery date, specs..." style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px; font-size:13px;"></textarea>
-            </div>
-
-            <button type="button" onclick="handleSendCartOrderWhatsApp(event)" class="btn btn-whatsapp" style="width:100%; justify-content:center; margin-bottom: var(--space-3);">
+            <button type="button" onclick="handleSendCartOrderWhatsApp(event)" class="ct-wa">
               ${ICONS.whatsapp}
-              <span>Send Cart via WhatsApp</span>
+              <span>Send via WhatsApp</span>
             </button>
-
-            <button type="submit" id="send-cart-order-btn" class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom: var(--space-3); font-weight:700;">
+            <div class="ct-or"><span>or</span></div>
+            <button type="submit" id="send-cart-order-btn" class="ct-primary">
               <span>Submit Cart Order</span>
             </button>
           </form>
-        </div>
+        </section>
       </div>
     </div>
   `;
@@ -1477,41 +1455,42 @@ function abAt(x, y, w, cls, html, d = 0, extra = '') {
   return `<div class="ab-abs ${cls}" style="--x:${x};--y:${y};${w ? `--w:${w};` : ''}--d:${d}ms;${extra}">${html}</div>`;
 }
 
-function renderAboutView() {
-  const SUPPLY = [
-    ['Sand, Aggregate & Cement', 'The foundation for every build.'],
-    ['Building Materials', 'Strong materials. Lasting results.'],
-    ['Safety Items', 'Work safer. Build smarter.'],
-    ['Fasteners', 'Small parts. Big strength.'],
-    ['Hand Tools', 'Reliable tools for every task.'],
-    ['Power Tools', 'More power. Greater productivity.'],
-    ['Timber & Plywood', 'Build with confidence.'],
-    ['Electrical, Plumbing & Sanitary', 'Better systems. Stronger spaces.'],
-    ['Water Tanks, Coolers & Filters', 'Clean water. A healthier tomorrow.'],
-    ['Concrete Products', 'Built for strength and durability.'],
-    ['Packing, Painting, Abrasives & Adhesives', 'The finishing touch for every project.']
-  ];
+const SUPPLY = [
+  ['Sand, Aggregate & Cement', 'The foundation for every build.'],
+  ['Building Materials', 'Strong materials. Lasting results.'],
+  ['Safety Items', 'Work safer. Build smarter.'],
+  ['Fasteners', 'Small parts. Big strength.'],
+  ['Hand Tools', 'Reliable tools for every task.'],
+  ['Power Tools', 'More power. Greater productivity.'],
+  ['Timber & Plywood', 'Build with confidence.'],
+  ['Electrical, Plumbing & Sanitary', 'Better systems. Stronger spaces.'],
+  ['Water Tanks, Coolers & Filters', 'Clean water. A healthier tomorrow.'],
+  ['Concrete Products', 'Built for strength and durability.'],
+  ['Packing, Painting, Abrasives & Adhesives', 'The finishing touch for every project.']
+];
+const WHY = [
+  ['A Wide Product Range', 'Access thousands of products across multiple building materials categories in one place.'],
+  ['16+ Years of Experience', 'Industry experience that helps us understand customer needs and construction requirements.'],
+  ['Customer-Focused Service', 'We aim to build lasting relationships through clear communication and attentive service.'],
+  ['Supply Support', 'Helping customers source the materials they need to keep projects moving.'],
+  ['Quality-Conscious Sourcing', 'We recognise the importance of dependable materials and work to meet our customers’ requirements.'],
+  ['Built Around Your Needs', 'Serving a variety of customers, from individual buyers to contractors and businesses.']
+];
+const SERVE = [
+  ['Contractors & Construction Companies', 'Dependable materials to keep projects supplied and moving on schedule.'],
+  ['Builders & Developers', 'A broad product range to support projects from planning through completion.'],
+  ['Trade Professionals', 'Practical tools, fittings and supplies for the work you do every day.'],
+  ['Business & Individual Buyers', 'Reliable access to essential building materials for businesses and personal projects.']
+];
+
+
+function renderAboutDesktop() {
   const SUPPLY_X = [205, 594, 980, 1355];
   const SUPPLY_Y = [284, 472, 659];
 
-  const WHY = [
-    ['A Wide Product Range', 'Access thousands of products across multiple building materials categories in one place.'],
-    ['16+ Years of Experience', 'Industry experience that helps us understand customer needs and construction requirements.'],
-    ['Customer-Focused Service', 'We aim to build lasting relationships through clear communication and attentive service.'],
-    ['Supply Support', 'Helping customers source the materials they need to keep projects moving.'],
-    ['Quality-Conscious Sourcing', 'We recognise the importance of dependable materials and work to meet our customers’ requirements.'],
-    ['Built Around Your Needs', 'Serving a variety of customers, from individual buyers to contractors and businesses.']
-  ];
   const WHY_X = [193, 580, 984];
   const WHY_W = [205, 228, 215];
   const WHY_Y = [292, 510];
-
-  const SERVE = [
-    ['Contractors & Construction Companies', 'Dependable materials to keep projects supplied and moving on schedule.'],
-    ['Builders & Developers', 'A broad product range to support projects from planning through completion.'],
-    ['Trade Professionals', 'Practical tools, fittings and supplies for the work you do every day.'],
-    ['Business & Individual Buyers', 'Reliable access to essential building materials for businesses and personal projects.']
-  ];
 
   return `
     <div class="about-page">
@@ -1612,9 +1591,145 @@ function renderAboutView() {
   `;
 }
 
+// ---- Mobile About page -----------------------------------------------------
+// Same idea as desktop, but on 941x1672 portrait artboards (units are px of that image).
+const ABOUT_MOBILE_QUERY = '(max-width: 860px)';
+const isAboutMobile = () => window.matchMedia(ABOUT_MOBILE_QUERY).matches;
+
+// Copy placed on a portrait artboard. fs = font size in artboard units, min = smallest px on screen.
+function mAt(x, y, w, cls, html, fs, d = 0, extra = '', min = 5) {
+  const size = fs ? `font-size:max(${min}px,calc(${fs}*var(--u)));` : '';
+  return abAt(x, y, w, cls, html, d, size + extra);
+}
+
+function renderAboutMobile() {
+  const SUPPLY_M_X = [229, 667];
+  const SUPPLY_M_Y = [466, 658, 841, 1026, 1206, 1381];
+  const WHY_M_X = [76, 526];
+  const WHY_M_W = [372, 385];
+  const WHY_M_Y = [806, 1056, 1310];
+  const SERVE_M_Y = [452, 785, 1117, 1435];
+
+  return `
+    <div class="about-page about-mobile">
+
+      <!-- 1. ABOUT US (hero) -->
+      <section class="ab-section ab-hero ab-hero-m" data-ab>
+        <div class="ab-stage ab-m-hero" style="background-image: linear-gradient(180deg, rgba(7,26,46,0.92) 0%, rgba(7,26,46,0.78) 50%, rgba(7,26,46,0.35) 100%), url('/cover.webp');">
+          <div class="ab-eyebrow ab-light ab-solo"><span>About Us</span><i></i></div>
+          <h2 class="ab-h1 ab-light">Building Strong Foundations.<br><em>Delivering with Confidence.</em></h2>
+          <div class="ab-body ab-light">
+            <p>At Pioneer Building Materials Trading LLC, we believe every successful project begins with the right materials and a reliable supply partner.</p>
+            <p>With over 16 years of experience in the building materials industry, we have built our business around quality products, dependable service and long-term customer relationships. From essential construction materials such as sand, cement and aggregates to tools, hardware, plumbing, electrical supplies and more, we bring a wide range of products together to support projects of every scale.</p>
+            <p>Our goal is simple: to make sourcing building materials easier, more efficient and more reliable for contractors, builders, businesses and individuals.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. WHO WE ARE -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage ab-m" style="background-image:url('/about/m-who-we-are.webp')">
+          <div class="ab-watermark" style="--x:12;--y:1440;font-size:calc(205*var(--u))">PIONEER</div>
+          ${mAt(50, 116, 0, 'ab-eyebrow', '<span>Who We Are</span><i></i>', 26, 0)}
+          ${mAt(50, 168, 640, 'ab-h1', 'Supporting<br>Every Step of<br>Your Build.', 67, 120, 'line-height:1.17;', 5)}
+          ${mAt(51, 432, 400, 'ab-body', '<p>Pioneer Building Materials Trading LLC is a building materials supplier dedicated to supporting the people and businesses that build, develop and improve our surroundings.</p><p>Over the years, we’ve developed a broad understanding of the demands of the construction industry. We understand that every project comes with its own requirements, timelines and budgets, and that having access to the right materials at the right time can make a significant difference.</p><p>That is why we focus on offering a diverse selection of construction materials and related products through one reliable source. Whether a customer is sourcing bulk raw materials for a construction site or looking for specific tools, fittings or hardware, we aim to simplify the purchasing process and provide dependable experience from enquiry to delivery.</p><p>We see ourselves as more than a supplier. We aim to be a long-term partner our customers can rely on as their projects and businesses grow.</p>', 21.4, 260, 'line-height:1.37;')}
+        </div>
+      </section>
+
+      <!-- 3. WHAT WE SUPPLY -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage ab-m" style="background-image:url('/about/m-what-we-supply.webp')">
+          ${mAt(46, 90, 0, 'ab-eyebrow ab-noline', '<span>What We Supply</span>', 21, 0)}
+          ${mAt(46, 138, 700, 'ab-h1', 'Everything You Need.<br>Under One Roof.', 52.7, 120, 'line-height:1.2;font-weight:700;', 5)}
+          ${mAt(46, 280, 480, 'ab-lead', 'From raw materials to essential tools and building supplies, we provide a wide range of products to support your construction and maintenance needs.', 21, 240, 'line-height:1.36;')}
+          ${mAt(46, 411, 0, 'ab-dash', '', 0, 320)}
+          ${SUPPLY.map((it, i) => {
+            const col = i === 10 ? 0 : i % 2, row = Math.floor(i / 2);
+            const x = i === 10 ? 252 : SUPPLY_M_X[col];
+            const w = i === 10 ? 600 : (col === 0 ? 232 : 235);
+            return mAt(x, SUPPLY_M_Y[row], w, 'ab-supply ab-supply-m', `<b>${String(i + 1).padStart(2, '0')}</b><h4>${it[0]}</h4><u></u><p>${it[1]}</p>`, 0, 360 + i * 80);
+          }).join('')}
+          <div class="ab-vbar" style="--x:37;--y:1550"></div>
+          ${mAt(58, 1561, 0, 'ab-tagline ab-tag-m', 'Quality Products. Reliable Supply. For Every Project.', 16, 1100, '', 5)}
+          ${mAt(700, 1522, 0, 'ab-script', 'Building<br>Better Together.', 32, 1200, '', 5)}
+        </div>
+      </section>
+
+      <!-- 4. WHY CHOOSE PIONEER -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage ab-m" style="background-image:url('/about/m-why-choose-us.webp')">
+          ${mAt(54, 102, 0, 'ab-eyebrow ab-noline', '<span>Why Choose Pioneer</span>', 18.7, 0)}
+          ${mAt(54, 150, 0, 'ab-dash', '', 0, 60)}
+          ${mAt(52, 178, 560, 'ab-h1', 'More Than<br>a Supplier.<br>A Partner<br>You Can Rely On.', 58.9, 120, 'line-height:1.19;font-weight:600;', 5)}
+          ${mAt(54, 488, 560, 'ab-lead', 'We’re committed to providing<br>quality products, dependable service<br>and long-term support to help you<br>build with confidence.', 23.2, 240, 'line-height:1.47;')}
+          ${mAt(54, 641, 0, 'ab-dash', '', 0, 300)}
+          ${WHY.map((it, i) => mAt(WHY_M_X[i % 2], WHY_M_Y[Math.floor(i / 2)], WHY_M_W[i % 2], 'ab-why ab-why-m',
+            `<h4 style="font-size:max(5px,calc(24.9*var(--u)))">${it[0]}</h4><p style="font-size:max(5px,calc(19.3*var(--u)));line-height:1.42">${it[1]}</p>`, 0, 380 + i * 110)).join('')}
+          ${mAt(64, 1508, 0, 'ab-band-name', 'Pioneer Building Materials Trading LLC', 17.5, 800, '', 5)}
+          ${mAt(64, 1540, 0, 'ab-band-sub', 'Quality Materials &nbsp;/&nbsp; Reliable Supply &nbsp;/&nbsp; Lasting Partnerships', 13.5, 880, '', 5)}
+          ${mAt(712, 1480, 0, 'ab-script', 'Building<br>Better Together.', 32, 960, '', 5)}
+        </div>
+      </section>
+
+      <!-- 5. OUR COMMITMENT -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage ab-m" style="background-image:url('/about/m-our-commitment.webp')">
+          ${mAt(64, 92, 0, 'ab-eyebrow ab-noline', '<span>Our Commitment</span>', 22, 0)}
+          ${mAt(235, 148, 0, 'ab-titleblock ab-title-m', '<small style="font-size:max(5px,calc(31*var(--u)))">Our</small><strong style="font-size:calc(73.2*var(--u))">Commitment</strong>', 0, 120)}
+          ${mAt(64, 290, 800, 'ab-body ab-body-md ab-pm32', '<p>At Pioneer, we understand that construction projects depend on more than just materials. They depend on planning, coordination, reliable communication and suppliers who understand the importance of getting things right.</p><p>We strive to make every interaction straightforward, from understanding product requirements and responding to enquiries to helping customers identify suitable products for their needs.</p><p>We value the trust our customers place in us and believe that lasting business relationships are built through consistency, transparency and a genuine commitment to service.</p><p>As the construction industry continues to evolve, we remain focused on expanding our range, improving the customer experience and finding better ways to serve the people who depend on us.</p>', 22.8, 260, 'line-height:1.38;')}
+          ${mAt(64, 826, 0, 'ab-dash', '', 0, 700)}
+        </div>
+      </section>
+
+      <!-- 6. OUR MISSION & VISION -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage ab-m" style="background-image:url('/about/m-mission-vision.webp')">
+          ${mAt(132, 62, 0, 'ab-eyebrow ab-noline', '<span>Our Mission &amp; Vision</span>', 17.5, 0)}
+          ${mAt(266, 150, 0, 'ab-titleblock ab-title-m', '<small style="font-size:max(5px,calc(26*var(--u)))">Our</small><strong style="font-size:calc(69*var(--u))">Mission</strong>', 0, 120)}
+          ${mAt(136, 268, 745, 'ab-body ab-body-md ab-pm32', '<p>Our mission is to provide high-quality building materials and related products that meet the evolving needs of our customers. We are committed to delivering reliable service, maintaining consistent supply, and making the purchasing process simple and efficient. By focusing on quality, accessibility and customer satisfaction, we aim to support the people and businesses that build a better tomorrow.</p>', 20.7, 260, 'line-height:1.47;')}
+          ${mAt(278, 540, 0, 'ab-titleblock ab-title-m', '<small style="font-size:max(5px,calc(26*var(--u)))">Our</small><strong style="font-size:calc(69*var(--u))">Vision</strong>', 0, 380)}
+          ${mAt(136, 650, 690, 'ab-body ab-body-md ab-pm32', '<p>Our vision is to be a leading building materials supplier in the region, known for our reliability, product range and commitment to long-term partnerships. We aim to grow alongside our customers, expand our offerings, and contribute to stronger, safer and more sustainable communities through the materials and solutions we provide.</p>', 20.7, 520, 'line-height:1.47;')}
+        </div>
+      </section>
+
+      <!-- 7. WHO WE SERVE -->
+      <section class="ab-section" data-ab>
+        <div class="ab-stage ab-m" style="background-image:url('/about/m-who-we-serve.webp')">
+          ${mAt(0, 56, 941, 'ab-eyebrow ab-center ab-noline', '<span>Pioneer Building Materials Trading LLC</span>', 19, 0)}
+          ${mAt(0, 112, 941, 'ab-h1 ab-center ab-serve-title', 'WHO WE <em>SERVE</em>', 74.2, 120, 'font-weight:800;', 5)}
+          ${SERVE.map((it, i) => mAt(66, SERVE_M_Y[i], 810, 'ab-serve ab-serve-m',
+            `<h4 style="font-size:max(5px,calc(22.5*var(--u)))">${it[0]}</h4><u></u><p style="font-size:max(5px,calc(16.8*var(--u)))">${it[1]}</p>`, 0, 300 + i * 140)).join('')}
+        </div>
+      </section>
+
+      <div class="ab-contact-strip" data-ab-self>
+        <div>
+          <strong>${COMPANY_INFO.name}</strong>
+          <span>${COMPANY_INFO.address}</span>
+        </div>
+        <div class="ab-contact-links">
+          <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}">${COMPANY_INFO.phones[0]}</a>
+          <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}">${COMPANY_INFO.phones[1]}</a>
+          <a href="mailto:${COMPANY_INFO.emails[0]}">${COMPANY_INFO.emails[0]}</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAboutView() {
+  return isAboutMobile() ? renderAboutMobile() : renderAboutDesktop();
+}
+
+// Switch between the desktop and phone layouts when the window crosses the breakpoint.
+window.matchMedia(ABOUT_MOBILE_QUERY).addEventListener('change', () => {
+  if (state.currentView === 'about') renderApp();
+});
+
+
 // About page: split every text block into its visual lines, then slide each
 // line in from the left, one after another, as it scrolls into view.
-const AB_TEXT = 'h1,.ab-h1,.ab-body p,.ab-lead,.ab-tagline,.ab-titleblock small,.ab-titleblock strong,' +
+const AB_TEXT = 'h1,h2.ab-h1,.ab-h1,.ab-body p,.ab-lead,.ab-tagline,.ab-titleblock small,.ab-titleblock strong,' +
   '.ab-supply b,.ab-supply h4,.ab-supply p,.ab-why h4,.ab-why p,.ab-serve h4,.ab-serve p,' +
   '.ab-band-name,.ab-band-sub,.ab-script,.ab-contact-strip > div:first-child > strong,.ab-contact-strip > div:first-child > span';
 
@@ -1664,7 +1779,7 @@ function initAboutReveal() {
     page.querySelectorAll(AB_TEXT).forEach(abSplitBlock);
 
     // Pieces with no text to split (eyebrows, dashes) slide as a single line.
-    page.querySelectorAll('.ab-abs').forEach(abs => {
+    page.querySelectorAll('.ab-abs, .ab-solo').forEach(abs => {
       if (!abs.querySelector('.ab-line') && !abs.classList.contains('ab-line')) abs.classList.add('ab-line');
     });
     // Anything already revealed before a re-split stays revealed.
@@ -1786,14 +1901,16 @@ function renderContactView() {
       </section>
 
       <section class="cx-faq">
-        <span class="cx-eyebrow">FAQs</span>
-        <h2>Frequently Asked Questions</h2>
+        <div class="faq-intro">
+          <h2>Frequently Asked <span>Questions</span></h2>
+          <p>Find answers to common questions about our products, enquiries, availability, and services. This section helps you quickly get the information you need before contacting our team. You can also learn more about product specifications, ordering process, and delivery details. If you still need assistance, our team is always ready to help with your requirements.</p>
+        </div>
         <div class="faq-list">
           ${FAQS.map((f, i) => `
             <div class="faq-item" data-faq="${i}">
               <button type="button" class="faq-q" aria-expanded="false" onclick="toggleFaq(${i})">
                 <span>${f[0]}</span>
-                <svg class="faq-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <span class="faq-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
               </button>
               <div class="faq-a"><div><p>${f[1]}</p></div></div>
             </div>
@@ -1968,29 +2085,28 @@ function renderMobileSidebar() {
         </div>
 
         <nav class="mobile-sidebar-nav">
-          <a href="#" onclick="navigateTo('home'); return false;" class="mobile-nav-link ${state.currentView === 'home' ? 'active' : ''}">
-            <span>Home</span>
-          </a>
-          <a href="#" onclick="navigateTo('categories'); return false;" class="mobile-nav-link ${state.currentView === 'categories' || state.currentView === 'category' ? 'active' : ''}">
-            <span>Material Categories</span>
-          </a>
-          <a href="#" onclick="navigateTo('cart'); return false;" class="mobile-nav-link ${state.currentView === 'cart' ? 'active' : ''}">
-            <span>Shopping Cart</span>
-          </a>
-          <a href="#" onclick="navigateTo('about'); return false;" class="mobile-nav-link ${state.currentView === 'about' ? 'active' : ''}">
-            <span>About Pioneer BMT</span>
-          </a>
-          <a href="#" onclick="navigateTo('contact'); return false;" class="mobile-nav-link ${state.currentView === 'contact' ? 'active' : ''}">
-            <span>Contact & Location</span>
-          </a>
+          ${[
+            ['home', 'Home', state.currentView === 'home', '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>'],
+            ['categories', 'Products', state.currentView === 'categories' || state.currentView === 'category', '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>'],
+            ['about', 'About Us', state.currentView === 'about', '<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="8" x2="12" y2="8.01"/>'],
+            ['contact', 'Contact Us', state.currentView === 'contact', '<path d="M4 4h16v12H8l-4 4z"/>'],
+            ['cart', 'Cart', state.currentView === 'cart', '<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l3 12h11l2-8H6"/>']
+          ].map(([view, label, on, icon]) => `
+            <a href="#" onclick="navigateTo('${view}'); return false;" class="mobile-nav-link ${on ? 'active' : ''}">
+              <svg class="mnl-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icon}</svg>
+              <span>${label}</span>
+              ${view === 'cart' && state.cart.length ? `<em class="mnl-count">${state.cart.length}</em>` : ''}
+              <svg class="mnl-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+            </a>`).join('')}
         </nav>
 
         <div class="mobile-sidebar-footer">
-          <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="btn btn-primary" style="width: 100%; justify-content: center;">
-            ${ICONS.phone} Call ${COMPANY_INFO.phones[0]}
+          <span class="msf-label">Talk to our sales team</span>
+          <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" class="msf-btn msf-call">
+            ${ICONS.phone} <span>${COMPANY_INFO.phones[0]}</span>
           </a>
-          <a href="https://wa.me/${COMPANY_INFO.whatsapp}" target="_blank" class="btn btn-whatsapp" style="width: 100%; justify-content: center;">
-            ${ICONS.whatsapp} WhatsApp Sales Desk
+          <a href="https://wa.me/${COMPANY_INFO.whatsapp}" target="_blank" rel="noopener" class="msf-btn msf-wa">
+            ${ICONS.whatsapp} <span>WhatsApp Sales Desk</span>
           </a>
         </div>
       </aside>
