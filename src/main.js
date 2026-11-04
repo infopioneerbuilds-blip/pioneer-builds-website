@@ -1,6 +1,8 @@
 import { COMPANY_INFO, CATEGORIES, PRODUCTS } from './data/products.js';
 
 // Target email from environment variable (VITE_TARGET_EMAIL)
+// Web3Forms public access key (safe to ship in client code); mail goes to the address registered with it.
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || 'a289feef-6c08-4bd5-927b-f353cf445e39';
 const TARGET_EMAIL = import.meta.env.VITE_TARGET_EMAIL || 'info.pioneerbuilds@gmail.com';
 
 // Local Brand Images from /public/BRANDS WE OFFER
@@ -311,46 +313,200 @@ window.handleSendCartOrderEmail = async function(e) {
   }
 
   const payload = {
-    "_subject": `Pioneer BMT Cart Order - ${name}`,
-    "_template": "table",
-    "_captcha": "false",
-    "Client / Contractor Name": name,
-    "Contact Phone / WhatsApp": phone,
-    "Delivery Location & Site Notes": notes || "No additional site notes specified",
-    "Cart Material Items": itemsSummary
+    kind: 'order',
+    subject: `[CART ORDER] Pioneer BMT - ${name}`,
+    fields: [
+      ['Client / Company', name],
+      ['Phone / WhatsApp', phone],
+      ['Delivery Location & Site Notes', notes || 'No additional site notes specified']
+    ],
+    items: state.cart.map(i => ({ name: i.name, spec: (i.spec || '').replace(/\n/g, ', '), note: i.note || '' })),
+    plain: itemsSummary
   };
 
+  const sent = await sendNotification(payload);
+  if (sent) {
+    showToast(`Order sent to ${TARGET_EMAIL}!`);
+    state.cart = [];
+    saveCart();
+    renderApp();
+    return;
+  }
+
+  // The service did not confirm delivery: open the visitor's mail app instead,
+  // and say so, rather than reporting an order that was never sent.
+  window.open(generateEmailCartUrl(name, phone, notes), '_self');
+  showToast('Could not send automatically. Your email app has opened with the order ready to send.');
+  if (btnEl) {
+    btnEl.disabled = false;
+    btnEl.innerHTML = `<span>Submit Cart Order</span>`;
+  }
+};
+
+// ---- Email notifications -------------------------------------------------
+// Preferred: EmailJS, which sends a fully formatted HTML email (logo, header,
+// footer, order/enquiry label). Fallback: Web3Forms plain-text email.
+const EMAILJS = {
+  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
+  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '',
+  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || ''
+};
+
+const escHtml = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function buildEmailHtml({ kind, fields, items }) {
+  const isOrder = kind === 'order';
+  const siteUrl = 'https://www.pioneerbuildingmaterial.com';
+  const badge = isOrder ? 'NEW CART ORDER' : 'NEW CONTACT ENQUIRY';
+  const source = isOrder ? 'Submitted from the Shopping Cart page' : 'Submitted from the Contact Us page (Send Direct Inquiry)';
+  const accent = isOrder ? '#178f86' : '#0f2c3d';
+  const font = "font-family:'Segoe UI',Arial,Helvetica,sans-serif;";
+
+  const rows = fields.map(([k, v]) => `
+    <tr>
+      <td style="${font}padding:12px 16px;width:34%;background:#f4fbfa;border-bottom:1px solid #e1efec;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4d6478;vertical-align:top;">${escHtml(k)}</td>
+      <td style="${font}padding:12px 16px;border-bottom:1px solid #e1efec;font-size:15px;color:#0f2c3d;white-space:pre-line;">${escHtml(v)}</td>
+    </tr>`).join('');
+
+  const itemRows = (items || []).map((it, i) => `
+    <tr>
+      <td style="${font}padding:12px 14px;border-bottom:1px solid #e1efec;font-size:14px;color:#178f86;font-weight:700;width:36px;vertical-align:top;">${i + 1}</td>
+      <td style="${font}padding:12px 14px;border-bottom:1px solid #e1efec;vertical-align:top;">
+        <div style="font-size:15px;font-weight:700;color:#0f2c3d;">${escHtml(it.name)}</div>
+        ${it.spec ? `<div style="font-size:12px;color:#4d6478;margin-top:2px;">${escHtml(it.spec)}</div>` : ''}
+        ${it.note ? `<div style="font-size:13px;color:#0f2c3d;margin-top:6px;padding:6px 10px;background:#fff8e6;border-left:3px solid #f0b429;">Note: ${escHtml(it.note)}</div>` : ''}
+      </td>
+    </tr>`).join('');
+
+  const itemsBlock = isOrder ? `
+    <tr><td style="padding:26px 32px 0;">
+      <div style="${font}font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#0f2c3d;margin-bottom:10px;">Cart Items (${(items || []).length})</div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e1efec;border-radius:8px;border-collapse:separate;">
+        ${itemRows || `<tr><td style="${font}padding:14px;font-size:14px;color:#4d6478;">General building materials catalog &amp; site inquiry.</td></tr>`}
+      </table>
+    </td></tr>` : '';
+
+  const now = new Date().toLocaleString('en-GB', { timeZone: 'Asia/Dubai', dateStyle: 'medium', timeStyle: 'short' }) + ' (Dubai time)';
+
+  return `<!DOCTYPE html>
+<html><body style="margin:0;padding:0;background:#eef5f4;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef5f4;padding:24px 12px;">
+<tr><td align="center">
+<table role="presentation" width="640" cellpadding="0" cellspacing="0" style="max-width:640px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #d5e9e6;">
+  <tr><td style="background:#ffffff;padding:22px 32px;border-bottom:4px solid #178f86;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="64" style="vertical-align:middle;"><img src="${siteUrl}/email-logo.png" width="56" height="57" alt="Pioneer" style="display:block;border:0;"></td>
+      <td style="vertical-align:middle;padding-left:12px;">
+        <div style="${font}font-size:24px;font-weight:800;letter-spacing:.14em;color:#0f2c3d;line-height:1;">PIONEER</div>
+        <div style="${font}font-size:12px;font-weight:600;letter-spacing:.08em;color:#4d6478;text-transform:uppercase;margin-top:5px;">Building Materials Trading LLC</div>
+      </td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:${accent};padding:18px 32px;">
+    <div style="${font}font-size:11px;letter-spacing:.2em;color:#bfe9e3;text-transform:uppercase;">Website notification</div>
+    <div style="${font}font-size:22px;font-weight:800;color:#ffffff;margin-top:4px;">${badge}</div>
+    <div style="${font}font-size:13px;color:#e8f5f3;margin-top:4px;">${source}</div>
+  </td></tr>
+  <tr><td style="padding:28px 32px 0;">
+    <div style="${font}font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#0f2c3d;margin-bottom:10px;">${isOrder ? 'Customer Details' : 'Enquiry Details'}</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e1efec;border-radius:8px;border-collapse:separate;">${rows}</table>
+  </td></tr>
+  ${itemsBlock}
+  <tr><td style="padding:22px 32px 30px;">
+    <div style="${font}font-size:13px;color:#4d6478;">Received: ${escHtml(now)}</div>
+    <div style="${font}font-size:13px;color:#4d6478;margin-top:6px;">Please reply with stock availability, pricing and delivery schedule.</div>
+  </td></tr>
+  <tr><td style="background:#0f2c3d;padding:22px 32px;">
+    <div style="${font}font-size:14px;font-weight:700;color:#ffffff;letter-spacing:.06em;">${escHtml(COMPANY_INFO.name)}</div>
+    <div style="${font}font-size:12px;color:#bcd0d8;margin-top:8px;line-height:1.7;">
+      ${escHtml(COMPANY_INFO.address)}<br>
+      ${COMPANY_INFO.phones.map(escHtml).join(' &nbsp;|&nbsp; ')}<br>
+      ${COMPANY_INFO.emails.map(escHtml).join(' &nbsp;|&nbsp; ')}<br>
+      <a href="${siteUrl}" style="color:#2ecfb2;text-decoration:none;">${escHtml(COMPANY_INFO.website)}</a>
+    </div>
+    <div style="${font}font-size:11px;color:#7f9aa6;margin-top:12px;">This message was generated automatically by the Pioneer website.</div>
+  </td></tr>
+</table>
+</td></tr></table>
+</body></html>`;
+}
+
+// True only when the mail service explicitly confirms it accepted the message.
+async function sendNotification(payload) {
+  const { kind, subject, fields, items, plain } = payload;
+
+  if (EMAILJS.serviceId && EMAILJS.templateId && EMAILJS.publicKey) {
+    try {
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: EMAILJS.serviceId,
+          template_id: EMAILJS.templateId,
+          user_id: EMAILJS.publicKey,
+          template_params: {
+            subject,
+            source_label: kind === 'order' ? 'Cart Order' : 'Contact Enquiry',
+            html_body: buildEmailHtml({ kind, fields, items })
+          }
+        })
+      });
+      return response.ok;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  // Fallback: Web3Forms plain-text email, still labelled with where it came from.
   try {
-    const response = await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify(payload)
+    const body = { access_key: WEB3FORMS_KEY, subject, from_name: 'Pioneer Website',
+      'Source': kind === 'order' ? 'CART ORDER (Shopping Cart page)' : 'CONTACT ENQUIRY (Contact Us page)' };
+    fields.forEach(([k, v]) => { body[k] = v; });
+    if (kind === 'order') body['Cart Items'] = plain;
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(body)
     });
-
     const data = await response.json();
-
-    if (response.ok || data.success === "true" || data.success === true) {
-      showToast(`Order sent directly to ${TARGET_EMAIL}!`);
-      state.cart = [];
-      saveCart();
-      renderApp();
-    } else {
-      const mailUrl = generateEmailCartUrl(name, phone, notes);
-      window.open(mailUrl, '_self');
-      showToast(`Order submitted to ${TARGET_EMAIL}!`);
-    }
+    return response.ok && data.success === true;
   } catch (err) {
-    const mailUrl = generateEmailCartUrl(name, phone, notes);
-    window.open(mailUrl, '_self');
-    showToast(`Order submitted to ${TARGET_EMAIL}!`);
-  } finally {
-    if (btnEl) {
-      btnEl.disabled = false;
-      btnEl.innerHTML = `<span>Submit Cart Order</span>`;
-    }
+    return false;
+  }
+}
+
+window.handleContactInquiry = async function(e) {
+  e.preventDefault();
+  const f = e.target;
+  const v = (id) => (f.querySelector('#' + id)?.value || '').trim();
+  const name = v('cx-name'), company = v('cx-company'), phone = v('cx-phone');
+  const email = v('cx-email'), subjectLine = v('cx-subject'), message = v('cx-message');
+  const btn = f.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const fields = [['Name', name]];
+  if (company) fields.push(['Company', company]);
+  fields.push(['Phone / WhatsApp', phone]);
+  if (email) fields.push(['Email', email]);
+  if (subjectLine) fields.push(['Subject', subjectLine]);
+  fields.push(['Message / Materials Needed', message]);
+
+  const sent = await sendNotification({
+    kind: 'contact',
+    subject: `[CONTACT ENQUIRY] Pioneer BMT - ${subjectLine || name}`,
+    fields
+  });
+  btn.disabled = false;
+  btn.textContent = 'Send Message';
+  if (sent) {
+    showToast('Message sent! We will get back to you shortly.');
+    f.reset();
+  } else {
+    const subject = encodeURIComponent(`Pioneer BMT Inquiry - ${subjectLine || name}`);
+    const body = encodeURIComponent(fields.map(([k, x]) => `${k}: ${x}`).join('\n'));
+    window.open(`mailto:${TARGET_EMAIL}?subject=${subject}&body=${body}`, '_self');
+    showToast('Could not send automatically. Your email app has opened with the message ready to send.');
   }
 };
 
@@ -1547,59 +1703,115 @@ function initAboutReveal() {
 }
 
 // CONTACT VIEW (/contact)
-function renderContactView() {
-  return `
-    <div class="container" style="padding: var(--space-16) 0;">
-      <div style="margin-bottom: var(--space-8);">
-        <h1>Contact Us</h1>
-        <p>Get in touch with our sales team in Dubai for instant product quotes & site delivery options.</p>
-      </div>
+const MAP_SHORT_LINK = 'https://maps.app.goo.gl/Jo5euEXq4H44oHDq8';
+const MAP_EMBED_SRC = 'https://www.google.com/maps?q=' + encodeURIComponent('Pioneer Building Materials Trading LLC, Dubai, UAE') + '&output=embed';
 
-      <div class="contact-layout-grid">
-        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6);">
-          <h3>Pioneer BMT Office</h3>
-          <p style="margin-bottom: var(--space-4);">Dubai, United Arab Emirates</p>
-          
-          <div style="display:flex; flex-direction:column; gap:var(--space-3); font-size:14px; margin-bottom:var(--space-6);">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="color:var(--color-primary-dark); display:flex; align-items:center;">${ICONS.phone}</span>
-              <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}" style="color:var(--color-text-main); font-weight:600; text-decoration:underline;">${COMPANY_INFO.phones[0]}</a>
-              <span>/</span>
-              <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" style="color:var(--color-text-main); font-weight:600; text-decoration:underline;">${COMPANY_INFO.phones[1]}</a>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="color:var(--color-primary-dark); display:flex; align-items:center;">${ICONS.mail}</span>
-              <a href="mailto:${COMPANY_INFO.emails[0]}" style="color:var(--color-text-main); font-weight:600; text-decoration:underline;">${COMPANY_INFO.emails[0]}</a>
-            </div>
+const FAQS = [
+  ['Can I place bulk or trade orders online?', 'Yes, you can submit bulk order enquiries through our product catalogue and also request a custom quotation by specifying your needs in the material description section.'],
+  ['How do I get a price quote for a large or custom project?', 'Send an enquiry directly by adding materials to your cart and submitting the cart via WhatsApp or the alternative option, and our estimators will return a tailored quotation.'],
+  ['Do you offer site delivery?', 'Yes, delivery services are available for residential and commercial construction sites, with free or tiered shipping thresholds depending on your order size and region.'],
+  ['How can I find technical data sheets (TDS)?', 'Technical specifications and material safety data sheets are available upon request from our service team.'],
+  ['Can I change or cancel my order after it has been placed?', 'Standard orders can be modified or cancelled up until they are loaded onto the delivery truck. Once an order is dispatched or a custom fabrication begins, changes cannot be made.'],
+  ['What is the minimum order quantity (MOQ) for loose aggregates?', 'Loose materials like sand, aggregate and road base can be ordered starting from 3m³ truck loads. Smaller quantities can be purchased in pre-packed 25kg bags; the MOQ for pre-packed bags can be discussed.']
+];
+
+const CONTACT_PIN = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+
+function renderContactView() {
+  const tel = (n) => n.replace(/\s+/g, '');
+  const field = (label, id, type = 'text', ph = '', required = false) => `
+    <div class="cx-field">
+      <label for="${id}">${label}${required ? ' <i>*</i>' : ''}</label>
+      <input type="${type}" id="${id}" placeholder="${ph || label}" ${required ? 'required' : ''}>
+    </div>`;
+
+  return `
+    <div class="contact-page">
+      <section class="cx-top">
+        <div class="cx-info">
+          <span class="cx-eyebrow">Get in touch</span>
+          <h1 class="cx-title">Pioneer BMT Office</h1>
+          <p class="cx-lead">Get in touch with our sales team in Dubai for instant product quotes and site delivery options.</p>
+
+          <div class="cx-card">
+            <span class="cx-ico">${CONTACT_PIN}</span>
+            <div><h4>Head Office</h4><p>${COMPANY_INFO.name}<br>${COMPANY_INFO.address}</p></div>
+          </div>
+          <div class="cx-card">
+            <span class="cx-ico">${ICONS.mail}</span>
+            <div><h4>Email Us</h4><p>${COMPANY_INFO.emails.map(e => `<a href="mailto:${e}">${e}</a>`).join('<br>')}</p></div>
+          </div>
+          <div class="cx-card">
+            <span class="cx-ico">${ICONS.phone}</span>
+            <div><h4>Let's Talk</h4><p>${COMPANY_INFO.phones.map(n => `<a href="tel:${tel(n)}">${n}</a>`).join('<br>')}<br><span class="cx-hours">${COMPANY_INFO.workingHours}</span></p></div>
           </div>
 
-          <a href="${generateWhatsAppCartUrl()}" target="_blank" class="btn btn-whatsapp">
+          <a href="${generateWhatsAppCartUrl()}" target="_blank" rel="noopener" class="btn btn-whatsapp cx-wa">
             ${ICONS.whatsapp} Chat on WhatsApp
           </a>
         </div>
 
-        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-6);">
-          <h3>Send Direct Inquiry</h3>
-          <form onsubmit="event.preventDefault(); showToast('Inquiry sent! We will get back to you shortly.');">
-            <div style="margin-bottom:12px;">
-              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Name:</label>
-              <input type="text" required style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px;">
+        <div class="cx-form-card">
+          <h2>Send Us a Message / Inquiry</h2>
+          <form onsubmit="handleContactInquiry(event)">
+            <div class="cx-row">
+              ${field('Name', 'cx-name', 'text', 'Your name', true)}
+              ${field('Company', 'cx-company', 'text', 'Company (optional)')}
             </div>
-            <div style="margin-bottom:12px;">
-              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Mobile / WhatsApp:</label>
-              <input type="tel" required style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px;">
+            <div class="cx-row">
+              ${field('Phone', 'cx-phone', 'tel', '+971 50 123 4567', true)}
+              ${field('Email', 'cx-email', 'email', 'you@example.com')}
             </div>
-            <div style="margin-bottom:16px;">
-              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Message / Materials Needed:</label>
-              <textarea rows="4" required style="width:100%; padding:8px; border:1px solid var(--color-border); border-radius:4px;"></textarea>
+            ${field('Subject', 'cx-subject', 'text', 'What is this about?')}
+            <div class="cx-field">
+              <label for="cx-message">Message / Materials Needed <i>*</i></label>
+              <textarea id="cx-message" rows="5" required placeholder="Tell us the materials, quantities and delivery location"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">Submit Inquiry</button>
+            <button type="submit" class="cx-submit">Send Message</button>
           </form>
         </div>
-      </div>
+      </section>
+
+      <section class="cx-map">
+        <div class="cx-map-head">
+          <div>
+            <span class="cx-eyebrow">Find us</span>
+            <h2>Visit Our Office &amp; Get Directions</h2>
+          </div>
+          <a href="${MAP_SHORT_LINK}" target="_blank" rel="noopener" class="cx-dir-btn">Get Directions →</a>
+        </div>
+        <div class="cx-map-frame">
+          <iframe src="${MAP_EMBED_SRC}" title="Pioneer Building Materials Trading LLC on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+      </section>
+
+      <section class="cx-faq">
+        <span class="cx-eyebrow">FAQs</span>
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          ${FAQS.map((f, i) => `
+            <div class="faq-item" data-faq="${i}">
+              <button type="button" class="faq-q" aria-expanded="false" onclick="toggleFaq(${i})">
+                <span>${f[0]}</span>
+                <svg class="faq-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-a"><div><p>${f[1]}</p></div></div>
+            </div>
+          `).join('')}
+        </div>
+      </section>
     </div>
   `;
 }
+
+// FAQ accordion: opening one question closes whichever was open.
+window.toggleFaq = function(i) {
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const open = Number(item.dataset.faq) === i && !item.classList.contains('open');
+    item.classList.toggle('open', open);
+    item.querySelector('.faq-q').setAttribute('aria-expanded', String(open));
+  });
+};
 
 // SITE FOOTER (PRIMARY MAIN THEME COLOR BACKGROUND)
 function renderFooter() {
