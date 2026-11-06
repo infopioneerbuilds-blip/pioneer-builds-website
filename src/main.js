@@ -2006,11 +2006,26 @@ function renderFooter() {
   `;
 }
 
+// Search every word against name, description, spec, brand/badge and category.
+// Products whose name matches rank first; the rest follow in catalogue order.
+function searchProducts(query) {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  const scored = [];
+  PRODUCTS.forEach(p => {
+    const cat = CATEGORIES.find(c => c.id === p.catId);
+    const name = p.name.toLowerCase();
+    const haystack = [p.name, p.spec, p.desc, p.badge, cat && cat.name].filter(Boolean).join(' ').toLowerCase();
+    if (!words.every(w => haystack.includes(w))) return;
+    scored.push({ p, score: words.every(w => name.includes(w)) ? 0 : 1 });
+  });
+  return scored.sort((a, b) => a.score - b.score).map(x => x.p);
+}
+
 function renderSearchModal() {
   if (!state.searchModalOpen) return '';
 
-  const q = state.searchQuery.toLowerCase().trim();
-  const results = q ? PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q)).slice(0, 15) : PRODUCTS.slice(0, 6);
+  const q = state.searchQuery.trim();
+  const results = q ? searchProducts(q).slice(0, 15) : PRODUCTS.slice(0, 6);
 
   return `
     <div class="modal-overlay active" onclick="if(event.target === this) closeSearchModal()">
