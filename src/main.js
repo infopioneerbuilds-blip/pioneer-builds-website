@@ -1,9 +1,7 @@
 import { COMPANY_INFO, CATEGORIES, PRODUCTS } from './data/products.js';
 
-// Target email from environment variable (VITE_TARGET_EMAIL)
 // Web3Forms public access key (safe to ship in client code); mail goes to the address registered with it.
 const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || 'a289feef-6c08-4bd5-927b-f353cf445e39';
-const TARGET_EMAIL = import.meta.env.VITE_TARGET_EMAIL || 'info.pioneerbuilds@gmail.com';
 
 // Local Brand Images from /public/BRANDS WE OFFER
 const BRAND_IMAGES = [
@@ -228,7 +226,7 @@ function showToast(msg) {
 }
 
 function generateEmailCartUrl(clientName = '', clientPhone = '', customNotes = '') {
-  const recipient = TARGET_EMAIL;
+  const recipient = COMPANY_INFO.emails[0];
   const subject = `Pioneer BMT Order Inquiry - ${clientName || 'Site Order'}`;
   
   let body = `OFFICIAL PIONEER BMT CART ORDER INQUIRY\n`;
@@ -261,7 +259,6 @@ function generateEmailCartUrl(clientName = '', clientPhone = '', customNotes = '
 function generateWhatsAppCartUrl(customNotes = '') {
   let text = `*OFFICIAL PIONEER BMT CART ORDER*\n`;
   text += `Pioneer Building Materials Trading LLC\n`;
-  text += `Email Target: ${TARGET_EMAIL}\n`;
   text += `------------------------------------\n\n`;
   
   if (state.cart.length === 0) {
@@ -326,7 +323,7 @@ window.handleSendCartOrderEmail = async function(e) {
 
   const sent = await sendNotification(payload);
   if (sent) {
-    showToast(`Order sent to ${TARGET_EMAIL}!`);
+    showToast('Order sent! Our sales team will get back to you shortly.');
     state.cart = [];
     saveCart();
     renderApp();
@@ -505,7 +502,7 @@ window.handleContactInquiry = async function(e) {
   } else {
     const subject = encodeURIComponent(`Pioneer BMT Inquiry - ${subjectLine || name}`);
     const body = encodeURIComponent(fields.map(([k, x]) => `${k}: ${x}`).join('\n'));
-    window.open(`mailto:${TARGET_EMAIL}?subject=${subject}&body=${body}`, '_self');
+    window.open(`mailto:${COMPANY_INFO.emails[0]}?subject=${subject}&body=${body}`, '_self');
     showToast('Could not send automatically. Your email app has opened with the message ready to send.');
   }
 };
@@ -1270,7 +1267,7 @@ function renderHomeView() {
 // PRODUCT CARD UTILITY
 function renderProductCard(p) {
   return `
-    <div class="product-card">
+    <div class="product-card" id="prod-${p.id}">
       <div class="product-thumb-wrap">
         <img src="${p.image}" alt="${p.name}" class="product-thumb-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&auto=format&fit=crop&q=80'">
       </div>
@@ -1422,7 +1419,7 @@ function renderCartView() {
 
         <section class="ct-card ct-submit-card">
           <h2>Send Your Order</h2>
-          <p class="ct-sub">Your cart is sent to <strong>${TARGET_EMAIL}</strong></p>
+          <p class="ct-sub">Your cart is sent directly to our sales team.</p>
 
           <form onsubmit="handleSendCartOrderEmail(event)">
             ${field('Name / Company', 'cart-client-name', 'text', 'e.g. Al Habtoor Contracting', true)}
@@ -1584,7 +1581,7 @@ function renderAboutDesktop() {
         <div class="ab-contact-links">
           <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}">${COMPANY_INFO.phones[0]}</a>
           <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}">${COMPANY_INFO.phones[1]}</a>
-          <a href="mailto:${COMPANY_INFO.emails[0]}">${COMPANY_INFO.emails[0]}</a>
+          ${COMPANY_INFO.emails.map(e => `<a href="mailto:${e}">${e}</a>`).join('')}
         </div>
       </div>
     </div>
@@ -1710,7 +1707,7 @@ function renderAboutMobile() {
         <div class="ab-contact-links">
           <a href="tel:${COMPANY_INFO.phones[0].replace(/\s+/g, '')}">${COMPANY_INFO.phones[0]}</a>
           <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}">${COMPANY_INFO.phones[1]}</a>
-          <a href="mailto:${COMPANY_INFO.emails[0]}">${COMPANY_INFO.emails[0]}</a>
+          ${COMPANY_INFO.emails.map(e => `<a href="mailto:${e}">${e}</a>`).join('')}
         </div>
       </div>
     </div>
@@ -1830,6 +1827,7 @@ const FAQS = [
   ['What is the minimum order quantity (MOQ) for loose aggregates?', 'Loose materials like sand, aggregate and road base can be ordered starting from 3m³ truck loads. Smaller quantities can be purchased in pre-packed 25kg bags; the MOQ for pre-packed bags can be discussed.']
 ];
 
+const CONTACT_CLOCK = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`;
 const CONTACT_PIN = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
 
 function renderContactView() {
@@ -1858,7 +1856,14 @@ function renderContactView() {
           </div>
           <div class="cx-card">
             <span class="cx-ico">${ICONS.phone}</span>
-            <div><h4>Let's Talk</h4><p>${COMPANY_INFO.phones.map(n => `<a href="tel:${tel(n)}">${n}</a>`).join('<br>')}<br><span class="cx-hours">${COMPANY_INFO.workingHours}</span></p></div>
+            <div><h4>Let's Talk</h4><p>${COMPANY_INFO.phones.map(n => `<a href="tel:${tel(n)}">${n}</a>`).join('<br>')}</p></div>
+          </div>
+          <div class="cx-card">
+            <span class="cx-ico">${CONTACT_CLOCK}</span>
+            <div><h4>Working Hours</h4>
+              <p><b class="cx-lbl">Office Timings</b><br>${COMPANY_INFO.workingHours}<br>${COMPANY_INFO.workingHoursNote}</p>
+              <p class="cx-gap"><b class="cx-lbl">Delivery Timings</b><br>${COMPANY_INFO.deliveryHours}</p>
+            </div>
           </div>
 
           <a href="${generateWhatsAppCartUrl()}" target="_blank" rel="noopener" class="btn btn-whatsapp cx-wa">
@@ -1945,7 +1950,7 @@ function renderFooter() {
               </div>
             </div>
             <p style="font-size: 14px; color: #1E293B; margin-bottom: var(--space-4); font-weight: 500;">
-              Premier wholesale distributor of building materials, timber, steel, safety gear, and heavy dump trucks across Dubai & UAE.
+              Quality building materials and safety equipment for contractors and developers across Dubai and the UAE, delivered on time and at wholesale prices.
             </p>
           </div>
 
@@ -1984,10 +1989,11 @@ function renderFooter() {
                 <span style="color:#1E293B; display:flex; align-items:center;">${ICONS.phone}</span>
                 <a href="tel:${COMPANY_INFO.phones[1].replace(/\s+/g, '')}" class="footer-link">${COMPANY_INFO.phones[1]}</a>
               </li>
+              ${COMPANY_INFO.emails.map(e => `
               <li style="display:flex; align-items:center; gap:8px; font-size:13px;">
                 <span style="color:#1E293B; display:flex; align-items:center;">${ICONS.mail}</span>
-                <a href="mailto:${COMPANY_INFO.emails[0]}" class="footer-link">${COMPANY_INFO.emails[0]}</a>
-              </li>
+                <a href="mailto:${e}" class="footer-link footer-email">${e}</a>
+              </li>`).join('')}
             </ul>
           </div>
         </div>
@@ -2011,24 +2017,53 @@ function renderSearchModal() {
       <div class="search-modal-box">
         <div class="search-input-wrap">
           ${ICONS.search}
-          <input type="text" id="search-input-field" placeholder="Search 121+ products..." value="${state.searchQuery}" oninput="onSearchInput(this.value)" autofocus class="search-input">
+          <input type="text" id="search-input-field" placeholder="Search ${PRODUCTS.length}+ products..." value="${state.searchQuery}" oninput="onSearchInput(this.value)" autofocus class="search-input">
           <button onclick="closeSearchModal()" style="background:none; border:none; cursor:pointer;">${ICONS.close}</button>
         </div>
 
         <div style="max-height: 400px; overflow-y: auto; padding: 12px 0;">
           ${results.map(p => `
-            <div style="padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="closeSearchModal(); addToCartById('${p.id}'); navigateTo('cart');">
+            <div style="padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="goToProduct('${p.id}')">
               <div>
                 <div style="font-weight: 700; font-size: 14px;">${p.name}</div>
                 <div style="font-size: 12px; color: var(--color-text-muted);">${p.spec}</div>
               </div>
-              <button class="btn btn-primary" style="font-size: 11px; padding: 4px 8px;">+ Add to Cart</button>
+              <span class="search-go">View <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
             </div>
           `).join('')}
         </div>
       </div>
     </div>
   `;
+}
+
+// Search result click: open the product's category and scroll to its card.
+window.goToProduct = function(productId) {
+  const product = PRODUCTS.find(p => p.id === productId);
+  const cat = product && CATEGORIES.find(c => c.id === product.catId);
+  if (!cat) return;
+  state.pendingProduct = productId;
+  state.searchModalOpen = false;
+  state.searchQuery = '';
+  navigateTo('category', cat.slug);
+};
+
+function scrollToPendingProduct() {
+  const id = state.pendingProduct;
+  const el = id && document.getElementById('prod-' + id);
+  if (!el) return;
+  state.pendingProduct = null;
+
+  const center = () => el.scrollIntoView({ block: 'center', behavior: 'instant' });
+  center();
+  setTimeout(center, 500);    // images above the card finish loading and shift the layout
+  setTimeout(center, 1300);
+
+  const loaderUp = document.getElementById('page-loader')?.classList.contains('show');
+  setTimeout(() => {
+    el.classList.add('product-flash');
+    setTimeout(() => el.classList.remove('product-flash'), 2400);
+  }, loaderUp ? 1100 : 150);
 }
 
 window.openSearchModal = function() {
@@ -2145,6 +2180,7 @@ function renderApp() {
   initSwipers();
 
   if (state.currentView === 'about') initAboutReveal();
+  scrollToPendingProduct();
 
   // Scroll-activated sticky nav: only on home view
   if (state.currentView === 'home') {

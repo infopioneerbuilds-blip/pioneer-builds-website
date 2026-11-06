@@ -891,7 +891,7 @@ button, input, select, textarea {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr repeat(3, 1fr);
+  grid-template-columns: 1.3fr 0.8fr 1fr 1.35fr;
   gap: var(--space-10);
   margin-bottom: var(--space-12);
 }
@@ -1616,7 +1616,7 @@ button, input, select, textarea {
   /* Shift the background photo right so the warehouse/building is visible
      behind the company name on narrow screens */
   .immersive-hero-img {
-    object-position: 88% center;
+    object-position: 86% center;
   }
 
   /* Nav links collapse into the hamburger */
@@ -1719,6 +1719,7 @@ button, input, select, textarea {
   .immersive-logo-sub {
     white-space: normal;
     line-height: 1.25;
+    font-size: 8.5px;
   }
 }
 
@@ -1726,8 +1727,10 @@ button, input, select, textarea {
   .immersive-logo-img { width: 40px; height: 40px; }
   .immersive-logo-name { font-size: 17px; }
   .immersive-logo-sub {
-    font-size: 11px;
-    letter-spacing: 0.02em;
+    font-size: 9px;
+    letter-spacing: 0.03em;
+    white-space: normal;
+    line-height: 1.25;
   }
   .immersive-logo { max-width: calc(100% - 188px); }
 
@@ -3695,4 +3698,25 @@ button,
 .ab-m .ab-serve { overflow: hidden; }
 .ab-m .ab-serve h4, .ab-m .ab-serve p { white-space: nowrap; }
 /* About hero on phones: same crop as the home hero (cover, 88% across) */
-.about-mobile .ab-stage.ab-m-hero { background-position: 88% center; min-height: 100svh; }
+.about-mobile .ab-stage.ab-m-hero { background-position: 86% center; min-height: 100svh; }
+
+/* FAQ: question turns blue while its answer is open */
+.faq-item.open { background: var(--color-primary-light); }
+.faq-item.open .faq-q { color: var(--color-primary-dark); }
+
+/* Contact: working hours card */
+.cx-card .cx-lbl { color: var(--cx-navy); font-weight: 700; }
+.cx-card .cx-gap { margin-top: 10px; }
+
+/* Search: result rows + product highlight after jumping to it */
+.search-go { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #178f86; white-space: nowrap; }
+.modal-overlay [onclick^="goToProduct"]:hover { background: #f1f7f6; }
+.product-card.product-flash { animation: productFlash 2.4s ease; }
+@keyframes productFlash {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(23, 143, 134, 0); }
+  15%, 70% { box-shadow: 0 0 0 4px rgba(23, 143, 134, 0.55), 0 14px 36px rgba(23, 143, 134, 0.25); }
+}
+
+/* footer emails stay on one line */
+.footer-email { white-space: nowrap; font-size: 13.5px; }
+@media (max-width: 400px) { .footer-email { font-size: 12.5px; } }

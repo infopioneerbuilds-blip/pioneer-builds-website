@@ -6,9 +6,11 @@ export const COMPANY_INFO = {
   address: "Dubai, United Arab Emirates",
   phones: ["+971 58 546 6599", "+971 56 542 6446"],
   whatsapp: "971585466599",
-  emails: ["info.pioneerbuilds@gmail.com"],
+  emails: ["sales@pioneerbuildingmaterials.com", "pbmtllc@gmail.com"],
   website: "www.pioneerbuildingmaterial.com",
-  workingHours: "Mon - Sat: 9:30 AM - 7:30 PM | Sunday: Closed",
+  workingHours: "Mon - Sat: 9:30 AM - 2:30 PM & 4:00 PM - 7:30 PM",
+  workingHoursNote: "Sunday: Closed",
+  deliveryHours: "6:00 AM - 4:00 PM",
   quotationRef: "QUO-PBM-2026-001"
 };
 
