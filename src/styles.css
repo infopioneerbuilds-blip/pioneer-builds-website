@@ -3720,3 +3720,27 @@ button,
 /* footer emails stay on one line */
 .footer-email { white-space: nowrap; font-size: 13.5px; }
 @media (max-width: 400px) { .footer-email { font-size: 12.5px; } }
+
+/* Phones in portrait: size the hero photo by the building sign (not by screen height)
+   so the logo and company board are fully visible on every phone. The sky above the
+   photo is extended with its own colour and faded in. */
+@media (max-width: 600px) and (orientation: portrait) {
+  .immersive-hero-bg { background: #74a3dc; }
+  .immersive-hero-img {
+    position: absolute;
+    left: -162%;
+    bottom: 0;
+    width: 290%;
+    height: auto;
+    max-width: none;
+    object-fit: fill;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 16%);
+  }
+  .about-mobile .ab-stage.ab-m-hero {
+    background-color: #74a3dc;
+    background-repeat: no-repeat;
+    background-size: cover, 290% auto;
+    background-position: center, 85.3% 100%;
+  }
+}
