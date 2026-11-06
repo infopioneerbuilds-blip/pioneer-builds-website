@@ -7,7 +7,7 @@ export const COMPANY_INFO = {
   phones: ["+971 58 546 6599", "+971 56 542 6446"],
   whatsapp: "971585466599",
   emails: ["sales@pioneerbuildingmaterials.com", "pbmtllc@gmail.com"],
-  website: "www.pioneerbuildingmaterial.com",
+  website: "pioneerbuildingmaterials.com",
   workingHours: "Mon - Sat: 9:30 AM - 2:30 PM & 4:00 PM - 7:30 PM",
   workingHoursNote: "Sunday: Closed",
   deliveryHours: "6:00 AM - 4:00 PM",

@@ -1,4 +1,5 @@
 import { COMPANY_INFO, CATEGORIES, PRODUCTS } from './data/products.js';
+import { SITE_URL, FAQS, getRouteSeo, getJsonLd } from './data/seo.js';
 
 // Web3Forms public access key (safe to ship in client code); mail goes to the address registered with it.
 const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || 'a289feef-6c08-4bd5-927b-f353cf445e39';
@@ -353,7 +354,7 @@ const escHtml = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;',
 
 function buildEmailHtml({ kind, fields, items }) {
   const isOrder = kind === 'order';
-  const siteUrl = 'https://www.pioneerbuildingmaterial.com';
+  const siteUrl = SITE_URL;
   const badge = isOrder ? 'NEW CART ORDER' : 'NEW CONTACT ENQUIRY';
   const source = isOrder ? 'Submitted from the Shopping Cart page' : 'Submitted from the Contact Us page (Send Direct Inquiry)';
   const accent = isOrder ? '#178f86' : '#0f2c3d';
@@ -1818,14 +1819,6 @@ function initAboutReveal() {
 const MAP_SHORT_LINK = 'https://maps.app.goo.gl/Jo5euEXq4H44oHDq8';
 const MAP_EMBED_SRC = 'https://www.google.com/maps?q=' + encodeURIComponent('Pioneer Building Materials Trading LLC, Dubai, UAE') + '&output=embed';
 
-const FAQS = [
-  ['Can I place bulk or trade orders online?', 'Yes, you can submit bulk order enquiries through our product catalogue and also request a custom quotation by specifying your needs in the material description section.'],
-  ['How do I get a price quote for a large or custom project?', 'Send an enquiry directly by adding materials to your cart and submitting the cart via WhatsApp or the alternative option, and our estimators will return a tailored quotation.'],
-  ['Do you offer site delivery?', 'Yes, delivery services are available for residential and commercial construction sites, with free or tiered shipping thresholds depending on your order size and region.'],
-  ['How can I find technical data sheets (TDS)?', 'Technical specifications and material safety data sheets are available upon request from our service team.'],
-  ['Can I change or cancel my order after it has been placed?', 'Standard orders can be modified or cancelled up until they are loaded onto the delivery truck. Once an order is dispatched or a custom fabrication begins, changes cannot be made.'],
-  ['What is the minimum order quantity (MOQ) for loose aggregates?', 'Loose materials like sand, aggregate and road base can be ordered starting from 3m³ truck loads. Smaller quantities can be purchased in pre-packed 25kg bags; the MOQ for pre-packed bags can be discussed.']
-];
 
 const CONTACT_CLOCK = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`;
 const CONTACT_PIN = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
@@ -2165,6 +2158,57 @@ function renderMobileSidebar() {
 }
 
 // Master App Renderer
+// ---- SEO: keep title, description, canonical, social tags and structured data in step with the page ----
+function currentSeoRoute() {
+  const cat = state.selectedCategory;
+  switch (state.currentView) {
+    case 'home': return { path: '/', type: 'home' };
+    case 'categories': return { path: '/categories', type: 'categories' };
+    case 'category': return cat ? { path: `/category/${cat.slug}`, type: 'category', cat } : { path: '/categories', type: 'categories' };
+    case 'about': return { path: '/about', type: 'about' };
+    case 'contact': return { path: '/contact', type: 'contact' };
+    default: return { path: '/cart', type: 'cart' };
+  }
+}
+
+function setMeta(selector, attr, value, create) {
+  let el = document.head.querySelector(selector);
+  if (!el && create) { el = document.createElement(create.tag); Object.entries(create.attrs).forEach(([k, v]) => el.setAttribute(k, v)); document.head.appendChild(el); }
+  if (el) el.setAttribute(attr, value);
+}
+
+function applySeo(route) {
+  const seo = getRouteSeo(route);
+  const url = `${SITE_URL}${route.path === '/' ? '/' : route.path}`;
+  document.title = seo.title;
+  setMeta('meta[name="description"]', 'content', seo.description, { tag: 'meta', attrs: { name: 'description' } });
+  setMeta('meta[name="robots"]', 'content', seo.robots, { tag: 'meta', attrs: { name: 'robots' } });
+  setMeta('link[rel="canonical"]', 'href', url, { tag: 'link', attrs: { rel: 'canonical' } });
+  [['og:title', seo.title], ['og:description', seo.description], ['og:url', url], ['og:image', seo.image]].forEach(([k, v]) =>
+    setMeta(`meta[property="${k}"]`, 'content', v, { tag: 'meta', attrs: { property: k } }));
+  [['twitter:title', seo.title], ['twitter:description', seo.description], ['twitter:image', seo.image]].forEach(([k, v]) =>
+    setMeta(`meta[name="${k}"]`, 'content', v, { tag: 'meta', attrs: { name: k } }));
+
+  document.head.querySelectorAll('script[data-seo], script#ld-default').forEach(n => n.remove());
+  getJsonLd(route).forEach(block => {
+    const tag = document.createElement('script');
+    tag.type = 'application/ld+json';
+    tag.setAttribute('data-seo', '');
+    tag.textContent = JSON.stringify(block);
+    document.head.appendChild(tag);
+  });
+}
+
+// Give every in-app link a real address so search engines (and "open in new tab") can follow it.
+function makeLinksCrawlable() {
+  document.querySelectorAll('a[href="#"][onclick*="navigateTo("]').forEach(a => {
+    const m = a.getAttribute('onclick').match(/navigateTo\('([a-z]+)'(?:,\s*'([^']+)')?\)/);
+    if (!m) return;
+    const [, view, slug] = m;
+    a.setAttribute('href', slug ? `/category/${slug}` : view === 'home' ? '/' : `/${view}`);
+  });
+}
+
 function renderApp() {
   const app = document.getElementById('app');
   if (!app) return;
@@ -2184,7 +2228,7 @@ function renderApp() {
 
   app.innerHTML = `
     ${renderHeader()}
-    <main class="${mainClass}">${bodyHtml}</main>
+    <main class="${mainClass}">${(state.currentView === 'home' || state.currentView === 'about') ? `<h1 class="sr-only">${getRouteSeo(currentSeoRoute()).h1}</h1>` : ''}${bodyHtml}</main>
     ${renderFooter()}
     ${renderSearchModal()}
     ${renderFloatingWhatsApp()}
@@ -2196,6 +2240,8 @@ function renderApp() {
 
   if (state.currentView === 'about') initAboutReveal();
   scrollToPendingProduct();
+  applySeo(currentSeoRoute());
+  makeLinksCrawlable();
 
   // Scroll-activated sticky nav: only on home view
   if (state.currentView === 'home') {
